@@ -20,16 +20,16 @@ class VueConnexion{
                 $content = $this->inscription();
                 break;
         }
-        return VuePageHTML::headersDeb().VuePageHTML::finHeader().$content.VuePageHTML::getFooter();
+        return VuePageHTML::header().$content.VuePageHTML::getFooter();
     }
     
     private function connexion(){
         $app = \Slim\Slim::getInstance();
-        $postInscr = $app->urlFor("postConnexion");
+        $postCo = $app->urlFor("postConnexion");
         $inscr = $app->urlFor("inscription");
         return <<<end
         <p>Connexion</p>
-        <form method="POST" action="$postInscr">
+        <form method="POST" action="$postCo">
             <div>
                 <label>Login</label>
                 <input type="text" name="loginCo" required><br>             
@@ -48,7 +48,7 @@ end;
     private function inscription(){
         $app = \Slim\Slim::getInstance();
         $retour = $app->urlFor("accueil");
-        $inscr = $app->urlFor("postConnexion");
+        $inscr = $app->urlFor("postInscription");
         return <<<end
         <p>Inscription</p>
         <form method="POST" action="$inscr">

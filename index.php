@@ -38,5 +38,9 @@ $app->post('/postConnexion(/)', function (){
     (new dbproject\controleur\ControleurConnexion())->postConnexion();
 })->name("postConnexion");
 
+$app->post('/postInscription(/)', function (){
+    (new dbproject\controleur\ControleurConnexion())->postInscription();
+})->name("postInscription");
+
 //Lancement de Slim
 $app->run();

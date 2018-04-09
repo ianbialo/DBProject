@@ -10,6 +10,6 @@ class User extends \Illuminate\Database\Eloquent\Model
     
     public static function getById($id){
         $id = filter_var($id, FILTER_SANITIZE_EMAIL);
-        return User::where('id', '=', $id)->first();
+        return User::where('login', '=', $id)->first();
     }
 }

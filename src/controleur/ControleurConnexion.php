@@ -37,4 +37,17 @@ class ControleurConnexion{
         Authentication::authenticateEns($id, $mdp);
         $app->redirect($app->urlFor("accueil"));
     }
+    
+    public function postInscription(){
+        $app = \Slim\Slim::getInstance();
+        $id = $_POST['loginInscr'];
+        $mdp = $_POST['mdpInscr'];
+        $orga = $_POST['orgInscr'];
+        $nom = $_POST['nomInscr'];
+        $prenom = $_POST['prenomInscr'];
+        $adr = $_POST['adrInscr'];
+        $tel = $_POST['telInscr'];
+        Authentication::createUser($id, $mdp, $orga, $nom, $prenom, $adr, $tel);
+        $app->redirect($app->urlFor("accueil"));
+    }
 }
