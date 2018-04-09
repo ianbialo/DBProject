@@ -4,10 +4,6 @@ namespace dbproject\controleur;
 use dbproject\vue\VueConnexion;
 use dbproject\conf\Authentication;
 
-require_once "vendor/autoload.php";
-require_once "src/vue/VueConnexion.php";
-require_once "src/conf/Authentication.php";
-
 class ControleurConnexion{
     
     

@@ -1,9 +1,6 @@
 <?php
 namespace dbproject\conf;
 
-require_once "vendor/autoload.php";
-require_once 'src/modele/User.php';
-
 use dbproject\modele\User;
 
 class Authentication

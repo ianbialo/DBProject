@@ -2,10 +2,6 @@
 session_start();
 require_once "vendor/autoload.php";
 
-#En attendant de pouvoir générer un bon auto-loader
-require_once 'src/controleur/ControleurConnexion.php';
-require_once 'src/conf/ConnexionBase.php';
-
 dbproject\conf\ConnexionBase::initialisation('src/conf/conf.ini');
 
 //Initialisation de Slim

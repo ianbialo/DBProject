@@ -1,11 +1,6 @@
 <?php
 namespace dbproject\vue;
 
-
-require_once "vendor/autoload.php";
-require_once 'vendor/slim/slim/Slim/Slim.php';
-require_once 'src/vue/VuePageHTML.php';
-
 class VueConnexion{
     const AFF_CONNEXION = 1;
     const AFF_INSCRIPTION = 2;
