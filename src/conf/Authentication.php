@@ -40,6 +40,7 @@ class Authentication
                 $app->setEncryptedCookie("user", $id, time() + 60 * 60 * 24 * 30, "/");
                 unset($_COOKIE['user']);
                 setcookie('user', '', time() - 60 * 60 * 24, '/');
+                echo "reussi";
             } else {
                 $app->redirect($app->urlFor("accueil"));
             }

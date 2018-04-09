@@ -35,7 +35,7 @@ class ControleurConnexion{
         $id = $_POST['loginCo'];
         $mdp = $_POST['mdpCo'];
         Authentication::authenticateEns($id, $mdp);
-        $app->redirect($app->urlFor("accueil"));
+        //$app->redirect($app->urlFor("accueil"));
     }
     
     public function postInscription(){

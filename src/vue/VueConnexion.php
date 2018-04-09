@@ -30,13 +30,13 @@ class VueConnexion{
         return <<<end
         <p>Connexion</p>
         <form method="POST" action="$postCo">
-            <div>
+            <div class="input-field col s12">
                 <label>Login</label>
-                <input type="text" name="loginCo" required><br>             
+                <input type="text" name="loginCo" class="validate" required><br>             
             </div>
-            <div>
+            <div class="input-field col s12">
                 <label>Mot de passe</label>
-                <input type="password" name="mdpCo" required><br>             
+                <input type="password" name="mdpCo" class="validate" required><br>             
             </div>
             <button>Valider</button>
         </form>
