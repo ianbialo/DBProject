@@ -2,12 +2,16 @@
 namespace dbproject\vue;
 
 class VueConnexion{
+    const AFF_INDEX = 0;
     const AFF_CONNEXION = 1;
     const AFF_INSCRIPTION = 2;
     
     public function render($selecteur, $tab = null)
     {
         switch ($selecteur) {
+            case VueConnexion::AFF_INDEX :
+                $content = $this->index();
+                break;
             case VueConnexion::AFF_CONNEXION :
                 $content = $this->connexion();
                 break;
@@ -18,25 +22,40 @@ class VueConnexion{
         return VuePageHTML::header().$content.VuePageHTML::getFooter();
     }
     
+    private function index(){
+        $app = \Slim\Slim::getInstance();
+        $deco = $app->urlFor("postDeconnexion");
+        return <<<end
+        <p>Ceci est le menu et vous êtes connecté</p>
+        <a href="$deco">Se déconnecter</a>
+end;
+    }
+    
     private function connexion(){
         $app = \Slim\Slim::getInstance();
         $postCo = $app->urlFor("postConnexion");
         $inscr = $app->urlFor("inscription");
         return <<<end
+        <div class="card-panel hoverable">
         <p>Connexion</p>
         <form method="POST" action="$postCo">
             <div class="input-field col s12">
-                <label>Login</label>
-                <input type="text" name="loginCo" class="validate" required><br>             
+                <i class="material-icons prefix">account_circle</i>
+                <input id="loginCo" type="text" name="loginCo" class="validate" required><br>
+                <label for="loginCo">Login</label>    
             </div>
             <div class="input-field col s12">
-                <label>Mot de passe</label>
-                <input type="password" name="mdpCo" class="validate" required><br>             
+                <i class="material-icons prefix">https</i>
+                <input id="mdpCo" type="password" name="mdpCo" class="validate" required><br>
+                <label for="mdpCo">Mot de passe</label>      
             </div>
-            <button>Valider</button>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Valider
+                <i class="material-icons right">send</i>
+            </button>
         </form>
         <a href="#">Mot de passe oublié</a><br>
         <a href="$inscr">Pas de compte? Inscrivez-vous</a>
+        </div>
 end;
     }
     
@@ -79,9 +98,11 @@ end;
                 <label>Numéro de téléphone</label>
                 <input type="number" name="telInscr" required><br>
             </div>
-            <button>Inscription</button>
+            <a href="$retour" class="btn waves-effect waves-light">Retour</a><br>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Inscription
+                <i class="material-icons right">send</i>
+            </button>
         </form>
-        <a href="$retour">Retour</a><br>
 end;
     }
 }

@@ -24,6 +24,10 @@ $app->get('/inscription(/)', function (){
     (new dbproject\controleur\ControleurConnexion())->inscritpion();
 })->name("inscription");
 
+$app->get('/postDeconnexion(/)', function (){
+    (new dbproject\controleur\ControleurConnexion())->postDeconnexion();
+})->name("postDeconnexion");
+
 
 
 ///////////////////////////////////////

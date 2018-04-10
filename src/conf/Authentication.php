@@ -37,7 +37,6 @@ class Authentication
                 $app->setEncryptedCookie("user", $id, time() + 60 * 60 * 24 * 30, "/");
                 unset($_COOKIE['user']);
                 setcookie('user', '', time() - 60 * 60 * 24, '/');
-                echo "reussi";
             } else {
                 $app->redirect($app->urlFor("accueil"));
             }
@@ -47,7 +46,14 @@ class Authentication
     }
 
     public static function disconnect()
-    {}
+    {
+        $app =  \Slim\Slim::getInstance();
+        if (isset($_COOKIE['user'])) {
+            unset($_COOKIE['user']);
+            setcookie('user', '', time() - 60*60*24, '/'); // valeur vide et temps dans le passé
+        }
+        $app->redirect($app->urlFor("accueil"));
+    }
 
     public static function updateUser($u, $surName, $firstName, $mail, $password)
     {}

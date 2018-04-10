@@ -13,7 +13,9 @@ class ControleurConnexion{
     
     public function index(){
         $vue = new VueConnexion();
-        print $vue->render(VueConnexion::AFF_CONNEXION);
+        if(isset($_COOKIE['user'])) print $vue->render(VueConnexion::AFF_INDEX);
+        else print $vue->render(VueConnexion::AFF_CONNEXION);
+        
     }
     
     public function inscritpion(){
@@ -31,7 +33,7 @@ class ControleurConnexion{
         $id = $_POST['loginCo'];
         $mdp = $_POST['mdpCo'];
         Authentication::authenticateEns($id, $mdp);
-        //$app->redirect($app->urlFor("accueil"));
+        $app->redirect($app->urlFor("accueil"));
     }
     
     public function postInscription(){
@@ -44,6 +46,11 @@ class ControleurConnexion{
         $adr = $_POST['adrInscr'];
         $tel = $_POST['telInscr'];
         Authentication::createUser($id, $mdp, $orga, $nom, $prenom, $adr, $tel);
+        $app->redirect($app->urlFor("accueil"));
+    }
+    
+    public function postDeconnexion(){
+        Authentication::disconnect();
         $app->redirect($app->urlFor("accueil"));
     }
 }

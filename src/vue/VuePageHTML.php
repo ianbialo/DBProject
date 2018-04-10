@@ -27,12 +27,27 @@ class VuePageHTML
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
         <!--Import materialize.css-->
-        <link type="text/css" rel="stylesheet" href="$path/css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="$path/css/materialize.css"  media="screen,projection"/>
         <link href="$path/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     </head>
     <body>
         <script type="text/javascript" src="$path/js/materialize.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <header>
+        <nav class="white" role="navigation">
+            <div class="nav-wrapper container">
+                <a id="logo-container" href="#" class="brand-logo">Logo</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="#">Navbar Link</a></li>
+                </ul>
+                <ul id="nav-mobile" class="sidenav">
+                    <li><a href="#">Navbar Link</a></li>
+                </ul>
+                <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            </div>
+        </nav>
+        </header>
+        <main>
 		
 end;
     }
@@ -48,13 +63,37 @@ end;
         $contact = $app->urlFor('accueil');
         $path = $requete->getRootUri();
         return <<<end
-    <footer>
-      <div>
-        <div>
-             <div>BIALO Ian</div>
-             <div>Demathieu Bard</div>
+    </main>
+    <footer class="page-footer orange darken-3">
+      <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Demathieu Bard</h5>
+          <p class="grey-text text-lighten-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit velit vel eros finibus, et fringilla massa molestie. Curabitur volutpat mi a cursus suscipit. Praesent commodo at mauris sed semper.</p>
+
+
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">A Propos</h5>
+          <ul>
+            <li><a class="white-text" href="http://www.demathieu-bard.fr/">Site DB</a></li>
+            <li><a class="white-text" href="http://intradb/Pages/Homepage.aspx">IntraDB</a></li>
+          </ul>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Contact</h5>
+          <ul>
+            <li><a class="white-text" href="#!">GEORGE Pierre</a></li>
+            <li><a class="white-text" href="mailto:ian.bialo@demathieu-bard.fr">BIALO Ian</a></li>
+          </ul>
         </div>
       </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by <a class="brown-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+      </div>
+    </div>
   </footer>
   <script src="$path/js/materialize.min.js"></script>
   <script src="$path/js/init.js"></script>  
