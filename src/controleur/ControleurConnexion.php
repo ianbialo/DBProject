@@ -40,12 +40,15 @@ class ControleurConnexion{
         $app = \Slim\Slim::getInstance();
         $id = $_POST['loginInscr'];
         $mdp = $_POST['mdpInscr'];
+        $mdp2 = $_POST['mdpInscr2'];
         $orga = $_POST['orgInscr'];
         $nom = $_POST['nomInscr'];
         $prenom = $_POST['prenomInscr'];
         $adr = $_POST['adrInscr'];
         $tel = $_POST['telInscr'];
+        if(strcmp($mdp,$mdp2) == 0){
         Authentication::createUser($id, $mdp, $orga, $nom, $prenom, $adr, $tel);
+        }
         $app->redirect($app->urlFor("accueil"));
     }
     

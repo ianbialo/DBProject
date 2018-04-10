@@ -41,7 +41,7 @@ end;
         <form method="POST" action="$postCo">
             <div class="input-field col s12">
                 <i class="material-icons prefix">account_circle</i>
-                <input id="loginCo" type="text" name="loginCo" class="validate" required><br>
+                <input id="loginCo" type="email" name="loginCo" class="validate" required><br>
                 <label for="loginCo">Login</label>    
             </div>
             <div class="input-field col s12">
@@ -64,45 +64,103 @@ end;
         $retour = $app->urlFor("accueil");
         $inscr = $app->urlFor("postInscription");
         return <<<end
-        <p>Inscription</p>
-        <form method="POST" action="$inscr">
-            <div>
-                <label>Login</label>
-                <input type="text" name="loginInscr" required><br>
+        <h3>Inscription</h3>
+        <div class="card-panel hoverable">
+        <form id="formInscr" class="col s12" method="POST" action="$inscr">
+            
+            <div class="input-field col s12">
+                <i class="material-icons prefix">account_circle</i>
+                <input type="email" id="loginInscr" name="loginInscr" class="validate" required><br>
+                <label for="loginInscr">Login</label>
+                <span class="helper-text" data-error="Il faut rentrer une adresse mail valide" ></span>
+            
             </div>
-            <div>
-                <label>Mot de passe</label>
-                <input type="password" name="mdpInscr" required><br>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">https</i>
+                <input type="password" minlength="6" id="mdpInscr" name="mdpInscr" required><br>
+                <label for="mdpInscr">Mot de passe</label>
             </div>
-            <div>
-                <label>Répétez le mot de passe</label>
-                <input type="password" name="mdpInscr2" required><br>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">https</i>
+                <input type="password" id="mdpInscr2" name="mdpInscr2" required><br>
+                <label for="mdpInscr2">Répétez le mot de passe</label>
+
             </div>
-            <div>
-                <label>Nom de l'organisme</label>
-                <input type="text" name="orgInscr" required><br>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">account_balance</i>
+                <input type="text" id="orgInscr" name="orgInscr" required><br>
+                <label for="orgInscr">Nom de l'organisme</label>
+
             </div>
-            <div>
-                <label>Nom du responsable</label>
-                <input type="text" name="nomInscr" required><br>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">assignment_ind</i>
+                <input type="text" id="nomInscr" name="nomInscr" required><br>
+                <label for="nomInscr">Nom du responsable</label>
+
             </div>
-            <div>
-                <label>Prenom du responsable</label>
-                <input type="text" name="prenomInscr" required><br>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">assignment_ind</i>
+                <input type="text" id="prenomInscr" name="prenomInscr" required><br>
+                <label for="prenomInscr">Prenom du responsable</label>
+
             </div>
-            <div>
-                <label>Adresse</label>
-                <input type="text" name="adrInscr" required><br>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">location_on</i>
+                <input type="text" id="adrInscr" name="adrInscr" required><br>
+                <label for="adrInscr">Adresse</label>
+
             </div>
-            <div>
-                <label>Numéro de téléphone</label>
-                <input type="number" name="telInscr" required><br>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">local_phone</i>
+                <input type="number" minlength="10" id="telInscr" name="telInscr" required><br>
+                <label for="telInscr">Numéro de téléphone</label>
+
             </div>
-            <a href="$retour" class="btn waves-effect waves-light">Retour</a><br>
-            <button class="btn waves-effect waves-light" type="submit" name="action">Inscription
+            </div>
+            <div class="row">
+            <a href="$retour" class="btn waves-effect waves-light">Retour</a>
+            <button class="btn" type="submit" name="action">Inscription
                 <i class="material-icons right">send</i>
             </button>
+            <input type="submit" value="Inscription"/>
+            </div>
         </form>
+
+
+<div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Attention</h4>
+      <p>Les mots de passe ne correspondent pas. Veuillez réessayer.</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">D'accord</a>
+    </div>
+  </div>
+
+
+
+<script>
+$('#formInscr').submit(function() {
+    var id1 = $('#mdpInscr').val(); //if #id1 is input element change from .text() to .val() 
+    var id2 = $('#mdpInscr2').val(); //if #id2 is input element change from .text() to .val()
+    alert(id1);
+    alert(id2);
+    if (id1 != id2) {
+        var elem = document.querySelector('.modal');
+        var instance = M.Modal.getInstance(elem);
+        instance.open();
+        return false;
+    }
+    else return true;
+});
+</script>
 end;
     }
 }

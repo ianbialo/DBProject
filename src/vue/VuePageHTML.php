@@ -15,6 +15,7 @@ class VuePageHTML
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
         $path = $requete->getRootUri();
+        $acc = $app->urlFor("accueil");
         return <<<end
 <!DOCTYPE html>
 <html>
@@ -22,6 +23,7 @@ class VuePageHTML
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>DBProjet</title>
+        <link rel="icon" type="image/png" href="$path/img/favicon.png" />
 
         <!--Import Google Icon Font-->
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -33,17 +35,23 @@ class VuePageHTML
     <body>
         <script type="text/javascript" src="$path/js/materialize.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script>
+        $(document).ready(function() {
+        $('.modal').modal();
+    //$('input').characterCounter();
+  });
+        </script>
         <header>
         <nav class="white" role="navigation">
             <div class="nav-wrapper container">
-                <a id="logo-container" href="#" class="brand-logo">Logo</a>
+                <a id="logo-container" href="$acc" class="brand-logo">Logo</a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a href="#">Navbar Link</a></li>
+                    <li><a href="$acc">Navbar Link</a></li>
                 </ul>
                 <ul id="nav-mobile" class="sidenav">
-                    <li><a href="#">Navbar Link</a></li>
+                    <li><a href="$acc">Navbar Link</a></li>
                 </ul>
-                <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <a href="$acc" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             </div>
         </nav>
         </header>

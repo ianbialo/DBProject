@@ -8,6 +8,7 @@ class Authentication
 
     public static function createUser($id, $mdp, $orga, $nom, $prenom, $adr, $tel)
     {
+        $app = \Slim\Slim::getInstance();
         $userTest = User::getById($id);
         if ($userTest == null) {
             $mdp = password_hash($mdp, PASSWORD_DEFAULT, Array(
