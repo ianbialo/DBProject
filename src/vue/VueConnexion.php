@@ -37,7 +37,7 @@ end;
         $inscr = $app->urlFor("inscription");
         return <<<end
         <div class="card-panel hoverable">
-        <p>Connexion</p>
+        <h3>Connexion</h3>
         <form method="POST" action="$postCo">
             <div class="input-field col s12">
                 <i class="material-icons prefix">account_circle</i>
@@ -63,7 +63,9 @@ end;
         $app = \Slim\Slim::getInstance();
         $retour = $app->urlFor("accueil");
         $inscr = $app->urlFor("postInscription");
-        return <<<end
+        if(isset($_SESSION['message'])) $msg = $_SESSION['message'];
+        else $msg = "";
+        $res = <<<end
         <h3>Inscription</h3>
         <div class="card-panel hoverable">
         <form id="formInscr" class="col s12" method="POST" action="$inscr">
@@ -129,7 +131,6 @@ end;
             <button class="btn" type="submit" name="action">Inscription
                 <i class="material-icons right">send</i>
             </button>
-            <input type="submit" value="Inscription"/>
             </div>
         </form>
 
@@ -137,30 +138,47 @@ end;
 <div id="modal1" class="modal">
     <div class="modal-content">
       <h4>Attention</h4>
-      <p>Les mots de passe ne correspondent pas. Veuillez réessayer.</p>
+      <p>$msg</p>
     </div>
     <div class="modal-footer">
       <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">D'accord</a>
     </div>
   </div>
 
-
-
 <script>
+end;
+        if(isset($_SESSION['message'])){
+            $msg .= "var elem = document.querySelector('#modal1');
+        var instance = M.Modal.getInstance(elem);
+        instance.open();";
+        }
+        $res .= <<<end
 $('#formInscr').submit(function() {
-    var id1 = $('#mdpInscr').val(); //if #id1 is input element change from .text() to .val() 
-    var id2 = $('#mdpInscr2').val(); //if #id2 is input element change from .text() to .val()
-    alert(id1);
-    alert(id2);
+    let id1 = $('#mdpInscr').val(); //if #id1 is input element change from .text() to .val() 
+    let id2 = $('#mdpInscr2').val(); //if #id2 is input element change from .text() to .val()
+    let tel = $('#telInscr').val();
     if (id1 != id2) {
-        var elem = document.querySelector('.modal');
+end;
+        $msg = "Les deux mot de passe ne correspondent pas. Veuillez réessayer.";
+        $res .= <<<end
+        var elem = document.querySelector('#modal1');
         var instance = M.Modal.getInstance(elem);
         instance.open();
         return false;
     }
-    else return true;
+    if(tel.length<10){
+end;
+        $msg = "Le numéro de téléphone doit être composé de au moins 10 chiffres.";
+        $res .= <<<end
+        var elem = document.querySelector('#modal1');
+        var instance = M.Modal.getInstance(elem);
+        instance.open();
+        return false;
+    }
+    return true;
 });
 </script>
 end;
+        return $res;
     }
 }

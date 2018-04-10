@@ -24,7 +24,7 @@ class Authentication
             $u->tel = $tel;
             $u->save();
         } else {
-            echo "<script>alert('L utilisateur existe déjà');</script>";
+            $_SESSION['message'] = "L'utilisateur existe déjà. Veuillez utiliser un autre login.";
             $app->redirect($app->urlFor("inscription"));
         }
     }
