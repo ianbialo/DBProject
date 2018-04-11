@@ -39,23 +39,39 @@ class Authentication
                 unset($_COOKIE['user']);
                 setcookie('user', '', time() - 60 * 60 * 24, '/');
             } else {
+                $_SESSION['message'] = "Les renseignements fournis ne sont pas corrects. Veuillez réessayer";
                 $app->redirect($app->urlFor("accueil"));
             }
         } else {
+            $_SESSION['message'] = "Les renseignements fournis ne sont pas corrects. Veuillez réessayer";
             $app->redirect($app->urlFor("accueil"));
         }
     }
 
     public static function disconnect()
     {
-        $app =  \Slim\Slim::getInstance();
+        $app = \Slim\Slim::getInstance();
         if (isset($_COOKIE['user'])) {
             unset($_COOKIE['user']);
-            setcookie('user', '', time() - 60*60*24, '/'); // valeur vide et temps dans le passé
+            setcookie('user', '', time() - 60 * 60 * 24, '/'); // valeur vide et temps dans le passé
         }
         $app->redirect($app->urlFor("accueil"));
     }
 
-    public static function updateUser($u, $surName, $firstName, $mail, $password)
-    {}
+    public static function updateUser($id, $orga, $nom, $prenom, $adr, $tel, $mdp = null)
+    {
+        $u = User::getById($id);
+        $u->organisme = $orga;
+        $u->nom = $nom;
+        $u->prenom = $prenom;
+        $u->adr = $adr;
+        $u->tel = $tel;
+        if(isset($mdp)){
+            $mdp = password_hash($mdp, PASSWORD_DEFAULT, Array(
+                'cost' => 12
+                ));
+            $u->mdp = $mdp;
+        }
+        $u->save();
+    }
 }

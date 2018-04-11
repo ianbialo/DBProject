@@ -16,7 +16,7 @@ class VuePageHTML
         $requete = $app->request();
         $path = $requete->getRootUri();
         $acc = $app->urlFor("accueil");
-        return <<<end
+        $res = <<<end
 <!DOCTYPE html>
 <html>
     <head>
@@ -37,12 +37,29 @@ class VuePageHTML
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script>
         $(document).ready(function() {
-        $('.modal').modal();
-    //$('input').characterCounter();
-  });
+            $('.modal').modal();
+            $(function() {
+                M.updateTextFields();
+            });
+        });
         </script>
-        <header>
-        <nav class="white" role="navigation">
+end;
+        if(isset($_COOKIE['user'])) $res .= self::getHeaderCo();
+        else $res .= self::getHeaderPasCo();
+        $res .= "
+                <main>";
+		
+        return $res;
+    }
+        
+    private static function getHeaderPasCo(){
+        $app = \Slim\Slim::getInstance();
+        $requete = $app->request();
+        $path = $requete->getRootUri();
+        $acc = $app->urlFor("accueil");
+        return <<<end
+            <header>
+            <nav class="white" role="navigation">
             <div class="nav-wrapper container">
                 <a id="logo-container" href="$acc" class="brand-logo">Logo</a>
                 <ul class="right hide-on-med-and-down">
@@ -55,8 +72,29 @@ class VuePageHTML
             </div>
         </nav>
         </header>
-        <main>
-		
+end;
+    }
+        
+    private static function getHeaderCo(){
+        $app = \Slim\Slim::getInstance();
+        $requete = $app->request();
+        $path = $requete->getRootUri();
+        $modif = $app->urlFor("modification");
+        return <<<end
+            <header>
+            <nav class="white" role="navigation">
+            <div class="nav-wrapper container">
+                <a id="logo-container" href="$modif" class="brand-logo">Logo</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="$modif">Modifier profil</a></li>
+                </ul>
+                <ul id="nav-mobile" class="sidenav">
+                    <li><a href="$modif">Modifier profil</a></li>
+                </ul>
+                <a href="$modif" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            </div>
+        </nav>
+        </header>
 end;
     }
 

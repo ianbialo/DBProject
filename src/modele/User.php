@@ -5,8 +5,9 @@ class User extends \Illuminate\Database\Eloquent\Model
 {
     
     protected $table = 'user';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'login';
     public $timestamps = false;
+    public $incrementing = false;
     
     public static function getById($id){
         $id = filter_var($id, FILTER_SANITIZE_EMAIL);
