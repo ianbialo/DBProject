@@ -13,7 +13,7 @@ class VueError404
     }
 
     /**
-     * @param unknown $num
+     * @param $num
      * @return string
      * 
      * Méthode pour afficher la page 404
@@ -21,10 +21,9 @@ class VueError404
     public function render($num = null)
     {
     	$app = \Slim\Slim::getInstance();
-    	// $app->getEncryptedCookie("enseignantCrypt");
     	$accueil = $app->urlFor("accueil");
     	$content="<h1>Il semble que la page soit inexistente</h1>";
     	$content.="<a href='$accueil'>Retour à l'accueil</a>";
-    	return VuePageHTML::header().$content.VuePageHTML::getFooter();
+    	return VuePageHTMLFrontOffice::header().$content.VuePageHTMLFrontOffice::getFooter();
     }
 }
