@@ -62,5 +62,11 @@ $app->post('/modification(/)', function (){
     (new dbproject\controleur\ControleurConnexion())->postModification();
 })->name("postModification");
 
+
+
+$app->notFound(function(){
+    (new dbproject\controleur\ControleurError404())->affichageErreur();
+});
+
 //Lancement de Slim
 $app->run();

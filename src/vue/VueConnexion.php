@@ -56,6 +56,7 @@ end;
         $inscr = $app->urlFor("inscription");
         $mdpOublie = $app->urlFor("recuperation");
         $res = <<<end
+
         <div class="card-panel hoverable">
         <h3>Connexion</h3>
         <form method="POST" action="$postCo">
@@ -182,13 +183,21 @@ $('#formInscr').submit(function() {
     let id1 = $('#mdpInscr').val(); //if #id1 is input element change from .text() to .val() 
     let id2 = $('#mdpInscr2').val(); //if #id2 is input element change from .text() to .val()
     let tel = $('#telInscr').val();
+    if (!(/\d/.test(id1)) || !(/[a-z]/.test(id1)) || !(/[A-Z]/.test(id1))) {
+end;
+        $msg = "Le mot de passe doit contenir au moins une lettre majuscule et minuscule ainsi qu'un chiffre.";
+        $res .= Modal::enclencher($msg);
+        $res .= <<<end
+        return false;
+    }
+
     if (id1 != id2) {
 end;
         $msg = "Les deux mot de passe ne correspondent pas. Veuillez réessayer.";
         $res .= Modal::enclencher($msg);
         $res .= <<<end
         return false;
-    }
+    }    
     if($.isNumeric(tel)){
     }else{
 end;
@@ -247,7 +256,7 @@ end;
             <div class="input-field col s12">
                 <i class="material-icons prefix">account_circle</i>
                 <input disabled value="$id" type="email" id="loginModif" name="loginModif" class="validate" required><br>
-                <label for="loginmodif">Inchangeable</label>
+                <label for="loginmodif">Login (Inchangeable)</label>
                 <span class="helper-text" data-error="Il faut rentrer une adresse mail valide" ></span>
             </div>
             <input name="loginModifhide" type="hidden" value="$id">

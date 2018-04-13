@@ -7,6 +7,7 @@ class VueMail{
     const AFF_MDP = 0;
     const AFF_INSCR = 1;
     const AFF_MODIFICATION = 2;
+    const AFF_ECHEC = 3;
     
     public function render($selecteur, $tab = null)
     {
@@ -19,6 +20,9 @@ class VueMail{
                 break;
             case VueMail::AFF_MODIFICATION :
                 $content = $this->affModification();
+                break;
+            case VueMail::AFF_ECHEC :
+                $content = $this->affEchec();
                 break;
         }
         return VuePageHTML::header().$content.VuePageHTML::getFooter();
@@ -50,6 +54,16 @@ end;
         return <<<end
         <h3>Modification</h3>
         <p>Un email vous a été envoyé. Veuillez vérifier votre boîte mail.</p><br>
+        <a href="$retour" class="btn waves-effect waves-light">Retour</a>
+end;
+    }
+        
+    private function affEchec(){
+        $app = \Slim\Slim::getInstance();
+        $retour = $app->urlFor("accueil");
+        return <<<end
+        <h3>Echec</h3>
+        <p>Un erreur est survenue. Veuillez réessayer ultérieurement.</p><br>
         <a href="$retour" class="btn waves-effect waves-light">Retour</a>
 end;
     }

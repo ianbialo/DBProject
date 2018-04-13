@@ -61,14 +61,7 @@ end;
             <header>
             <nav class="white" role="navigation">
             <div class="nav-wrapper container">
-                <a id="logo-container" href="$acc" class="brand-logo">Logo</a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a href="$acc">Navbar Link</a></li>
-                </ul>
-                <ul id="nav-mobile" class="sidenav">
-                    <li><a href="$acc">Navbar Link</a></li>
-                </ul>
-                <a href="$acc" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <a id="logo-container" href="$acc" class="brand-logo">DBProject</a>
             </div>
         </nav>
         </header>
@@ -84,7 +77,7 @@ end;
             <header>
             <nav class="white" role="navigation">
             <div class="nav-wrapper container">
-                <a id="logo-container" href="$modif" class="brand-logo">Logo</a>
+                <a id="logo-container" href="$modif" class="brand-logo">DBProject</a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="$modif">Modifier profil</a></li>
                 </ul>

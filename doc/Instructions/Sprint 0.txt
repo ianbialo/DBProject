@@ -16,4 +16,6 @@ Sprint 1 : gestion des utilisateurs
 •	En tant qu'utilisateur en possession d'un compte (login (email) / mot de passe), je peux accéder au site.
 •	En tant qu'utilisateur non identifié, je peux créer un compte : login (email), mot de passe, nom de l'organisme, nom / prénom contact, adresse, téléphone).
 •	En tant qu'utilisateur ayant demandé un compte utilisateur, je reçois un mail pour valider mon compte. 
-•	En tant qu'utilisateur identifié, je peux : modifier mes informations, changer mon mot de passe, supprimer complètement mon compte.  
+•	En tant qu'utilisateur identifié, je peux : modifier mes informations, changer mon mot de passe, supprimer complètement mon compte. 
+
++ rajouter la complexité sur les mot de passes : taille minimum (6 par exemple), une lettre minuscule, une lettre majuscule, et un chiffre.
