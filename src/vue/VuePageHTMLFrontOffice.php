@@ -27,6 +27,8 @@ class VuePageHTMLFrontOffice
         <link href="$path/css/perso.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     </head>
     <body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script type="text/javascript" src="$path/js/perso.js"></script>
         <header>
             <p>Ceci est le header</p>
         </header>

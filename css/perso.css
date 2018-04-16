@@ -1,7 +1,16 @@
-input, label {
-    display:block;
+div {
+	margin-top: 10px;
 }
 
-.info{
-	margin-top:10px;
+
+.info > input {
+	display: block;
+}
+
+.info > label {
+	display: block;
+}
+
+#in {
+	display: inline;
 }

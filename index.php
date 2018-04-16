@@ -24,6 +24,10 @@ $app->get('/', function (){
     (new dbproject\controleur\ControleurFrontOffice())->index();
 })->name("accueil");
 
+$app->get('/ui(/)', function (){
+    (new dbproject\controleur\ControleurFrontOffice())->formulaireOk();
+})->name("formulaireOk");
+
 $app->get('/admin(/)', function (){
     //(new dbproject\controleur\ControleurFrontOffice())->index();
 })->name("admin");
