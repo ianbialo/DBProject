@@ -45,7 +45,7 @@ end;
         $val = $app->urlFor("postFormulaire");
         return <<<end
         <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
-            <form method="POST" action="$val" enctype="multipart/form-data">
+            
 
                 <h2>Structure</h2>
                 <div class="info">
@@ -54,11 +54,11 @@ end;
                 </div>
                 <div class="info">
                     <label>Adresse de la structure demanderesse *</label>
-                    <input type="text" id="adrstruct" name="adrstruct" required>
-                    <label>Code Postal *</label>
-                    <input type="text" id="cpostalstruct" name="cpostalstruct" pattern=".{,6}" required>
-                    <label>Ville *</label>
-                    <input type="text" id="villestruct" name="villestruct" required>
+                    <input type="text" class="grandeTaille" id="adrstruct" name="adrstruct" placeholder="Adresse" required>
+                    <div id="in">
+                        <input type="number" id="cpostalstruct" name="cpostalstruct" placeholder="Code Postal" max="99999" required>
+                        <input type="text" id="villestruct" name="villestruct" placeholder="Ville" required>
+                    </div>
                 </div>
                 <div class="info">
                     <label>Raison d'être de la structure demanderesse *</label>
@@ -81,11 +81,19 @@ end;
                         <input type="text" id="autre" name="autre">
                     </div>
                 </div>
-
+                <div class="info">
+                    <label>Site internet</label>
+                    <input type="url" id="site" maxlength="60" name="site">
+                </div>
+                
+            
                 <h2>Personnel</h2>
                 <div class="info">
                     <label>Nom et prénom du représentant légal (qui signera la convention)*</label>
-                    <input type="text" id="rpzlegal" name="rpzlegal" maxlength="60" required>
+                    <div id="in">
+                        <input type="text" id="nomrzplegal" name="nomrzplegal" placeholder="Nom" maxlength="30" required>
+                        <input type="text" id="prenomrzplegal" name="prenomrzplegal" placeholder="Prenom" maxlength="30" required>
+                    </div>
                 </div>
                 <div class="info">
                     <label>Qualité du signataire *</label>
@@ -93,7 +101,10 @@ end;
                 </div>
                 <div class="info">
                     <label>Nom et prénom du responsable du projet *</label>
-                    <input type="text" id="respprojet" name="respprojet" maxlength="60" required>
+                    <div id="in">
+                        <input type="text" id="nomresplegal" name="nomresplegal" placeholder="Nom" maxlength="30" required>
+                        <input type="text" id="prenomresplegal" name="prenomresplegal" placeholder="Prenom" maxlength="30" required>
+                    </div>
                 </div>
                 <div class="info">
                     <label>Position dans la structure *</label>
@@ -101,11 +112,10 @@ end;
                 </div>
                 <div class="info">
                     <label>Adresse du porteur du projet *</label>
-                    <input type="text" id="adrporteur" name="adrporteur" required>
-                    <label>Code Postal *</label>
-                    <input type="text" id="cpostalporteur" name="cpostalporteur" pattern=".{,6}" required>
-                    <label>Ville *</label>
-                    <input type="text" id="villeporteur" name="villeporteur" required>
+                    <input type="text" class="grandeTaille" id="adrport" name="adrport" placeholder="Adresse" required>
+                    <div id="in">
+                    <input type="number" id="cpostalport" name="cpostalport" placeholder="Code Postal" max="99999" required>
+                    <input type="text" id="villeport" name="villeport" placeholder="Ville" required></div>
                 </div>
                 <div class="info">
                     <label>Telephone *</label>
@@ -115,11 +125,9 @@ end;
                     <label>Courriel *</label>
                     <input type="email" id="courriel" name="courriel" maxlength="60" required>
                 </div>
-                <div class="info">
-                    <label>Site internet</label>
-                    <input type="url" id="site" maxlength="60" name="site">
-                </div>
-
+                
+            
+            <form method="POST" action="$val" enctype="multipart/form-data">
                 <h2>Projet</h2>
                 <div class="info">
                     <label>Exposé synthétique du projet ou des actions à soutenir *</label>
@@ -130,7 +138,7 @@ end;
                     <input type="file" name="fileToUpload" id="fileToUpload">
                 </div>
                 <div class="info">
-                    <label>Courriel *</label>
+                    <label>Date de début du projet *</label>
                     <input type="date" id="datedeb" name="datedeb" required>
                 </div>
                 <div class="info">
@@ -153,9 +161,17 @@ end;
                     <label>Indiquez à quelles fins sera utilisé le montant demandé à Demathieu Bard *</label>
                     <textarea rows="1" cols="50" style="resize:none" id="findb" name="findb" maxlength="90" required></textarea>
                 </div>
-                <div class="info">
+                <!--<div class="info">
                     <label>Co-financeur(s) éventuel(s)</label>
-                    <input type="text" id="cofindb" name="cofindb" maxlength="90"></textarea>
+                    <input type="text" id="cofindb" name="cofindb" maxlength="90"></input>
+                </div>-->
+                <div class="info" >
+                    <label id="labelcofin">Co-financeur(s) éventuel(s) ? (maximum 5)</label>
+                    <div class="cofin">
+                    </div>
+                    <br>
+                    <input type="button" id="boutoncofin" value="Ajouter">
+                    <input type="hidden" id="nbCo" name="nbCo" value="0">
                 </div>
                 <div class="info">
                     <label>Votre projet est-il d'intérêt général ? *</label>
@@ -192,7 +208,8 @@ end;
                     <textarea rows="3" cols="50" style="resize:none" id="valorev" name="valorev"></textarea>
                 </div>
                 <br><input type="submit" value="Validation de votre demande" name="submit">
-            </form>
+              </form>  
+            
 end;
     }
 
