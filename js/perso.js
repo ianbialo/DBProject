@@ -3,9 +3,18 @@
  */
 
 application = (function(){
+	
+	//Booléen permettant de récupérer les informations sur la structure si il est mentionné "autre"
 	let changed = true;
+	
+	//Booléen utilisé dans l'identification du parrain
 	let changed2 = true;
+	
+	//Nombre de co-fondateurs
 	let nbCo = 0;
+	
+	//Iterateur utilisé dans la récupération des co-fondateurs
+	let valNbCo = 0;
 
 	return{
 		run : function(){
@@ -23,13 +32,20 @@ application = (function(){
 		listener : function(){
 
 			$("#boutoncofin").on("click",function(){
-				//$('<div id="in">').append('<input type="button" value="-">').append('<input type="text" id="" name="" maxlength="90"></input>').insertAfter('#labelcofin');
+				
+				//S'il y a moins de 5 co-fondateurs
 				if(nbCo < 5){
-					let x = nbCo;
+					
+					//Ajout
+					let x = valNbCo;
 					$( ".cofin" ).append( $('<div id="divco'+x+'">').append('<input type="button" id="btnco'+x+'" name="btnco'+x+'" value="-">').append('<input type="text" id="nomco'+x+'" name="nomco'+x+'" maxlength="90" placeholder="Nom" required></input>').append('<input type="text" id="prenomco'+x+'" name="prenomco'+x+'" maxlength="90" placeholder="Prenom" required></input>') );
 					nbCo++;
+					valNbCo++;
+					
+					//Ajoute à l'input caché le (nouveau) nombre de co-fondateurs
 					$( "#nbCo" ).val(nbCo);
 
+					//Ajout du listener sur le nouveau bonton créé : supprime l'input et décrémente la valeur de l'input caché
 					$( "#btnco"+x ).on("click",function(){
 						$( "#divco"+x ).remove();
 						nbCo--;
@@ -39,7 +55,6 @@ application = (function(){
 			}),
 
 			$("#vousetes").change(function() {
-				//console.log($( this ).val());
 				if($( this ).val()==0){
 					$("#selecteur").find("#divautre").toggle();
 					$("#selecteur").find("#divautre").find("#autre").prop('required',true);
@@ -56,10 +71,28 @@ application = (function(){
 			});
 
 			$('#parrain').change(function() {
-				//console.log($('input[name=group1]:checked', '#parrain').val()); 
-				$("#parrain").find("#divautre2").toggle();
-				if($('input[name=group1]:checked', '#parrain').val() == 1) $("#parrain").find("#divautre2").find("#txtparrain").prop('required',true);
-				else $("#parrain").find("#divautre2").find("#txtparrain").prop('required',false);
+				
+				//Si le bouton vient d'être changé sur "Vrai"
+				if(changed2 && ($('input[name=group1]:checked', '#parrain').val() == 1)){
+					$("#parrain").find("#divautre2").toggle();
+					changed2 = false;
+				}
+				
+				//Si le bouton vient d'être changé sur "Faux"
+				if(!changed2 && ($('input[name=group1]:checked', '#parrain').val() == 0)){
+					$("#parrain").find("#divautre2").toggle();
+					changed2 = true;
+				}
+				
+				//Si le bouton est vrai, ajoute l'attribut required sur les inputs, sinon les enlève
+				if($('input[name=group1]:checked', '#parrain').val() == 1) {
+					$("#parrain").find("#divautre2").find("#nomparrain").prop('required',true);
+					$("#parrain").find("#divautre2").find("#prenomparrain").prop('required',true);
+				}
+				else {
+					$("#parrain").find("#divautre2").find("#nomparrain").prop('required',false);
+					$("#parrain").find("#divautre2").find("#prenomparrain").prop('required',false);
+				}
 			});
 		}
 

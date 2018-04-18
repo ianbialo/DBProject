@@ -24,13 +24,17 @@ $app->get('/', function (){
     (new dbproject\controleur\ControleurFrontOffice())->index();
 })->name("accueil");
 
-$app->get('/ui(/)', function (){
+$app->get('/enrengistrement(/)', function (){
     (new dbproject\controleur\ControleurFrontOffice())->formulaireOk();
 })->name("formulaireOk");
 
-$app->get('/admin(/)', function (){
-    //(new dbproject\controleur\ControleurFrontOffice())->index();
-})->name("admin");
+$app->get('/admin/formulaire(/)', function (){
+    (new dbproject\controleur\ControleurBackOffice())->affichageFormulaires();
+})->name("listeFormulaires");
+
+$app->get('/admin/formulaire/:no', function ($no){
+    (new dbproject\controleur\ControleurBackOffice())->affichageProjet($no);
+})->name("projet");
 
 
 
@@ -43,6 +47,11 @@ $app->post('/form(/)',function(){
 })->name("postFormulaire");
 
 
+
+
+///////////////////////////////////////
+///             NOT FOUND           ///
+///////////////////////////////////////
 
 $app->notFound(function(){
     (new dbproject\controleur\ControleurError404())->affichageErreur();

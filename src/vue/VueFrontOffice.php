@@ -21,31 +21,13 @@ class VueFrontOffice
         return VuePageHTMLFrontOffice::header() . $content . VuePageHTMLFrontOffice::getFooter();
     }
 
-    private function index2()
-    {
-        $app = \Slim\Slim::getInstance();
-        $val = $app->urlFor("postFormulaire");
-        return <<<end
-            <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
-            <form method="POST" action="$val" enctype="multipart/form-data">
-
-                <h2>Structure</h2>
-                <div class="info">
-                    <label>Nom de la structure demanderesse *</label>
-                    <input type="text" id="nomstruct" name="nomstruct" maxlength="10" autofocus required>
-                </div>
-                <br><input type="submit" value="Validation de votre demande" name="submit">
-            </form>
-end;
-    }
-
     private function index()
     {
         $app = \Slim\Slim::getInstance();
         $val = $app->urlFor("postFormulaire");
         return <<<end
         <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
-            
+            <form method="POST" action="$val" enctype="multipart/form-data">
 
                 <h2>Structure</h2>
                 <div class="info">
@@ -54,10 +36,10 @@ end;
                 </div>
                 <div class="info">
                     <label>Adresse de la structure demanderesse *</label>
-                    <input type="text" class="grandeTaille" id="adrstruct" name="adrstruct" placeholder="Adresse" required>
+                    <input type="text" class="grandeTaille" id="adrstruct" name="adrstruct" placeholder="Adresse" maxlength="80" required>
                     <div id="in">
                         <input type="number" id="cpostalstruct" name="cpostalstruct" placeholder="Code Postal" max="99999" required>
-                        <input type="text" id="villestruct" name="villestruct" placeholder="Ville" required>
+                        <input type="text" id="villestruct" name="villestruct" placeholder="Ville" maxlength="60" required>
                     </div>
                 </div>
                 <div class="info">
@@ -65,7 +47,7 @@ end;
                     <textarea rows="3" cols="50" style="resize:none" id="raisontruct" name="raisonstruct" required></textarea>
                 </div>
                 <div id="selecteur" class="info">
-                    <label>Vous êtes :</label>
+                    <label>Vous êtes : *</label>
                     <select id="vousetes" name="vousetes">
                         <option value="Une association">Une association</option>
                         <option value="Un particulier">Un particulier</option>
@@ -77,7 +59,7 @@ end;
                         <option value="0">Autre...</option>
                     </select>
                     <div id="divautre">
-                        <label>Veuillez préciser :</label>
+                        <label>Veuillez préciser : *</label>
                         <input type="text" id="autre" name="autre">
                     </div>
                 </div>
@@ -112,10 +94,10 @@ end;
                 </div>
                 <div class="info">
                     <label>Adresse du porteur du projet *</label>
-                    <input type="text" class="grandeTaille" id="adrport" name="adrport" placeholder="Adresse" required>
+                    <input type="text" class="grandeTaille" id="adrport" name="adrport" placeholder="Adresse" maxlength="80" required>
                     <div id="in">
                     <input type="number" id="cpostalport" name="cpostalport" placeholder="Code Postal" max="99999" required>
-                    <input type="text" id="villeport" name="villeport" placeholder="Ville" required></div>
+                    <input type="text" id="villeport" name="villeport" placeholder="Ville" maxlength="60" required></div>
                 </div>
                 <div class="info">
                     <label>Telephone *</label>
@@ -126,8 +108,7 @@ end;
                     <input type="email" id="courriel" name="courriel" maxlength="60" required>
                 </div>
                 
-            
-            <form method="POST" action="$val" enctype="multipart/form-data">
+
                 <h2>Projet</h2>
                 <div class="info">
                     <label>Exposé synthétique du projet ou des actions à soutenir *</label>
@@ -180,7 +161,7 @@ end;
                 </div>
                 <div class="info">
                     <label>Domaine principal du projet *</label>
-                    <input type="text" id="domaine" name="domaine" maxlength="90" required>
+                    <textarea rows="1" cols="50" style="resize:none" id="domaine" name="domaine" maxlength="90" required></textarea>
                 </div>
                 <div id="parrain" class="info">
                     <label>Avez vous un parrain impliqué dans votre projet, salarié ou retraité du Groupe ? *</label>
@@ -189,7 +170,10 @@ end;
                     <div id="divautre2">
                         <div class="info">
                             <label>Nom et prénom du parrain *</label>
-                            <input type="text" id="txtparrain" name="txtparrain">
+                            <div id="in">
+                                <input type="text" id="nomparrain" name="nomparrain" placeholder="Nom">
+                                <input type="text" id="prenomparrain" name="prenomparrain" placeholder="Prenom">
+                            </div>
                         </div>
                     </div>
                 </div>
