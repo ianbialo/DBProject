@@ -18,14 +18,14 @@ class ControleurFrontOffice
 
     public function formulaireOk()
     {
-        if (Formulaire::getFormulaireOk()) {
-            Formulaire::switchFormulaireOk();
+        //if ($form::$insertionOk) {
+            //Formulaire::switchFormulaireOk();
             $vue = new VueFrontOffice();
             print $vue->render(VueFrontOffice::AFF_OK);
-        } else {
+       /** } else {
             $app = \Slim\Slim::getInstance();
             return $app->notFound();
-        }
+        }*/
     }
 
     // /////////////////////////////////////

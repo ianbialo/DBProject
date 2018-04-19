@@ -9,7 +9,7 @@ class Responsable extends \Illuminate\Database\Eloquent\Model
     public $timestamps = false;
     
     public static function getById($id){
-        $id = filter_var($id, FILTER_SANITIZE_EMAIL);
-        return User::where('IdRes', '=', $id)->first();
+        $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+        return Responsable::where('IdRes', '=', $id)->first();
     }
 }

@@ -24,7 +24,7 @@ $app->get('/', function (){
     (new dbproject\controleur\ControleurFrontOffice())->index();
 })->name("accueil");
 
-$app->get('/enrengistrement(/)', function (){
+$app->get('/enregistrement(/)', function (){
     (new dbproject\controleur\ControleurFrontOffice())->formulaireOk();
 })->name("formulaireOk");
 

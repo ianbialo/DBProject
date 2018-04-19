@@ -20,10 +20,10 @@ class ControleurBackOffice
         print $vue->render(VueBackOffice::AFF_FORMULAIRE);
     }
     
-    public function affichageProjet()
+    public function affichageProjet($no)
     {
-        //$vue = new VueBackOffice();
-        //print $vue->render(VueBackOffice::AFF_FORMULAIRE);
+        $vue = new VueBackOffice();
+        print $vue->render(VueBackOffice::AFF_PROJET,$no);
     }
     
     // /////////////////////////////////////

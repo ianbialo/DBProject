@@ -9,7 +9,11 @@ class Projet extends \Illuminate\Database\Eloquent\Model
     public $timestamps = false;
     
     public static function getById($id){
-        $id = filter_var($id, FILTER_SANITIZE_EMAIL);
-        return User::where('IdProjet', '=', $id)->first();
+        $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+        return Projet::where('IdProjet', '=', $id)->first();
+    }
+    
+    public static function getAll(){
+        return Projet::all();
     }
 }

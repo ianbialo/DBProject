@@ -42,6 +42,7 @@ class VuePageHTMLBackOffice
             $(function() {
                 M.updateTextFields();
             });
+            
         });
         </script>
 end;

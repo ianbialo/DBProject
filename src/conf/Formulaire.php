@@ -9,7 +9,7 @@ use dbproject\modele\Implique;
 
 class Formulaire
 {
-    private static $insertionOk = false;
+    public static $insertionOk = false;
 
     public static function insertionFormulaire()
     {
@@ -97,16 +97,20 @@ class Formulaire
             $imp->Role = 1;
             $imp->save();
         }
-        
-         self::switchFormulaireOk();
-    }
-    
-    public static function getFormulaireOk(){
-        return self::$insertionOk;
+         //self::switchFormulaireOk();
     }
     
     public static function switchFormulaireOk(){
         if(self::$insertionOk) self::$insertionOk = false;
         else self::$insertionOk = true;
+    }
+    
+    public static function transformerDate($date){
+        $date = explode("-",$date);
+        $monthArray = array("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre");
+        $jour = $date[2];
+        $mois = $monthArray[$date[1]-1];
+        $annee = $date[0];
+        return $jour." ".$mois." ".$annee;       
     }
 }

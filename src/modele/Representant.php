@@ -9,7 +9,7 @@ class Representant extends \Illuminate\Database\Eloquent\Model
     public $timestamps = false;
     
     public static function getById($id){
-        $id = filter_var($id, FILTER_SANITIZE_EMAIL);
-        return User::where('IdRep', '=', $id)->first();
+        $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+        return Representant::where('IdRep', '=', $id)->first();
     }
 }

@@ -9,7 +9,7 @@ class Structure extends \Illuminate\Database\Eloquent\Model
     public $timestamps = false;
     
     public static function getById($id){
-        $id = filter_var($id, FILTER_SANITIZE_EMAIL);
-        return User::where('IdStruct', '=', $id)->first();
+        $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+        return Structure::where('IdStruct', '=', $id)->first();
     }
 }
