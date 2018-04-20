@@ -12,7 +12,9 @@ class VueBackOffice
 {
 
     const AFF_INDEX = 0;
+
     const AFF_FORMULAIRE = 1;
+
     const AFF_PROJET = 2;
 
     public function render($selecteur, $tab = null)
@@ -48,12 +50,31 @@ end;
                 <h3>Liste des projets</h3>
                 
 end;
-        foreach($listeProj as $p){
-            $struct  = Structure::getById($p->IdStruct);
+        foreach ($listeProj as $p) {
+            $struct = Structure::getById($p->IdStruct);
             $rep = Representant::getById($p->IdStruct);
             $resp = Responsable::getById($p->IdStruct);
-            $acceder = $app->urlFor("projet",['no'=>$p->IdProjet]);
+            $acceder = $app->urlFor("projet", [
+                'no' => $p->IdProjet
+            ]);
+            $supprimer = $app->urlFor("postSuppressionFormulaire");
             $res .= <<<end
+
+              <!-- Modal Structure -->
+              <div id="modal$p->IdProjet" class="modal">
+                <div class="modal-content">
+                  <h4>Modal Header</h4>
+                  <p>Supprimer le projet de $struct->Nom est un acte irréversible. Êtes-vous sûr de vouloir continuer ?</p>
+                </div>
+                <div class="modal-footer">
+                  <form methode="POST" action="$supprimer">
+                    <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
+                    <input id="IdProjet" name="IdProjet" type="hidden" value="$p->IdProjet">
+                    <input type="submit" formmethod="post" value="Confirmer" class="modal-action modal-close waves-effect waves-green btn-flat">
+                  </form>
+                </div>
+              </div>
+
                     <div class="row">
     <div class="col s12">
       <div class="hoverable card">
@@ -64,29 +85,44 @@ end;
         </div>
         <div class="card-action">
           <a href="$acceder">Accéder</a>
-          <a href="#">Supprimer</a>
+          <a class="modal-trigger" href="#modal$p->IdProjet">Supprimer</a>
+             
         </div>
       </div>
     </div>
   </div>
+
+  
 end;
         }
-			         
-		$res .= <<<end
+        
+        $res .= <<<end
 	              
             </div>
 end;
-		return $res;
+        return $res;
     }
+
+    private function projet($no)
+    {
+        $app = \Slim\Slim::getInstance();
+        $liste = $app->urlFor("listeFormulaires");
         
-    private function projet($no){
         $proj = Projet::getById($no);
-        $struct  = Structure::getById($proj->IdStruct);
+        $struct = Structure::getById($proj->IdStruct);
         $rep = Representant::getById($proj->IdStruct);
         $resp = Responsable::getById($proj->IdStruct);
-        $date = Formulaire::transformerDate($proj->DateDep);
+        
+        $dateDep = Formulaire::transformerDate($proj->DateDep);
+        $dateDeb = Formulaire::transformerDate($proj->DateDeb);
+        $interetG = Formulaire::transformerBooleen($proj->InteretGeneral);
+        $mecenat = Formulaire::transformerBooleen($proj->Mecenat);
+        $fiscal = Formulaire::transformerBooleen($proj->Fiscal);
+        if(isset($proj->Valorisation)) $valor = $proj->Valorisation;
+        else $valor = "<label>Aucun</label>";
+        
         $cofin = Implique::getCoFinanceur($no);
-        //Fixer le bug tmtc
+        $parrain = Implique::getParrain($no);
         $res = <<<end
         <div class="container row">
                 <div class="card hoverable">
@@ -95,7 +131,7 @@ end;
                         <h5>$struct->Nom</h5>
                     </div>
                     <div class="col s6">
-                        <h5>Date de création : $date</h5>
+                        <h5>Date de création : $dateDep</h5>
                     </div>
                   </div>
                   <div class="card-tabs">
@@ -109,7 +145,65 @@ end;
                   </div>
                   <div class="card-content grey lighten-4">
                     <div id="14c1" class="active" style="display: block;">
-                        
+                        <table>
+                		<thead>
+                			<tr>
+                				<th>Intitulé</th>
+                				<th>Description</th>
+                			</tr>
+                		</thead>
+                
+                		<tbody>
+                			<tr>
+                				<td>Exposé synthétique du projet ou des actions à soutenir</td>
+                				<td>$proj->Expose</td>
+                			</tr>
+                			<tr>
+                				<td>Date de début du projet</td>
+                				<td>$dateDeb</td>
+                			</tr>
+                			<tr>
+                				<td>Durée (en mois)</td>
+                				<td>$proj->Duree</td>
+                			</tr>
+                			<tr>
+                				<td>Lieu</td>
+                				<td>$proj->Lieu</td>
+                			</tr>
+                			<tr>
+                				<td>Montant de l'aide financière sollicitée (en euros)</td>
+                				<td>$proj->Aide</td>
+                			</tr>
+                			<tr>
+                				<td>Budget prévisionnel global du projet (en euros)</td>
+                				<td>$proj->Budget</td>
+                			</tr>
+                			<tr>
+                				<td>Fins utilisé du montant demandé à Demathieu Bard</td>
+                				<td>$proj->Fin</td>
+                			</tr>
+                            <tr>
+                				<td>Le projet est-il d'intérêt général ?</td>
+                				<td>$interetG</td>
+                			</tr>
+                            <tr>
+                				<td>Domaine principal du projet</td> 
+                				<td>$proj->Domaine</td>
+                			</tr>
+                            <tr>
+                				<td>Possibilité d'établir une convention de Mécénat</td>
+                				<td>$mecenat</td>
+                			</tr>
+                            <tr>
+                				<td>Possibilité d'établir un reçu fiscal (cerfa n°11580*03)</td>
+                				<td>$fiscal</td>
+                			</tr>
+                            <tr>
+                				<td>Valorisation éventuelle</td>
+                				<td>$valor</td>
+                			</tr>
+                		</tbody>
+	                   </table>
                     </div>
                     <div id="14c2" class="" style="display: none;">
                         <table>
@@ -223,6 +317,31 @@ end;
 	                   </table>
                     </div>
                     <div id="14c5" class="" style="display: none;">
+                        <div class="hoverable card">
+                        <div class="card-content">
+                        <div class="col s12">
+                        <h5 >Co-fondateurs</h5>
+                        </div>
+end;
+        if (sizeof($cofin) == 0) {
+            $res .= <<<end
+                        <table>
+                		<thead>
+                			<tr>
+                				<th></th>
+                			</tr>
+                		</thead>
+                
+                		<tbody>
+                			<tr>
+                				<td>Aucun co-fondateur enrengistré</td>
+                			</tr>
+                		</tbody>
+	                   </table>
+end;
+        } else {
+            $res .= <<<end
+
                         <table>
                 		<thead>
                 			<tr>
@@ -233,17 +352,17 @@ end;
                 
                 		<tbody>
 end;
-        foreach ($cofin as $co){
-            $res .= <<<end
+            foreach ($cofin as $co) {
+                $res .= <<<end
 
                             <tr>
-                				<th>$co->Nom</th>
-                				<th>$co->Prenom</th>
+                				<td>$co->Nom</td>
+                				<td>$co->Prenom</td>
                 			</tr>
    
 end;
-        }
-        $res .= <<<end
+            }
+            $res .= <<<end
 
                 			<tr>
                 				<td></td>
@@ -251,10 +370,78 @@ end;
                 			</tr>
                 		</tbody>
 	                   </table>
+end;
+        }
+        $res .= <<<end
+
+                        </div>
+                       </div>
+
+<!--///////////////////////////////////////////////////////////-->
+
+                        <div class="hoverable card">
+                        <div class="card-content">
+                        <div class="col s12">
+                        <h5 >Parrain</h5>
+                        </div>
+end;
+        if (sizeof($cofin) == 0) {
+            $res .= <<<end
+                        <table>
+                		<thead>
+                			<tr>
+                				<th></th>
+                			</tr>
+                		</thead>
+                
+                		<tbody>
+                			<tr>
+                				<td>Aucun parrain enrengistré</td>
+                			</tr>
+                		</tbody>
+	                   </table>
+end;
+        } else {
+            $res .= <<<end
+
+                        <table>
+                		<thead>
+                			<tr>
+                				<th>Nom</th>
+                				<th>Prenom</th>
+                			</tr>
+                		</thead>
+                
+                		<tbody>
+end;
+            foreach ($parrain as $p) {
+                $res .= <<<end
+
+                            <tr>
+                				<td>$p->Nom</td>
+                				<td>$p->Prenom</td>
+                			</tr>
+   
+end;
+            }
+            $res .= <<<end
+
+                			<tr>
+                				<td></td>
+                				<td></td>
+                			</tr>
+                		</tbody>
+	                   </table>
+end;
+        }
+        $res .= <<<end
+
+                        </div>
+                       </div>
                     </div>
                   </div>
                 </div>
-        <a class="waves-effect waves-light btn" href="#"><i class="material-icons left">arrow_back</i>Quitter</a>
+        <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Quitter</a>
         </div>
 end;
         return $res;

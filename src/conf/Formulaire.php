@@ -100,6 +100,19 @@ class Formulaire
          //self::switchFormulaireOk();
     }
     
+    public static function supprimerFormulaire($id){
+        $implique = Implique::getImplique($id);
+        foreach($implique as $i)$i->delete();
+        $projet = Projet::getById($id);
+        $structure = Structure::getById($projet->IdStruct);        
+        $rep = Representant::getById($projet->IdRep);        
+        $res = Responsable::getById($projet->IdRes);
+        $projet->delete();
+        $structure->delete();
+        $rep->delete();
+        $res->delete();  
+    }
+    
     public static function switchFormulaireOk(){
         if(self::$insertionOk) self::$insertionOk = false;
         else self::$insertionOk = true;
@@ -112,5 +125,11 @@ class Formulaire
         $mois = $monthArray[$date[1]-1];
         $annee = $date[0];
         return $jour." ".$mois." ".$annee;       
+    }
+    
+    public static function transformerBooleen($int){
+        if($int == 0) return "Non";
+        if($int == 1) return "Oui";
+        return null;
     }
 }

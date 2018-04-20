@@ -38,7 +38,7 @@ class VuePageHTMLBackOffice
         <script>
         $(document).ready(function() {
             $('.tabs').tabs();
-            $('.modal').modal();
+            $('.modal').modal({dismissible: false});
             $(function() {
                 M.updateTextFields();
             });
@@ -63,7 +63,14 @@ end;
             <header>
             <nav class="white" role="navigation">
             <div class="nav-wrapper container">
-                <a id="logo-container" href="$acc" class="brand-logo">DBProject</a>
+                <a id="logo-container" href="#" class="brand-logo">DBProject</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="#">Deconnexion</a></li>
+                </ul>
+                <ul id="nav-mobile" class="sidenav">
+                    <li><a href="#">Deconnexion</a></li>
+                </ul>
+                <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             </div>
         </nav>
         </header>

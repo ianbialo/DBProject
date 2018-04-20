@@ -42,9 +42,13 @@ $app->get('/admin/formulaire/:no', function ($no){
 ///               POST              ///
 ///////////////////////////////////////
 
-$app->post('/form(/)',function(){
+$app->post('/postForm(/)',function(){
     (new dbproject\controleur\ControleurFrontOffice())->postFomulaire();
 })->name("postFormulaire");
+
+$app->post('/postSupprForm(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->suppressionFomulaire();
+})->name("postSuppressionFormulaire");
 
 
 
