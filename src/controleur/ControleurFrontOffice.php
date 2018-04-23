@@ -3,6 +3,7 @@ namespace dbproject\controleur;
 
 use dbproject\vue\VueFrontOffice;
 use dbproject\conf\Formulaire;
+use dbproject\conf\Uploads;
 
 class ControleurFrontOffice
 {

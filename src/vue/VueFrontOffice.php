@@ -115,8 +115,12 @@ class VueFrontOffice
                     <textarea rows="5" cols="50" style="resize:none" id="expose" name="expose" required></textarea>
                 </div>
                 <div class="info">
-                    <label>Documents de présentation éventuels (flyer, affiche…) </label>
-                    <input type="file" name="fileToUpload" id="fileToUpload">
+                    <label>Documents de présentation éventuels (flyer, affiche…) - 5 maximum</label>
+                    <div class="coFile">
+                    </div>
+                    <br>
+                    <input type="button" id="boutonfileajout" value="Ajouter">
+                    <input type="hidden" id="nbFile" name="nbFile" value="0">
                 </div>
                 <div class="info">
                     <label>Date de début du projet *</label>
@@ -200,7 +204,7 @@ end;
     private function succes()
     {
         return <<<end
-        <h3>Nous avons bien pris en compte votre demande et prendrons contact avec vous par mail au plus vite</h3>
+        <h3>Nous avons bien pris en compte votre demande et prendrons contact avec vous par mail au plus vite.</h3>
 end;
     }
 }

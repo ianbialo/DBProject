@@ -44,9 +44,15 @@ end;
     private function formulaire()
     {
         $app = \Slim\Slim::getInstance();
+        $requete = $app->request();
+        $path = $requete->getRootUri();
+        
+        $app = \Slim\Slim::getInstance();
         $listeProj = Projet::getall();
         $res = <<<end
             <div class="container">
+
+                <a href="$path/uploads/3_unix_23_04_2018_15_16_07/Suivi stage.docx">Slt</a>
                 <h3>Liste des projets</h3>
                 
 end;
@@ -108,6 +114,14 @@ end;
         $app = \Slim\Slim::getInstance();
         $liste = $app->urlFor("listeFormulaires");
         
+        $app = \Slim\Slim::getInstance();
+        $requete = $app->request();
+        $path = $requete->getRootUri();
+        $list = scandir("C:\Users\ibialo\Documents\GIT\DBProject\uploads");
+        foreach ($list as $l){
+            echo $l;
+        }
+        
         $proj = Projet::getById($no);
         $struct = Structure::getById($proj->IdStruct);
         $rep = Representant::getById($proj->IdStruct);
@@ -141,6 +155,7 @@ end;
                       <li class="tab"><a href="#14c3" class="">Représentant</a></li>
                       <li class="tab"><a href="#14c4" class="">Responsable</a></li>
                       <li class="tab"><a href="#14c5" class="">Impliqué(s)</a></li>
+                      <li class="tab"><a href="#14c6" class="">Fichier(s)</a></li>
                     <div class="indicator"></div></ul>
                   </div>
                   <div class="card-content grey lighten-4">
@@ -438,6 +453,51 @@ end;
 
                         </div>
                        </div>
+                    </div>
+                    <div id="14c6" class="" style="display: none;">
+                        <table>
+                		<thead>
+                			<tr>
+                				<th>Intitulé</th>
+                				<th>Description</th>
+                			</tr>
+                		</thead>
+                
+                		<tbody>
+                			<tr>
+                				<td>Nom</td>
+                				<td>$resp->Nom</td>
+                			</tr>
+                			<tr>
+                				<td>Prenom</td>
+                				<td>$resp->Prenom</td>
+                			</tr>
+                			<tr>
+                				<td>Position</td>
+                				<td>$resp->Position</td>
+                			</tr>
+                			<tr>
+                				<td>Adresse</td>
+                				<td>$resp->Adresse</td>
+                			</tr>
+                			<tr>
+                				<td>Code Postal</td>
+                				<td>$resp->CodePostal</td>
+                			</tr>
+                			<tr>
+                				<td>Ville</td>
+                				<td>$resp->Ville</td>
+                			</tr>
+                			<tr>
+                				<td>Tel</td>
+                				<td>$resp->Tel</td>
+                			</tr>
+                            <tr>
+                				<td>Courriel</td>
+                				<td>$resp->Courriel</td>
+                			</tr>
+                		</tbody>
+	                   </table>
                     </div>
                   </div>
                 </div>

@@ -15,33 +15,33 @@ class Formulaire
     {
         //Ajout de la structure
         $struct = new Structure();
-        $struct->Nom = $_POST['nomstruct'];
-        $struct->Adresse = $_POST['adrstruct'];
-        $struct->CodePostal = $_POST['cpostalstruct'];
-        $struct->Ville = $_POST['villestruct'];
-        $struct->Raison = $_POST['raisonstruct'];
+        $struct->Nom = filter_var($_POST['nomstruct'],FILTER_SANITIZE_STRING);
+        $struct->Adresse = filter_var($_POST['adrstruct'],FILTER_SANITIZE_STRING);
+        $struct->CodePostal = filter_var($_POST['cpostalstruct'],FILTER_SANITIZE_STRING);
+        $struct->Ville = filter_var($_POST['villestruct'],FILTER_SANITIZE_STRING);
+        $struct->Raison = filter_var($_POST['raisonstruct'],FILTER_SANITIZE_STRING);
         if($_POST['vousetes'] != "0") $struct->Type = $_POST['vousetes'];
-        else $struct->Type = $_POST['autre'];
-        $struct->Site = $_POST['site'];
+        else $struct->Type = filter_var($_POST['autre'],FILTER_SANITIZE_STRING);
+        $struct->Site = filter_var($_POST['site'],FILTER_SANITIZE_URL);
         $struct->save();
         
         //Ajout du représentant
         $rep = new Representant();
-        $rep->Nom = $_POST['nomrzplegal'];
-        $rep->Prenom = $_POST['prenomrzplegal'];
-        $rep->Qualite = $_POST['qualite'];
+        $rep->Nom = filter_var($_POST['nomrzplegal'],FILTER_SANITIZE_STRING);
+        $rep->Prenom = filter_var($_POST['prenomrzplegal'],FILTER_SANITIZE_STRING);
+        $rep->Qualite = filter_var($_POST['qualite'],FILTER_SANITIZE_STRING);
         $rep->save();
         
         //Ajout du responsable
         $res = new Responsable();
-        $res->Nom = $_POST['nomresplegal'];
-        $res->Prenom = $_POST['prenomresplegal'];
-        $res->Position = $_POST['position'];
-        $res->Adresse = $_POST['adrport'];
-        $res->CodePostal = $_POST['cpostalport'];
-        $res->Ville = $_POST['villeport'];
-        $res->Tel = $_POST['tel'];
-        $res->courriel = $_POST['courriel'];
+        $res->Nom = filter_var($_POST['nomresplegal'],FILTER_SANITIZE_STRING);
+        $res->Prenom = filter_var($_POST['prenomresplegal'],FILTER_SANITIZE_STRING);
+        $res->Position = filter_var($_POST['position'],FILTER_SANITIZE_STRING);
+        $res->Adresse = filter_var($_POST['adrport'],FILTER_SANITIZE_STRING);
+        $res->CodePostal = filter_var($_POST['cpostalport'],FILTER_SANITIZE_STRING);
+        $res->Ville = filter_var($_POST['villeport'],FILTER_SANITIZE_STRING);
+        $res->Tel = filter_var($_POST['tel'],FILTER_SANITIZE_STRING);
+        $res->courriel = filter_var($_POST['courriel'],FILTER_SANITIZE_EMAIL);
         $res->save();
         
         $IdStruct = $struct->IdStruct;
@@ -54,20 +54,20 @@ class Formulaire
         $proj->IdRes = $IdRes;
         $proj->IdRep = $IdRep;
         $proj->DateDep = date("Y-m-d");
-        $proj->Expose = $_POST['expose'];
+        $proj->Expose = filter_var($_POST['expose'],FILTER_SANITIZE_EMAIL);
         $proj->DateDeb = $_POST['datedeb'];
-        $proj->Duree = $_POST['duree'];
-        $proj->Lieu = $_POST['lieu'];
-        $proj->Aide = $_POST['aide'];
-        $proj->Budget = $_POST['budget'];
-        $proj->Fin = $_POST['findb'];
-        $proj->InteretGeneral = $_POST['group0'];
-        $proj->Domaine = $_POST['domaine'];
-        $proj->Mecenat = $_POST['group2'];
-        $proj->Fiscal = $_POST['group3'];
-        if(strlen($_POST['valorev']) != 0)$proj->Valorisation = $_POST['valorev'];
+        $proj->Duree = filter_var($_POST['duree'],FILTER_SANITIZE_NUMBER_INT);
+        $proj->Lieu = filter_var($_POST['lieu'],FILTER_SANITIZE_STRING);
+        $proj->Aide = filter_var($_POST['aide'],FILTER_SANITIZE_NUMBER_INT);
+        $proj->Budget = filter_var($_POST['budget'],FILTER_SANITIZE_NUMBER_INT);
+        $proj->Fin = filter_var($_POST['findb'],FILTER_SANITIZE_STRING);
+        $proj->InteretGeneral = filter_var($_POST['group0'],FILTER_SANITIZE_NUMBER_INT);
+        $proj->Domaine = filter_var($_POST['domaine'],FILTER_SANITIZE_STRING);
+        $proj->Mecenat = filter_var($_POST['group2'],FILTER_SANITIZE_NUMBER_INT);
+        $proj->Fiscal = filter_var($_POST['group3'],FILTER_SANITIZE_NUMBER_INT);
+        if(strlen($_POST['valorev']) != 0)$proj->Valorisation = filter_var($_POST['valorev'],FILTER_SANITIZE_STRING);
         else $proj->Valorisation = null;
-        $proj->Document = 0;
+        $proj->Document = $_POST['nbFile'];
         $proj->save();
         
         $IdProjet = $proj->IdProjet;
@@ -80,8 +80,8 @@ class Formulaire
             if(isset($_POST['nomco'.$y])){
                 $imp = new Implique();
                 $imp->IdProjet = $IdProjet;
-                $imp->Nom = $_POST['nomco'.$y];
-                $imp->Prenom = $_POST['prenomco'.$y];
+                $imp->Nom = filter_var($_POST['nomco'.$y],FILTER_SANITIZE_STRING);
+                $imp->Prenom = filter_var($_POST['prenomco'.$y],FILTER_SANITIZE_STRING);
                 $imp->Role = 0;
                 $imp->save();
                 $x--;
@@ -92,11 +92,15 @@ class Formulaire
         if($_POST['group1'] == 1){
             $imp = new Implique();
             $imp->IdProjet = $IdProjet;
-            $imp->Nom = $_POST['nomparrain'];
-            $imp->Prenom = $_POST['prenomparrain'];
+            $imp->Nom = filter_var($_POST['nomparrain'],FILTER_SANITIZE_STRING);
+            $imp->Prenom = filter_var($_POST['prenomparrain'],FILTER_SANITIZE_STRING);
             $imp->Role = 1;
             $imp->save();
         }
+        
+        //Ajout des fichiers
+        Uploads::ajoutFichierFormulaire($IdProjet);
+        
          //self::switchFormulaireOk();
     }
     

@@ -24,6 +24,7 @@ class ControleurBackOffice
     {
         $app = \Slim\Slim::getInstance();
         $vue = new VueBackOffice();
+        $no = filter_var($no,FILTER_SANITIZE_NUMBER_INT);
         if (null !== Projet::getById($no))
             print $vue->render(VueBackOffice::AFF_PROJET, $no);
         else
