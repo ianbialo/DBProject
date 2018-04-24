@@ -7,6 +7,8 @@ use dbproject\modele\Structure;
 use dbproject\modele\Representant;
 use dbproject\modele\Responsable;
 use dbproject\modele\Implique;
+use dbproject\conf\Variable;
+use dbproject\conf\Uploads;
 
 class VueBackOffice
 {
@@ -46,14 +48,41 @@ end;
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
         $path = $requete->getRootUri();
-        
-        $app = \Slim\Slim::getInstance();
+
         $listeProj = Projet::getall();
         $res = <<<end
             <div class="container">
 
-                <a href="$path/uploads/3_unix_23_04_2018_15_16_07/Suivi stage.docx">Slt</a>
+  <div class="row">
+    <div class="col s12">
+      <div class="row">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">textsms</i>
+          <input type="text" id="autocomplete-input" class="autocomplete">
+          <label for="autocomplete-input">Autocomplete</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
                 <h3>Liste des projets</h3>
+            
+            <div class="input-field col s12">
+                <select size="1" name="links" onchange="window.location.href=this.value;">
+                    <option value="" disabled selected>Choisissez un projet</option>
+end;
+        foreach($listeProj as $p){
+            $struct = Structure::getById($p->IdStruct);
+            $redirection = $app->urlFor("projet", [
+                'no' => $p->IdProjet
+            ]);
+            $res .= '
+                    <option value="'.$redirection.'">'.$struct->Nom.'</option>';
+        }
+        $res .= <<<end
+                </select>
+                <label>Liste des projets</label>
+            </div>
                 
 end;
         foreach ($listeProj as $p) {
@@ -114,29 +143,65 @@ end;
         $app = \Slim\Slim::getInstance();
         $liste = $app->urlFor("listeFormulaires");
         
-        $app = \Slim\Slim::getInstance();
-        $requete = $app->request();
-        $path = $requete->getRootUri();
-        $list = scandir("C:\Users\ibialo\Documents\GIT\DBProject\uploads");
-        foreach ($list as $l){
-            echo $l;
-        }
-        
         $proj = Projet::getById($no);
         $struct = Structure::getById($proj->IdStruct);
         $rep = Representant::getById($proj->IdStruct);
         $resp = Responsable::getById($proj->IdStruct);
+        
+        $dossier = null;
+        $fichiers = array();
+        
+        if ($proj->Document != 0) {
+            $app = \Slim\Slim::getInstance();
+            $requete = $app->request();
+            $path = $requete->getRootUri();
+            
+            // Dossier avec tout les dossiers
+            $list = scandir(Variable::$path . "\\" . Variable::$dossierFichier);
+            
+            foreach ($list as $l) {
+                $id = explode("_", $l)[0];
+                if ($no == $id) {
+                    
+                    $dossier = $l;
+                    
+                    // Dossier avec tout les fichiers recherchés
+                    $list2 = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l);
+                    
+                    $zip = null;
+                    foreach ($list2 as $i) {
+                        if ($i != "." && $i != "..") {
+                            if (self::endsWith($i, ".zip"))
+                                $zip = $i;
+                            else {
+                                array_push($fichiers, $i);
+                            }
+                        }
+                    }
+                    array_push($fichiers, $zip);
+                }
+            }
+        }
         
         $dateDep = Formulaire::transformerDate($proj->DateDep);
         $dateDeb = Formulaire::transformerDate($proj->DateDeb);
         $interetG = Formulaire::transformerBooleen($proj->InteretGeneral);
         $mecenat = Formulaire::transformerBooleen($proj->Mecenat);
         $fiscal = Formulaire::transformerBooleen($proj->Fiscal);
-        if(isset($proj->Valorisation)) $valor = $proj->Valorisation;
-        else $valor = "<label>Aucun</label>";
+        
+        if (isset($proj->Valorisation))
+            $valor = $proj->Valorisation;
+        else
+            $valor = "<label>Aucune valorisation</label>";
+        
+        if (isset($struct->Site))
+            $site = $struct->Site;
+        else
+            $site = "<label>Aucun site enrengistré</label>";
         
         $cofin = Implique::getCoFinanceur($no);
         $parrain = Implique::getParrain($no);
+        
         $res = <<<end
         <div class="container row">
                 <div class="card hoverable">
@@ -252,7 +317,7 @@ end;
                 			</tr>
                 			<tr>
                 				<td>Site</td>
-                				<td>$struct->Site</td>
+                				<td>$site</td>
                 			</tr>
                 			<tr>
                 				<td>Raison</td>
@@ -379,10 +444,6 @@ end;
             }
             $res .= <<<end
 
-                			<tr>
-                				<td></td>
-                				<td></td>
-                			</tr>
                 		</tbody>
 	                   </table>
 end;
@@ -400,7 +461,7 @@ end;
                         <h5 >Parrain</h5>
                         </div>
 end;
-        if (sizeof($cofin) == 0) {
+        if (sizeof($parrain) == 0) {
             $res .= <<<end
                         <table>
                 		<thead>
@@ -441,10 +502,6 @@ end;
             }
             $res .= <<<end
 
-                			<tr>
-                				<td></td>
-                				<td></td>
-                			</tr>
                 		</tbody>
 	                   </table>
 end;
@@ -456,54 +513,67 @@ end;
                     </div>
                     <div id="14c6" class="" style="display: none;">
                         <table>
-                		<thead>
+end;
+        if (sizeof($fichiers) == 0) {
+            $res .= <<<end
+
+                        <thead>
                 			<tr>
-                				<th>Intitulé</th>
-                				<th>Description</th>
+                				<th></th>
                 			</tr>
                 		</thead>
-                
+            
                 		<tbody>
                 			<tr>
-                				<td>Nom</td>
-                				<td>$resp->Nom</td>
-                			</tr>
-                			<tr>
-                				<td>Prenom</td>
-                				<td>$resp->Prenom</td>
-                			</tr>
-                			<tr>
-                				<td>Position</td>
-                				<td>$resp->Position</td>
-                			</tr>
-                			<tr>
-                				<td>Adresse</td>
-                				<td>$resp->Adresse</td>
-                			</tr>
-                			<tr>
-                				<td>Code Postal</td>
-                				<td>$resp->CodePostal</td>
-                			</tr>
-                			<tr>
-                				<td>Ville</td>
-                				<td>$resp->Ville</td>
-                			</tr>
-                			<tr>
-                				<td>Tel</td>
-                				<td>$resp->Tel</td>
-                			</tr>
-                            <tr>
-                				<td>Courriel</td>
-                				<td>$resp->Courriel</td>
+                				<td>Aucun fichier à télécharger</td>
                 			</tr>
                 		</tbody>
+end;
+        } else {
+            $res .= <<<end
+
+                        <thead>
+                			<tr>
+                				<th>Intitulé</th>
+                				<th></th>
+                			</tr>
+                		</thead>
+            
+                		<tbody>
+end;
+            foreach ($fichiers as $f) {
+                $folder = Variable::$dossierFichier;
+                if (self::endsWith($f, ".zip"))
+                    $nomFichier = "-- Archive contenant tout les fichiers (format .zip) --";
+                else
+                    $nomFichier = $f;
+                $res .= <<<end
+                            <tr>
+                				<td>$nomFichier</td>
+                				<td><a href="$path/$folder/$dossier/$f">Télécharger</a></td>
+                			</tr>
+end;
+            }
+            $res .= "
+                        </tbody>";
+        }
+        
+        $res .= <<<end
+
 	                   </table>
                     </div>
                   </div>
                 </div>
-        <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Quitter</a>
+        <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>
         </div>
 end;
         return $res;
+    }
+
+    function endsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        
+        return $length === 0 || (substr($haystack, - $length) === $needle);
     }
 }

@@ -14,6 +14,7 @@ class Projet extends \Illuminate\Database\Eloquent\Model
     }
     
     public static function getAll(){
-        return Projet::all();
+        $query = Projet::all();
+        return $query->sortBy("IdProjet");
     }
 }

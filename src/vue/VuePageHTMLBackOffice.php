@@ -38,10 +38,20 @@ class VuePageHTMLBackOffice
         <script>
         $(document).ready(function() {
             $('.tabs').tabs();
+            $('select').formSelect();
             $('.modal').modal({dismissible: false});
             $(function() {
                 M.updateTextFields();
             });
+            $('input.autocomplete').autocomplete({
+            data: {
+                "Apple": null,
+                "Amphux": null,
+                "Microsoft": null,
+                "Google": null,
+                "Unixs": null,
+      },
+    });
             
         });
         </script>

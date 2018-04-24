@@ -22,7 +22,8 @@ class Formulaire
         $struct->Raison = filter_var($_POST['raisonstruct'],FILTER_SANITIZE_STRING);
         if($_POST['vousetes'] != "0") $struct->Type = $_POST['vousetes'];
         else $struct->Type = filter_var($_POST['autre'],FILTER_SANITIZE_STRING);
-        $struct->Site = filter_var($_POST['site'],FILTER_SANITIZE_URL);
+        if(strlen($_POST['site']) != 0)$struct->Site = filter_var($_POST['site'],FILTER_SANITIZE_URL);
+        else $struct->Site = null;
         $struct->save();
         
         //Ajout du représentant
@@ -54,7 +55,7 @@ class Formulaire
         $proj->IdRes = $IdRes;
         $proj->IdRep = $IdRep;
         $proj->DateDep = date("Y-m-d");
-        $proj->Expose = filter_var($_POST['expose'],FILTER_SANITIZE_EMAIL);
+        $proj->Expose = filter_var($_POST['expose'],FILTER_SANITIZE_STRING);
         $proj->DateDeb = $_POST['datedeb'];
         $proj->Duree = filter_var($_POST['duree'],FILTER_SANITIZE_NUMBER_INT);
         $proj->Lieu = filter_var($_POST['lieu'],FILTER_SANITIZE_STRING);

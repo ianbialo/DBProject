@@ -26,6 +26,7 @@ class VueFrontOffice
         $app = \Slim\Slim::getInstance();
         $val = $app->urlFor("postFormulaire");
         return <<<end
+
         <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
             <form method="POST" action="$val" enctype="multipart/form-data">
 
@@ -44,7 +45,7 @@ class VueFrontOffice
                 </div>
                 <div class="info">
                     <label>Raison d'être de la structure demanderesse *</label>
-                    <textarea rows="3" cols="50" style="resize:none" id="raisontruct" name="raisonstruct" required></textarea>
+                    <textarea rows="3" cols="50" style="resize:none" id="raisontruct" name="raisonstruct" maxlength="300" required></textarea>
                 </div>
                 <div id="selecteur" class="info">
                     <label>Vous êtes : *</label>
@@ -65,7 +66,7 @@ class VueFrontOffice
                 </div>
                 <div class="info">
                     <label>Site internet</label>
-                    <input type="url" id="site" maxlength="60" name="site">
+                    <input type="url" id="site" maxlength="200" name="site">
                 </div>
                 
             
@@ -112,7 +113,7 @@ class VueFrontOffice
                 <h2>Projet</h2>
                 <div class="info">
                     <label>Exposé synthétique du projet ou des actions à soutenir *</label>
-                    <textarea rows="5" cols="50" style="resize:none" id="expose" name="expose" required></textarea>
+                    <textarea rows="5" cols="50" style="resize:none" id="expose" name="expose" maxlength="300" required></textarea>
                 </div>
                 <div class="info">
                     <label>Documents de présentation éventuels (flyer, affiche…) - 5 maximum</label>
@@ -144,7 +145,7 @@ class VueFrontOffice
                 </div>
                 <div class="info">
                     <label>Indiquez à quelles fins sera utilisé le montant demandé à Demathieu Bard *</label>
-                    <textarea rows="1" cols="50" style="resize:none" id="findb" name="findb" maxlength="90" required></textarea>
+                    <textarea rows="1" cols="50" style="resize:none" id="findb" name="findb" maxlength="300" required></textarea>
                 </div>
                 <!--<div class="info">
                     <label>Co-financeur(s) éventuel(s)</label>
@@ -165,7 +166,7 @@ class VueFrontOffice
                 </div>
                 <div class="info">
                     <label>Domaine principal du projet *</label>
-                    <textarea rows="1" cols="50" style="resize:none" id="domaine" name="domaine" maxlength="90" required></textarea>
+                    <textarea rows="1" cols="50" style="resize:none" id="domaine" name="domaine" maxlength="150" required></textarea>
                 </div>
                 <div id="parrain" class="info">
                     <label>Avez vous un parrain impliqué dans votre projet, salarié ou retraité du Groupe ? *</label>
@@ -193,7 +194,7 @@ class VueFrontOffice
                 </div>
                 <div class="info">
                     <label>Valorisation éventuelle proposée</label>
-                    <textarea rows="3" cols="50" style="resize:none" id="valorev" name="valorev"></textarea>
+                    <textarea rows="3" cols="50" style="resize:none" id="valorev" name="valorev" maxlength="300"></textarea>
                 </div>
                 <br><input type="submit" value="Validation de votre demande" name="submit">
               </form>  

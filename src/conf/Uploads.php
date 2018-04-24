@@ -16,19 +16,42 @@ class Uploads
             $str = strtolower($str);
             
             $date = new \DateTime();
-            $dir = "uploads/" . $id . "_" . $str . "_" . $date->format('d_m_Y_H_i_s') . "/";
-            mkdir($dir, 0700);
+            $dir = Variable::$dossierFichier."/" . $id . "_" . $str . "_" . $date->format('d_m_Y_H_i_s') . "/";
+            
+            $oldmask = umask(0);
+            mkdir($dir, 0777);
+            umask($oldmask);
+            
             $x = $_POST['nbFile'];
             $y = 0;
+            $liste = array();
             while ($x > 0) {
                 if (isset($_FILES['fileToUpload' . $y])) {
-                    self::ajoutFichier($dir, 'fileToUpload' . $y);
+                    array_push($liste,self::ajoutFichier($dir, 'fileToUpload' . $y));
                     $x --;
                 }
                 
                 $y ++;
             }
+            
+            echo "<br>".$dir."<br>";
+            foreach($liste as $l) echo $l."<br>";
+            self::creationZip($dir,$liste);
         }
+    }
+    
+    public function creationZip($dir,$liste){
+        $zip = new \ZipArchive();
+        $filename = $dir."/".$_POST['nomstruct']."_projet.zip";
+        
+        if ($zip->open($filename, \ZipArchive::CREATE)!==TRUE) {
+            exit("Impossible d'ouvrir le fichier <$filename>\n");
+        }
+        
+        foreach ($liste as $l) $zip->addFile($dir . "/".$l,$l);
+        echo "Nombre de fichiers : " . $zip->numFiles . "\n";
+        echo "Statut :" . $zip->status . "\n";
+        $zip->close();
     }
 
     public function ajoutFichier($dir, $fileName)
@@ -75,9 +98,11 @@ class Uploads
         } else {
             if (move_uploaded_file($_FILES[$fileName]["tmp_name"], $target_file)) {
                 echo "Le fichier " . basename($_FILES[$fileName]["name"]) . " a été uploadé.";
+                return basename($_FILES[$fileName]["name"]);
             } else {
                 echo "Désolé, il y a eu une erreur avec l'upload du fichier.";
             }
         }
+        return null;
     }
 }
