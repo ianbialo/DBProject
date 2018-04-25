@@ -12,4 +12,14 @@ class Structure extends \Illuminate\Database\Eloquent\Model
         $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
         return Structure::where('IdStruct', '=', $id)->first();
     }
+        
+    public static function getByName($nom){
+        $id = filter_var($nom, FILTER_SANITIZE_STRING);
+        return Structure::where('Nom', '=', $nom)->get();
+    }
+    
+    public static function getAll(){
+        $query = Structure::all();
+        return $query->sortBy("Nom");
+    }
 }

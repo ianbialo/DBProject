@@ -13,6 +13,11 @@ class Projet extends \Illuminate\Database\Eloquent\Model
         return Projet::where('IdProjet', '=', $id)->first();
     }
     
+    public static function getByStructure($id){
+        $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
+        return Projet::where('IdStruct', '=', $id)->first();
+    }
+    
     public static function getAll(){
         $query = Projet::all();
         return $query->sortBy("IdProjet");

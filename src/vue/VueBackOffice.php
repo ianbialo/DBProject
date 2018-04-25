@@ -2,13 +2,13 @@
 namespace dbproject\vue;
 
 use dbproject\conf\Formulaire;
+use dbproject\conf\Modal;
 use dbproject\modele\Projet;
 use dbproject\modele\Structure;
 use dbproject\modele\Representant;
 use dbproject\modele\Responsable;
 use dbproject\modele\Implique;
 use dbproject\conf\Variable;
-use dbproject\conf\Uploads;
 
 class VueBackOffice
 {
@@ -18,6 +18,8 @@ class VueBackOffice
     const AFF_FORMULAIRE = 1;
 
     const AFF_PROJET = 2;
+    
+    const AFF_RECHERCHE = 3;
 
     public function render($selecteur, $tab = null)
     {
@@ -31,6 +33,9 @@ class VueBackOffice
             case VueBackOffice::AFF_PROJET:
                 $content = $this->projet($tab);
                 break;
+            case VueBackOffice::AFF_RECHERCHE:
+                $content = $this->recherche($tab);
+                break;
         }
         return VuePageHTMLBackOffice::header() . $content . VuePageHTMLBackOffice::getFooter();
     }
@@ -42,34 +47,126 @@ class VueBackOffice
         <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
 end;
     }
+        
+    private function recherche($tab){
+        $app = \Slim\Slim::getInstance();
+        $requete = $app->request();
+        $path = $requete->getRootUri();
+        
+        $redirection = $app->urlFor("postRedirection");
+        $liste = $app->urlFor("listeFormulaires");
+        
+        $struct = Structure::getByName($tab);
+        
+        $res = <<<end
+        
+            <div class="container">
+                <h3>Résultat de la recherche pour "$tab"</h3>
+                
+            
+end;
+        if(sizeof($struct) == 0){
+            $res .= <<<end
+                <div class="col s12"> 
+                        <h5>Aucun résultat</h5>
+                        <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>
+                </div>
+end;
+        } else {
+            foreach ($struct as $s) {
+                $p = Projet::getByStructure($s->IdStruct);
+                $rep = Representant::getById($p->IdRes);
+                $resp = Responsable::getById($p->IdRep);
+                $acceder = $app->urlFor("projet", [
+                    'no' => $p->IdProjet
+                ]);
+                $supprimer = $app->urlFor("postSuppressionFormulaire");
+                $res .= <<<end
+                
+              <!-- Modal Structure -->
+              <div id="modal$p->IdProjet" class="modal">
+                <div class="modal-content">
+                  <h4>Modal Header</h4>
+                  <p>Supprimer le projet de $s->Nom est un acte irréversible. Êtes-vous sûr de vouloir continuer ?</p>
+                </div>
+                <div class="modal-footer">
+                  <form methode="POST" action="$supprimer">
+                    <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
+                    <input id="IdProjet" name="IdProjet" type="hidden" value="$p->IdProjet">
+                    <input type="submit" formmethod="post" value="Confirmer" class="modal-action modal-close waves-effect waves-green btn-flat">
+                  </form>
+                </div>
+              </div>
+              
+                    <div class="row">
+    <div class="col s12">
+      <div class="hoverable card">
+        <div class="card-content">
+          <span class="card-title">$s->Nom</span>
+          <label>Représentant : $rep->Nom $rep->Prenom - Responsable : $resp->Nom $resp->Prenom</label>
+          <p>$p->Expose</p>
+        </div>
+        <div class="card-action">
+          <a href="$acceder">Accéder</a>
+          <a class="modal-trigger" href="#modal$p->IdProjet">Supprimer</a>
+          
+        </div>
+      </div>
+    </div>
+end;
+        }
+        $res .= <<<end
+  
+    <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>      
+  </div>
+  
+  
+end;
+        }
+        
+        $res .= <<<end
+        
+            </div>
+            
+end;
+        return $res;
+    }
 
     private function formulaire()
     {
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
         $path = $requete->getRootUri();
+        
+        $redirection = $app->urlFor("postRedirection");
 
         $listeProj = Projet::getall();
+        
         $res = <<<end
+
             <div class="container">
-
-  <div class="row">
-    <div class="col s12">
-      <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">textsms</i>
-          <input type="text" id="autocomplete-input" class="autocomplete">
-          <label for="autocomplete-input">Autocomplete</label>
-        </div>
-      </div>
-    </div>
-  </div>
-
                 <h3>Liste des projets</h3>
+
+                <div class="row">
+                    <form id="formRecherche" action="$redirection" method="POST" autocomplete="off">
+                    <div class="col s12">
+                      <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" name="autocompleteRecherche" id="autocompleteRecherche" class="autocomplete" required>
+                            <label for="autocompleteRecherche">Rechercher un projet</label>    
+                        </div>
+                        <button class="btn" type="submit" name="action">Rechercher
+                            <i class="material-icons right">send</i>
+                        </button>
+                      </div>
+                    </div>
+                    </form>
+                  </div>
             
-            <div class="input-field col s12">
-                <select size="1" name="links" onchange="window.location.href=this.value;">
-                    <option value="" disabled selected>Choisissez un projet</option>
+            <div class="row">    
+                <div class="input-field col s12">
+                    <select size="1" name="links" onchange="window.location.href=this.value;">
+                        <option value="" disabled selected>Choisissez un projet</option>
 end;
         foreach($listeProj as $p){
             $struct = Structure::getById($p->IdStruct);
@@ -80,15 +177,16 @@ end;
                     <option value="'.$redirection.'">'.$struct->Nom.'</option>';
         }
         $res .= <<<end
-                </select>
-                <label>Liste des projets</label>
+                    </select>
+                    <label>Accès rapide aux projets</label>
+                </div>
             </div>
                 
 end;
         foreach ($listeProj as $p) {
             $struct = Structure::getById($p->IdStruct);
-            $rep = Representant::getById($p->IdStruct);
-            $resp = Responsable::getById($p->IdStruct);
+            $rep = Representant::getById($p->IdRep);
+            $resp = Responsable::getById($p->IdRep);
             $acceder = $app->urlFor("projet", [
                 'no' => $p->IdProjet
             ]);
@@ -134,6 +232,7 @@ end;
         $res .= <<<end
 	              
             </div>
+
 end;
         return $res;
     }
@@ -271,11 +370,11 @@ end;
                 				<td>$proj->Domaine</td>
                 			</tr>
                             <tr>
-                				<td>Possibilité d'établir une convention de Mécénat</td>
+                				<td>Possibilité d'établir une convention de Mécénat ?</td>
                 				<td>$mecenat</td>
                 			</tr>
                             <tr>
-                				<td>Possibilité d'établir un reçu fiscal (cerfa n°11580*03)</td>
+                				<td>Possibilité d'établir un reçu fiscal (cerfa n°11580*03) ?</td>
                 				<td>$fiscal</td>
                 			</tr>
                             <tr>

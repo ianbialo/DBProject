@@ -36,6 +36,10 @@ $app->get('/admin/formulaire/:no', function ($no){
     (new dbproject\controleur\ControleurBackOffice())->affichageProjet($no);
 })->name("projet");
 
+$app->get('/admin/formulaire/recherche/:recherche', function ($recherche){
+    (new dbproject\controleur\ControleurBackOffice())->affichageRecherche($recherche);
+})->name("recherche");
+
 
 
 ///////////////////////////////////////
@@ -47,8 +51,12 @@ $app->post('/postForm(/)',function(){
 })->name("postFormulaire");
 
 $app->post('/postSupprForm(/)',function(){
-    (new dbproject\controleur\ControleurBackOffice())->suppressionFomulaire();
+    (new dbproject\controleur\ControleurBackOffice())->postSuppressionFomulaire();
 })->name("postSuppressionFormulaire");
+
+$app->post('/postRedirection(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postRedirectionProjet();
+})->name("postRedirection");
 
 
 

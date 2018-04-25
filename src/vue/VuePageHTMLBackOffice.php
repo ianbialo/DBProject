@@ -2,6 +2,8 @@
 
 namespace dbproject\vue;
 
+use dbproject\modele\Structure;
+
 class VuePageHTMLBackOffice
 {
 
@@ -16,6 +18,9 @@ class VuePageHTMLBackOffice
         $requete = $app->request();
         $path = $requete->getRootUri();
         $acc = $app->urlFor("accueil");
+        
+        $structure = Structure::getAll();
+        
         $res = <<<end
 <!DOCTYPE html>
 <html>
@@ -45,11 +50,11 @@ class VuePageHTMLBackOffice
             });
             $('input.autocomplete').autocomplete({
             data: {
-                "Apple": null,
-                "Amphux": null,
-                "Microsoft": null,
-                "Google": null,
-                "Unixs": null,
+                
+end;
+        foreach($structure as $s) $res .= '"'.$s->Nom.'": null,
+                ';
+        $res .= <<<end
       },
     });
             
