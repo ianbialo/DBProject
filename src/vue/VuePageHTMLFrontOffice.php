@@ -28,7 +28,7 @@ class VuePageHTMLFrontOffice
     </head>
     <body>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <script type="text/javascript" src="$path/js/perso.js"></script>
+        <script type="text/javascript" src="$path/js/formulaire.js"></script>
         <header>
             <p>Ceci est le header</p>
         </header>

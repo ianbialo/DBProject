@@ -19,7 +19,6 @@ class Structure extends \Illuminate\Database\Eloquent\Model
     }
     
     public static function getAll(){
-        $query = Structure::all();
-        return $query->sortBy("Nom");
+        return Structure::orderBy("Nom")->get();
     }
 }

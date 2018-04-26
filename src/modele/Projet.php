@@ -19,7 +19,6 @@ class Projet extends \Illuminate\Database\Eloquent\Model
     }
     
     public static function getAll(){
-        $query = Projet::all();
-        return $query->sortBy("IdProjet");
+        return $test = Projet::join('structure', 'projet.IdStruct', '=', 'structure.IdStruct')->select("projet.*")->orderBy("structure.Nom")->get();
     }
 }

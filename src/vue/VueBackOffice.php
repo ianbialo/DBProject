@@ -47,90 +47,6 @@ class VueBackOffice
         <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
 end;
     }
-        
-    private function recherche($tab){
-        $app = \Slim\Slim::getInstance();
-        $requete = $app->request();
-        $path = $requete->getRootUri();
-        
-        $redirection = $app->urlFor("postRedirection");
-        $liste = $app->urlFor("listeFormulaires");
-        
-        $struct = Structure::getByName($tab);
-        
-        $res = <<<end
-        
-            <div class="container">
-                <h3>Résultat de la recherche pour "$tab"</h3>
-                
-            
-end;
-        if(sizeof($struct) == 0){
-            $res .= <<<end
-                <div class="col s12"> 
-                        <h5>Aucun résultat</h5>
-                        <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>
-                </div>
-end;
-        } else {
-            foreach ($struct as $s) {
-                $p = Projet::getByStructure($s->IdStruct);
-                $rep = Representant::getById($p->IdRes);
-                $resp = Responsable::getById($p->IdRep);
-                $acceder = $app->urlFor("projet", [
-                    'no' => $p->IdProjet
-                ]);
-                $supprimer = $app->urlFor("postSuppressionFormulaire");
-                $res .= <<<end
-                
-              <!-- Modal Structure -->
-              <div id="modal$p->IdProjet" class="modal">
-                <div class="modal-content">
-                  <h4>Modal Header</h4>
-                  <p>Supprimer le projet de $s->Nom est un acte irréversible. Êtes-vous sûr de vouloir continuer ?</p>
-                </div>
-                <div class="modal-footer">
-                  <form methode="POST" action="$supprimer">
-                    <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
-                    <input id="IdProjet" name="IdProjet" type="hidden" value="$p->IdProjet">
-                    <input type="submit" formmethod="post" value="Confirmer" class="modal-action modal-close waves-effect waves-green btn-flat">
-                  </form>
-                </div>
-              </div>
-              
-                    <div class="row">
-    <div class="col s12">
-      <div class="hoverable card">
-        <div class="card-content">
-          <span class="card-title">$s->Nom</span>
-          <label>Représentant : $rep->Nom $rep->Prenom - Responsable : $resp->Nom $resp->Prenom</label>
-          <p>$p->Expose</p>
-        </div>
-        <div class="card-action">
-          <a href="$acceder">Accéder</a>
-          <a class="modal-trigger" href="#modal$p->IdProjet">Supprimer</a>
-          
-        </div>
-      </div>
-    </div>
-end;
-        }
-        $res .= <<<end
-  
-    <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>      
-  </div>
-  
-  
-end;
-        }
-        
-        $res .= <<<end
-        
-            </div>
-            
-end;
-        return $res;
-    }
 
     private function formulaire()
     {
@@ -665,6 +581,90 @@ end;
                 </div>
         <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>
         </div>
+end;
+        return $res;
+    }
+    
+    private function recherche($tab){
+        $app = \Slim\Slim::getInstance();
+        $requete = $app->request();
+        $path = $requete->getRootUri();
+        
+        $redirection = $app->urlFor("postRedirection");
+        $liste = $app->urlFor("listeFormulaires");
+        
+        $struct = Structure::getByName($tab);
+        
+        $res = <<<end
+        
+            <div class="container">
+                <h3>Résultat de la recherche pour "$tab"</h3>
+                
+                
+end;
+        if(sizeof($struct) == 0){
+            $res .= <<<end
+                <div class="col s12">
+                        <h5>Aucun résultat</h5>
+                        <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>
+                </div>
+end;
+        } else {
+            foreach ($struct as $s) {
+                $p = Projet::getByStructure($s->IdStruct);
+                $rep = Representant::getById($p->IdRes);
+                $resp = Responsable::getById($p->IdRep);
+                $acceder = $app->urlFor("projet", [
+                    'no' => $p->IdProjet
+                ]);
+                $supprimer = $app->urlFor("postSuppressionFormulaire");
+                $res .= <<<end
+                
+              <!-- Modal Structure -->
+              <div id="modal$p->IdProjet" class="modal">
+                <div class="modal-content">
+                  <h4>Modal Header</h4>
+                  <p>Supprimer le projet de $s->Nom est un acte irréversible. Êtes-vous sûr de vouloir continuer ?</p>
+                </div>
+                <div class="modal-footer">
+                  <form methode="POST" action="$supprimer">
+                    <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
+                    <input id="IdProjet" name="IdProjet" type="hidden" value="$p->IdProjet">
+                    <input type="submit" formmethod="post" value="Confirmer" class="modal-action modal-close waves-effect waves-green btn-flat">
+                  </form>
+                </div>
+              </div>
+              
+                    <div class="row">
+    <div class="col s12">
+      <div class="hoverable card">
+        <div class="card-content">
+          <span class="card-title">$s->Nom</span>
+          <label>Représentant : $rep->Nom $rep->Prenom - Responsable : $resp->Nom $resp->Prenom</label>
+          <p>$p->Expose</p>
+        </div>
+        <div class="card-action">
+          <a href="$acceder">Accéder</a>
+          <a class="modal-trigger" href="#modal$p->IdProjet">Supprimer</a>
+          
+        </div>
+      </div>
+    </div>
+end;
+            }
+            $res .= <<<end
+            
+    <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>
+  </div>
+  
+  
+end;
+        }
+        
+        $res .= <<<end
+        
+            </div>
+            
 end;
         return $res;
     }

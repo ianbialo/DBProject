@@ -27,17 +27,17 @@ class Uploads
             $liste = array();
             while ($x > 0) {
                 if (isset($_FILES['fileToUpload' . $y])) {
-                    array_push($liste,self::ajoutFichier($dir, 'fileToUpload' . $y));
+                    if(!($val = self::ajoutFichier($dir, 'fileToUpload' . $y))) return false;
+                    array_push($liste,$val);
                     $x --;
                 }
                 
                 $y ++;
             }
-            
-            echo "<br>".$dir."<br>";
-            foreach($liste as $l) echo $l."<br>";
-            self::creationZip($dir,$liste);
+
+            if(!self::creationZip($dir,$liste)) return false;
         }
+        return true;
     }
     
     public function creationZip($dir,$liste){
@@ -51,7 +51,7 @@ class Uploads
         foreach ($liste as $l) $zip->addFile($dir . "/".$l,$l);
         echo "Nombre de fichiers : " . $zip->numFiles . "\n";
         echo "Statut :" . $zip->status . "\n";
-        $zip->close();
+        return $zip->close();
     }
 
     public function ajoutFichier($dir, $fileName)

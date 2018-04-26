@@ -7,6 +7,8 @@ class VueFrontOffice
     const AFF_INDEX = 0;
 
     const AFF_OK = 1;
+    
+    const AFF_ECHEC = 2;
 
     public function render($selecteur, $tab = null)
     {
@@ -17,6 +19,9 @@ class VueFrontOffice
             case VueFrontOffice::AFF_OK:
                 $content = $this->succes();
                 break;
+            case VueFrontOffice::AFF_ECHEC:
+                $content = $this->echec();
+                break;
         }
         return VuePageHTMLFrontOffice::header() . $content . VuePageHTMLFrontOffice::getFooter();
     }
@@ -25,10 +30,10 @@ class VueFrontOffice
     {
         $app = \Slim\Slim::getInstance();
         $val = $app->urlFor("postFormulaire");
-        return <<<end
+        $res = <<<end
 
         <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
-            <form method="POST" action="$val" enctype="multipart/form-data">
+            <form method="POST" id="formFormulaire" action="$val" enctype="multipart/form-data">            
 
                 <h2>Structure</h2>
                 <div class="info">
@@ -197,15 +202,23 @@ class VueFrontOffice
                     <textarea rows="3" cols="50" style="resize:none" id="valorev" name="valorev" maxlength="300"></textarea>
                 </div>
                 <br><input type="submit" value="Validation de votre demande" name="submit">
-              </form>  
-            
+              </form>
+
 end;
+        return $res;
     }
 
     private function succes()
     {
         return <<<end
         <h3>Nous avons bien pris en compte votre demande et prendrons contact avec vous par mail au plus vite.</h3>
+end;
+    }
+        
+    private function echec()
+    {
+        return <<<end
+        <h3>Une erreur est survenue.</h3>
 end;
     }
 }

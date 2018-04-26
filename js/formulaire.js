@@ -1,8 +1,10 @@
+"use strict";
 /**
  * 
  */
 
-application = (function(){
+//Application regroupant toutes les fonctions utiles au formulaires
+let application = (function(){
 
 	//Booléen permettant de récupérer les informations sur la structure si il est mentionné "autre"
 	let changed = true;
@@ -18,10 +20,13 @@ application = (function(){
 
 	//Nombre de fichier visible à l'écran
 	let nbFile = 0;
-	
+
+	//Iterateur utilisé dans la récupération des fichiers
 	let valNbFile = 0;
 
 	return{
+		
+		//Méthode lancée au chargement de la page
 		run : function(){
 			if(application.isset($("#selecteur"))){
 				$("#selecteur").find("#divautre").toggle();
@@ -30,12 +35,40 @@ application = (function(){
 			}
 		},
 
+		//Méthode déterminant si un élément existe sur la page
 		isset : function(element){
 			return element.length > 0;
 		},
 
+		//Méthode initialisant tout les listeners sur les éléments de la page
 		listener : function(){
+			
+			//Méthode enclenchée dès lors que le formulaire est soumis
+			$('#formFormulaire').submit(function() {
+				
+				//On vérifie qu'il n'existe pas des fichiers joints identiques
+				let nbFiles = $("#nbFile").val();
+				let res = [];
+				for(let a = 0; a < nbFiles; a++){
+					let files = $("#fileToUpload"+a)[0].files;
 
+					for (let i = 0; i < files.length; i++)
+					{
+						if(res.indexOf(files[i].name) > -1) {
+							alert("Deux fichiers identiques ont été joints. Veuillez en supprimer un.");
+							return false;
+						}
+						else res.push(files[i].name);
+					}
+				}
+				
+				
+				return true;
+			});
+			
+			
+			
+			//Méthode enclenché si on appuie sur le bouton d'ajout de co-fondateur
 			$("#boutoncofin").on("click",function(){
 
 				//S'il y a moins de 5 co-fondateurs
@@ -59,6 +92,7 @@ application = (function(){
 				}
 			}),
 
+			//Méthode enclenché si on appuie sur le bouton d'ajout de pièce jointe
 			$("#boutonfileajout").on("click",function(){
 
 				//S'il y a moins de 5 co-fondateurs
@@ -82,13 +116,18 @@ application = (function(){
 				}
 			}),
 
+			
+			//Méthode enclenché si on interagit avec le combobox lié au type de la structure
 			$("#vousetes").change(function() {
+				
+				//Si l'option "autre" est sélectionné
 				if($( this ).val()==0){
 					$("#selecteur").find("#divautre").toggle();
 					$("#selecteur").find("#divautre").find("#autre").prop('required',true);
 					application.changed = false;
 				}
 				else {
+					//Si l'optin précédente était "autre"
 					if(application.changed == false){
 						$("#selecteur").find("#divautre").toggle();
 						$("#selecteur").find("#divautre").find("#autre").prop('required',false);
@@ -98,6 +137,7 @@ application = (function(){
 				}
 			});
 
+			//Méthode enclenché si on interagit avec les radio buttons liés au parrain
 			$('#parrain').change(function() {
 
 				//Si le bouton vient d'être changé sur "Vrai"
@@ -129,6 +169,7 @@ application = (function(){
 
 })();
 
+//Lancement de l'application dès lors que la page est chargée
 $(document).ready(function () {
 	application.run();
 });

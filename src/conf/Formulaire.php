@@ -24,14 +24,14 @@ class Formulaire
         else $struct->Type = filter_var($_POST['autre'],FILTER_SANITIZE_STRING);
         if(strlen($_POST['site']) != 0)$struct->Site = filter_var($_POST['site'],FILTER_SANITIZE_URL);
         else $struct->Site = null;
-        $struct->save();
+        if(!$struct->save()) return false;
         
         //Ajout du représentant
         $rep = new Representant();
         $rep->Nom = filter_var($_POST['nomrzplegal'],FILTER_SANITIZE_STRING);
         $rep->Prenom = filter_var($_POST['prenomrzplegal'],FILTER_SANITIZE_STRING);
         $rep->Qualite = filter_var($_POST['qualite'],FILTER_SANITIZE_STRING);
-        $rep->save();
+        if(!$rep->save()) return false;
         
         //Ajout du responsable
         $res = new Responsable();
@@ -43,7 +43,7 @@ class Formulaire
         $res->Ville = filter_var($_POST['villeport'],FILTER_SANITIZE_STRING);
         $res->Tel = filter_var($_POST['tel'],FILTER_SANITIZE_STRING);
         $res->courriel = filter_var($_POST['courriel'],FILTER_SANITIZE_EMAIL);
-        $res->save();
+        if(!$res->save()) return false;
         
         $IdStruct = $struct->IdStruct;
         $IdRes = $res->IdRes;
@@ -69,7 +69,7 @@ class Formulaire
         if(strlen($_POST['valorev']) != 0)$proj->Valorisation = filter_var($_POST['valorev'],FILTER_SANITIZE_STRING);
         else $proj->Valorisation = null;
         $proj->Document = $_POST['nbFile'];
-        $proj->save();
+        if(!$proj->save()) return false;
         
         $IdProjet = $proj->IdProjet;
         
@@ -84,7 +84,7 @@ class Formulaire
                 $imp->Nom = filter_var($_POST['nomco'.$y],FILTER_SANITIZE_STRING);
                 $imp->Prenom = filter_var($_POST['prenomco'.$y],FILTER_SANITIZE_STRING);
                 $imp->Role = 0;
-                $imp->save();
+                if(!$imp->save()) return false;
                 $x--;
             }
             $y++;
@@ -96,13 +96,14 @@ class Formulaire
             $imp->Nom = filter_var($_POST['nomparrain'],FILTER_SANITIZE_STRING);
             $imp->Prenom = filter_var($_POST['prenomparrain'],FILTER_SANITIZE_STRING);
             $imp->Role = 1;
-            $imp->save();
+            if(!$imp->save()) return false;
         }
         
         //Ajout des fichiers
         Uploads::ajoutFichierFormulaire($IdProjet);
         
-         //self::switchFormulaireOk();
+        return true;
+        //self::switchFormulaireOk();
     }
     
     public static function supprimerFormulaire($id){

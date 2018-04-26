@@ -28,6 +28,10 @@ $app->get('/enregistrement(/)', function (){
     (new dbproject\controleur\ControleurFrontOffice())->formulaireOk();
 })->name("formulaireOk");
 
+$app->get('/erreur(/)', function (){
+    (new dbproject\controleur\ControleurFrontOffice())->formulaireEchec();
+})->name("formulaireEchec");
+
 $app->get('/admin/formulaire(/)', function (){
     (new dbproject\controleur\ControleurBackOffice())->affichageFormulaires();
 })->name("listeFormulaires");
