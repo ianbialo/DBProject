@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 class Email
 {
 
-    public static function sendMail($to,$subject,$msg)
+    public static function sendMail($subject,$msg)
     {
         /**$subject = "Selection At Google oueoue";
         $txt = "Congratulations blablabla";
@@ -25,7 +25,7 @@ class Email
         $mail->Username = "SupervisionDB@demathieu-bard.fr";
         $mail->Password = "Passw0rd15";
         $mail->setFrom("SupervisionDB@demathieu-bard.fr");
-        $mail->addAddress($to);
+        foreach(Variable::$annuaire as $annuaire => $nom)$mail->AddCC($annuaire,$nom);
         $mail->Subject = $subject;
         $mail->msgHTML($msg); //$mail->msgHTML(file_get_contents('contents.html'), __DIR__); //Read an HTML message body from an external file, convert referenced images to embedded,
         $mail->AltBody = 'HTML messaging not supported';

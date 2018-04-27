@@ -3,7 +3,9 @@ namespace dbproject\controleur;
 
 use dbproject\vue\VueBackOffice;
 use dbproject\modele\Projet;
+use dbproject\conf\Email;
 use dbproject\conf\Formulaire;
+use dbproject\conf\Variable;
 use dbproject\modele\Structure;
 
 class ControleurBackOffice
@@ -17,8 +19,13 @@ class ControleurBackOffice
 
     public function affichageFormulaires()
     {
+        // Envoi de mail
+        $subject = "Nouveau dépôt de projet";
+        $msg = "Slt";
+        Email::sendMail($subject, $msg);
         $vue = new VueBackOffice();
         print $vue->render(VueBackOffice::AFF_FORMULAIRE);
+        
     }
 
     public function affichageProjet($no)

@@ -49,10 +49,9 @@ class ControleurFrontOffice
             $app->redirect($app->urlFor("formulaireEchec"));
         
         // Envoi de mail
-        $id = "ian.bialo@demathieu-bard.fr";//filter_var($_POST['loginInscr'], FILTER_SANITIZE_EMAIL);
         $subject = "Nouveau dépôt de projet";
         $msg = "Slt";
-        Email::sendMail($id, $subject, $msg);
+        Email::sendMail($subject, $msg);
         $app->redirect($app->urlFor("formulaireOk"));
     }
 }
