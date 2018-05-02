@@ -32,6 +32,16 @@ $app->get('/erreur(/)', function (){
     (new dbproject\controleur\ControleurFrontOffice())->formulaireEchec();
 })->name("formulaireEchec");
 
+////////////////////////////////////
+
+$app->get('/admin(/)', function (){
+    (new dbproject\controleur\ControleurBackOffice())->index();
+})->name("connexionAdmin");
+
+$app->get('/admin/deconnexion(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->deconnexion();
+})->name("deconnexion");
+
 $app->get('/admin/formulaire(/)', function (){
     (new dbproject\controleur\ControleurBackOffice())->affichageFormulaires();
 })->name("listeFormulaires");
@@ -53,6 +63,12 @@ $app->get('/admin/formulaire/recherche/:recherche', function ($recherche){
 $app->post('/postForm(/)',function(){
     (new dbproject\controleur\ControleurFrontOffice())->postFomulaire();
 })->name("postFormulaire");
+
+/////////////////////////////////////////////
+
+$app->post('/postConnexion(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postConnexion();
+})->name("postConnexion");
 
 $app->post('/postSupprForm(/)',function(){
     (new dbproject\controleur\ControleurBackOffice())->postSuppressionFomulaire();

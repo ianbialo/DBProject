@@ -43,9 +43,41 @@ class VueBackOffice
     private function index()
     {
         $app = \Slim\Slim::getInstance();
-        return <<<end
-        <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
+        $postCo = $app->urlFor("postConnexion");
+        $res = <<<end
+        
+        <div class="card-panel hoverable">
+        <h3>Connexion au back office</h3>
+        <form method="POST" action="$postCo">
+            <div class="input-field col s12">
+                <i class="material-icons prefix">account_circle</i>
+                <input id="loginCo" type="email" name="loginCo" class="validate active" required><br>
+                <label for="loginCo">Login</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">https</i>
+                <input id="mdpCo" type="password" name="mdpCo" class="validate active" required><br>
+                <label for="mdpCo">Mot de passe</label>
+            </div>
+            <button class="btn" type="submit" name="action">Valider
+                <i class="material-icons right">send</i>
+            </button>
+        </form>
+        </div>
 end;
+        $res .= Modal::genereModal() . "<script>
+$(document).ready(function() {";
+        ;
+        if (isset($_SESSION['message'])) {
+            $msg = $_SESSION['message'];
+            $res .= Modal::enclencher($msg);
+            $_SESSION['message'] = null;
+        }
+        $res .= "});
+</script>
+";
+        
+        return $res;
     }
 
     private function formulaire()

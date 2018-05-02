@@ -24,7 +24,7 @@ class VuePageHTMLFrontOffice
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>DBProjet</title>
         <link rel="icon" type="image/png" href="$path/img/favicon.png" />
-        <link href="$path/css/perso.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+        <link href="$path/css/formulaire.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     </head>
     <body>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

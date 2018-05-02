@@ -32,7 +32,9 @@ class VueFrontOffice
         $val = $app->urlFor("postFormulaire");
         $res = <<<end
 
+        <div class="panel">
         <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
+            <div class="formulaire">
             <form method="POST" id="formFormulaire" action="$val" enctype="multipart/form-data">            
 
                 <h2>Structure</h2>
@@ -202,7 +204,9 @@ class VueFrontOffice
                     <textarea rows="3" cols="50" style="resize:none" id="valorev" name="valorev" maxlength="300"></textarea>
                 </div>
                 <br><input type="submit" value="Validation de votre demande" name="submit">
+                </div>
               </form>
+              </div>
 
 end;
         return $res;

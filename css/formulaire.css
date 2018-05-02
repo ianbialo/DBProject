@@ -1,4 +1,9 @@
-div {
+.panel {
+	border: 1px solid #e2dcdc;
+	text-align: center;
+}
+
+.formulaire div {
 	margin-top: 10px;
 }
 

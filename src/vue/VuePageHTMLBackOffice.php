@@ -73,21 +73,14 @@ end;
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
         $path = $requete->getRootUri();
-        $acc = $app->urlFor("accueil");
+        $acc = $app->urlFor("connexionAdmin");
         return <<<end
-            <header>
+        <header>
             <nav class="white" role="navigation">
-            <div class="nav-wrapper container">
-                <a id="logo-container" href="#" class="brand-logo">DBProject</a>
-                <ul class="right hide-on-med-and-down">
-                    <li><a href="#">Deconnexion</a></li>
-                </ul>
-                <ul id="nav-mobile" class="sidenav">
-                    <li><a href="#">Deconnexion</a></li>
-                </ul>
-                <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            </div>
-        </nav>
+                <div class="nav-wrapper container">
+                    <a id="logo-container" href="$acc" class="brand-logo">DBProject</a>
+                </div>
+            </nav>
         </header>
 end;
     }
@@ -96,19 +89,20 @@ end;
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
         $path = $requete->getRootUri();
-        $modif = $app->urlFor("modification");
+        $acc = $app->urlFor("accueil");
+        $disconnect = $app->urlFor("deconnexion");
         return <<<end
             <header>
             <nav class="white" role="navigation">
             <div class="nav-wrapper container">
-                <a id="logo-container" href="$modif" class="brand-logo">DBProject</a>
+                <a id="logo-container" href="#" class="brand-logo">DBProject</a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a href="$modif">Modifier profil</a></li>
+                    <li><a href="$disconnect">Deconnexion</a></li>
                 </ul>
                 <ul id="nav-mobile" class="sidenav">
-                    <li><a href="$modif">Modifier profil</a></li>
+                    <li><a href="$disconnect">Deconnexion</a></li>
                 </ul>
-                <a href="$modif" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             </div>
         </nav>
         </header>

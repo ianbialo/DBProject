@@ -16,7 +16,7 @@ class Uploads
             $str = strtolower($str);
             
             $date = new \DateTime();
-            $dir = Variable::$dossierFichier."/" . $id . "_" . $str . "_" . $date->format('d_m_Y_H_i_s') . "/";
+            $dir = Variable::$dossierFichier . "/" . $id . "_" . $str . "_" . $date->format('d_m_Y_H_i_s') . "/";
             
             $oldmask = umask(0);
             mkdir($dir, 0777);
@@ -27,28 +27,32 @@ class Uploads
             $liste = array();
             while ($x > 0) {
                 if (isset($_FILES['fileToUpload' . $y])) {
-                    if(!($val = self::ajoutFichier($dir, 'fileToUpload' . $y))) return false;
-                    array_push($liste,$val);
+                    if (! ($val = self::ajoutFichier($dir, 'fileToUpload' . $y)))
+                        return false;
+                    array_push($liste, $val);
                     $x --;
                 }
                 
                 $y ++;
             }
-
-            if(!self::creationZip($dir,$liste)) return false;
+            
+            if (! self::creationZip($dir, $liste))
+                return false;
         }
         return true;
     }
-    
-    public function creationZip($dir,$liste){
+
+    public function creationZip($dir, $liste)
+    {
         $zip = new \ZipArchive();
-        $filename = $dir."/".$_POST['nomstruct']."_projet.zip";
+        $filename = $dir . "/" . $_POST['nomstruct'] . "_projet.zip";
         
-        if ($zip->open($filename, \ZipArchive::CREATE)!==TRUE) {
+        if ($zip->open($filename, \ZipArchive::CREATE) !== TRUE) {
             exit("Impossible d'ouvrir le fichier <$filename>\n");
         }
         
-        foreach ($liste as $l) $zip->addFile($dir . "/".$l,$l);
+        foreach ($liste as $l)
+            $zip->addFile($dir . "/" . $l, $l);
         echo "Nombre de fichiers : " . $zip->numFiles . "\n";
         echo "Statut :" . $zip->status . "\n";
         return $zip->close();
@@ -104,5 +108,32 @@ class Uploads
             }
         }
         return null;
+    }
+
+    public function supprimerFichierFormulaire($id)
+    {
+        
+        // Dossier avec tout les dossiers
+        $list = scandir(Variable::$path . "\\" . Variable::$dossierFichier);
+        $fichiers = array();
+        
+        foreach ($list as $l) {
+            $no = explode("_", $l)[0];
+            if ($no == $id) {
+                
+                // Dossier avec tout les fichiers recherchés
+                $list2 = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l);
+                
+                $zip = null;
+                foreach ($list2 as $i) {
+                    if ($i != "." && $i != "..") {
+                        unlink(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l. "\\" . $i);
+                    }
+                }
+                rmdir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l);
+            }
+        }
+        
+        return true;
     }
 }

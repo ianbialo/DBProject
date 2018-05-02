@@ -11,7 +11,7 @@ class Modal{
             <p></p>
             </div>
             <div class="modal-footer">
-                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">D'accord</a>
+                <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">D'accord</a>
             </div>
         </div>
 

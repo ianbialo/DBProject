@@ -107,6 +107,10 @@ class Formulaire
     }
     
     public static function supprimerFormulaire($id){
+        
+        //Supprimer ici les fichiers
+        Uploads::supprimerFichierFormulaire($id);
+        
         $implique = Implique::getImplique($id);
         foreach($implique as $i)$i->delete();
         $projet = Projet::getById($id);
@@ -116,7 +120,7 @@ class Formulaire
         $projet->delete();
         $structure->delete();
         $rep->delete();
-        $res->delete();  
+        $res->delete();
     }
     
     public static function switchFormulaireOk(){
