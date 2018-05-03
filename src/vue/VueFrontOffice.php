@@ -32,7 +32,11 @@ class VueFrontOffice
         $val = $app->urlFor("postFormulaire");
         $res = <<<end
 
+        
+
+
         <div class="panel">
+
         <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
             <div class="formulaire">
             <form method="POST" id="formFormulaire" action="$val" enctype="multipart/form-data">            
@@ -40,11 +44,11 @@ class VueFrontOffice
                 <h2>Structure</h2>
                 <div class="info">
                     <label>Nom de la structure demanderesse *</label>
-                    <input type="text" id="nomstruct" name="nomstruct" maxlength="90" autofocus required>
+                    <div><input type="text" id="nomstruct" name="nomstruct" maxlength="90" autofocus required></div>
                 </div>
                 <div class="info">
                     <label>Adresse de la structure demanderesse *</label>
-                    <input type="text" class="grandeTaille" id="adrstruct" name="adrstruct" placeholder="Adresse" maxlength="80" required>
+                    <div><input type="text" class="grandeTaille" id="adrstruct" name="adrstruct" placeholder="Adresse" maxlength="80" required></div>
                     <div id="in">
                         <input type="number" id="cpostalstruct" name="cpostalstruct" placeholder="Code Postal" max="99999" required>
                         <input type="text" id="villestruct" name="villestruct" placeholder="Ville" maxlength="60" required>
@@ -73,7 +77,7 @@ class VueFrontOffice
                 </div>
                 <div class="info">
                     <label>Site internet</label>
-                    <input type="url" id="site" maxlength="200" name="site">
+                    <div><input type="url" id="site" maxlength="200" name="site"></div>
                 </div>
                 
             
@@ -87,7 +91,7 @@ class VueFrontOffice
                 </div>
                 <div class="info">
                     <label>Qualité du signataire *</label>
-                    <input type="text" id="qualite" name="qualite" maxlength="60" required>
+                    <div><input type="text" id="qualite" name="qualite" maxlength="60" required></div>
                 </div>
                 <div class="info">
                     <label>Nom et prénom du responsable du projet *</label>
@@ -98,22 +102,22 @@ class VueFrontOffice
                 </div>
                 <div class="info">
                     <label>Position dans la structure *</label>
-                    <input type="text" id="position" name="position" maxlength="60" required>
+                    <div><input type="text" id="position" name="position" maxlength="60" required></div>
                 </div>
                 <div class="info">
                     <label>Adresse du porteur du projet *</label>
-                    <input type="text" class="grandeTaille" id="adrport" name="adrport" placeholder="Adresse" maxlength="80" required>
+                    <div><input type="text" class="grandeTaille" id="adrport" name="adrport" placeholder="Adresse" maxlength="80" required></div>
                     <div id="in">
                     <input type="number" id="cpostalport" name="cpostalport" placeholder="Code Postal" max="99999" required>
                     <input type="text" id="villeport" name="villeport" placeholder="Ville" maxlength="60" required></div>
                 </div>
                 <div class="info">
                     <label>Telephone *</label>
-                    <input type="text" id="tel" name="tel" pattern="[0-9]{9,13}" required>
+                    <div><input type="text" id="tel" name="tel" pattern="[0-9]{9,13}" required></div>
                 </div>
                 <div class="info">
                     <label>Courriel *</label>
-                    <input type="email" id="courriel" name="courriel" maxlength="60" required>
+                    <div><input type="email" id="courriel" name="courriel" maxlength="60" required></div>
                 </div>
                 
 
@@ -127,28 +131,28 @@ class VueFrontOffice
                     <div class="coFile">
                     </div>
                     <br>
-                    <input type="button" id="boutonfileajout" value="Ajouter">
+                    <div><input type="button" id="boutonfileajout" value="Ajouter"></div>
                     <input type="hidden" id="nbFile" name="nbFile" value="0">
                 </div>
                 <div class="info">
                     <label>Date de début du projet *</label>
-                    <input type="date" id="datedeb" name="datedeb" required>
+                    <div><input type="date" id="datedeb" name="datedeb" required></div>
                 </div>
                 <div class="info">
                     <label>Durée du projet (en mois) *</label>
-                    <input type="number" id="duree" name="duree" required>
+                    <div><input type="number" id="duree" name="duree" required></div>
                 </div>
                 <div class="info">
                     <label>Lieu du projet *</label>
-                    <input type="text" id="lieu" name="lieu" maxlength="90" required>
+                    <div><input type="text" id="lieu" name="lieu" maxlength="90" required></div>
                 </div>
                 <div class="info">
                     <label>Montant de l'aide financière sollicitée (en euros) *</label>
-                    <input type="number" id="aide" name="aide" required>
+                    <div><input type="number" id="aide" name="aide" required></div>
                 </div>
                 <div class="info">
                     <label>Budget prévisionnel global du projet (en euros) *</label>
-                    <input type="number" id="budget" name="budget" required>
+                    <div><input type="number" id="budget" name="budget" required></div>
                 </div>
                 <div class="info">
                     <label>Indiquez à quelles fins sera utilisé le montant demandé à Demathieu Bard *</label>
@@ -163,7 +167,7 @@ class VueFrontOffice
                     <div class="cofin">
                     </div>
                     <br>
-                    <input type="button" id="boutoncofin" value="Ajouter">
+                    <div><input type="button" id="boutoncofin" value="Ajouter"></div>
                     <input type="hidden" id="nbCo" name="nbCo" value="0">
                 </div>
                 <div class="info">
@@ -203,7 +207,7 @@ class VueFrontOffice
                     <label>Valorisation éventuelle proposée</label>
                     <textarea rows="3" cols="50" style="resize:none" id="valorev" name="valorev" maxlength="300"></textarea>
                 </div>
-                <br><input type="submit" value="Validation de votre demande" name="submit">
+                <br><input type="submit" id="submitButton" value="Valider et envoyer votre demande" name="submit">
                 </div>
               </form>
               </div>

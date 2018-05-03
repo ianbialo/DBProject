@@ -81,18 +81,18 @@ class Uploads
          */
         // Check if file already exists
         if (file_exists($target_file)) {
-            echo "Désolé, le fichier existe déjà.";
+            //echo "Désolé, le fichier existe déjà.";
             $uploadOk = 0;
         }
         
         // Check file size
         if ($_FILES[$fileName]["size"] > 2000000) {
-            echo "Désolé, le fichier est trop large.";
+            //echo "Désolé, le fichier est trop large.";
             $uploadOk = 0;
         }
         // Allow certain file formats
-        if ($imageFileType != "odt" && $imageFileType != "docx" && $imageFileType != "pdf") {
-            echo "Désolé, seuls les fichiers ODT, DOCX & PDF sont autorisés.";
+        if (/**$imageFileType != "odt" && $imageFileType != "docx" && $imageFileType != "pdf"*/in_array($imageFileType,Variable::$formatAutorise)) {
+            //echo "Désolé, seuls les fichiers ODT, DOCX & PDF sont autorisés.";
             $uploadOk = 0;
         }
         // Check if $uploadOk is set to 0 by an error
@@ -101,10 +101,10 @@ class Uploads
             // if everything is ok, try to upload file
         } else {
             if (move_uploaded_file($_FILES[$fileName]["tmp_name"], $target_file)) {
-                echo "Le fichier " . basename($_FILES[$fileName]["name"]) . " a été uploadé.";
+                //echo "Le fichier " . basename($_FILES[$fileName]["name"]) . " a été uploadé.";
                 return basename($_FILES[$fileName]["name"]);
             } else {
-                echo "Désolé, il y a eu une erreur avec l'upload du fichier.";
+                //echo "Désolé, il y a eu une erreur avec l'upload du fichier.";
             }
         }
         return null;

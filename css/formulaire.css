@@ -1,9 +1,19 @@
+header {
+	/* background-color: #0000a0; */	
+}
+
+textarea {
+  width: 300px;
+  height: 150px;
+}
+
 .panel {
 	border: 1px solid #e2dcdc;
 	text-align: center;
+	font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
 }
 
-.formulaire div {
+.formulaire div.info {
 	margin-top: 10px;
 }
 
@@ -22,4 +32,12 @@
 
 #in {
 	display: inline;
+}
+
+#submitButton {
+	width: 150px;
+	height: 2em;
+    background: #e6e6e6;
+    border: 1px solid #999;
+    font-family: inherit;
 }

@@ -30,7 +30,9 @@ class VuePageHTMLFrontOffice
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript" src="$path/js/formulaire.js"></script>
         <header>
-            <p>Ceci est le header</p>
+            <a href="/" title="Accueil" rel="home" id="logo-img">
+            <img class="site-logo" src="$path/img/db_accueil.jpg" alt="Accueil" pagespeed_no_transform="">
+            </a>
         </header>
         <main>
 
