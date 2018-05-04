@@ -75,6 +75,7 @@ end;
         $path = $requete->getRootUri();
         $acc = $app->urlFor("connexionAdmin");
         return <<<end
+
         <header>
             <nav class="white" role="navigation">
                 <div class="nav-wrapper container">
@@ -92,6 +93,7 @@ end;
         $acc = $app->urlFor("accueil");
         $disconnect = $app->urlFor("deconnexion");
         return <<<end
+
             <header>
             <nav class="white" role="navigation">
             <div class="nav-wrapper container">

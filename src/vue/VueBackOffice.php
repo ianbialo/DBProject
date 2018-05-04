@@ -18,7 +18,7 @@ class VueBackOffice
     const AFF_FORMULAIRE = 1;
 
     const AFF_PROJET = 2;
-    
+
     const AFF_RECHERCHE = 3;
 
     public function render($selecteur, $tab = null)
@@ -86,14 +86,43 @@ $(document).ready(function() {";
         $requete = $app->request();
         $path = $requete->getRootUri();
         
+        if (! isset($_GET['query']))
+            $_GET['query'] = 0;
+        
         $redirection = $app->urlFor("postRedirection");
-
-        $listeProj = Projet::getall();
+        
+        switch ($_GET['query']) {
+            case 1:
+                $listeProj = Projet::getAllDate();
+                break;
+            default:
+                $listeProj = Projet::getAll();
+                break;
+        }
         
         $res = <<<end
 
+
             <div class="container">
                 <h3>Liste des projets</h3>
+   
+                    <div class="input-field col s12">
+                        <select size="1" name="links" onchange="window.location.href=this.value;">
+                            <option value="" disabled selected>Choisissez un projet</option>
+end;
+        foreach ($listeProj as $p) {
+            $struct = Structure::getById($p->IdStruct);
+            $changementTri = $app->urlFor("listeFormulaires");
+            $redirection2 = $app->urlFor("projet", [
+                'no' => $p->IdProjet
+            ]);
+            $res .= '
+                    <option value="' . $redirection2 . '">' . $struct->Nom . '</option>';
+        }
+        $res .= <<<end
+                    </select>
+                    <label>Accès rapide aux projets</label>
+                </div>
 
                 <div class="row">
                     <form id="formRecherche" action="$redirection" method="POST" autocomplete="off">
@@ -110,25 +139,29 @@ $(document).ready(function() {";
                     </div>
                     </form>
                   </div>
-            
-            <div class="row">    
-                <div class="input-field col s12">
-                    <select size="1" name="links" onchange="window.location.href=this.value;">
-                        <option value="" disabled selected>Choisissez un projet</option>
+
+                  <div class="input-field col s12">
+                    <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                        
 end;
-        foreach($listeProj as $p){
-            $struct = Structure::getById($p->IdStruct);
-            $redirection = $app->urlFor("projet", [
-                'no' => $p->IdProjet
-            ]);
-            $res .= '
-                    <option value="'.$redirection.'">'.$struct->Nom.'</option>';
-        }
+        if ($_GET['query'] == 0)
+            $res .= '<option value="' . $changementTri . '?query=0" selected>Alphabétique</option>
+                        ';
+        else
+            $res .= '<option value="' . $changementTri . '?query=0">Alphabétique</option>
+                        ';
+        if ($_GET['query'] == 1)
+            $res .= '<option value="' . $changementTri . '?query=1" selected>Date de création</option>
+';
+        else
+            $res .= '<option value="' . $changementTri . '?query=1">Date de création</option>
+';
         $res .= <<<end
                     </select>
-                    <label>Accès rapide aux projets</label>
-                </div>
-            </div>
+                    <label>Trier par</label>
+                  </div>
+            
+            
                 
 end;
         foreach ($listeProj as $p) {
@@ -139,12 +172,14 @@ end;
                 'no' => $p->IdProjet
             ]);
             $supprimer = $app->urlFor("postSuppressionFormulaire");
+            
+            $date = Formulaire::transformerDate($p->DateDep);
             $res .= <<<end
 
               <!-- Modal Structure -->
               <div id="modal$p->IdProjet" class="modal">
                 <div class="modal-content">
-                  <h4>Modal Header</h4>
+                  <h4>Suppression de projet</h4>
                   <p>Supprimer le projet de $struct->Nom est un acte irréversible. Êtes-vous sûr de vouloir continuer ?</p>
                 </div>
                 <div class="modal-footer">
@@ -160,9 +195,9 @@ end;
     <div class="col s12">
       <div class="hoverable card">
         <div class="card-content">
-          <span class="card-title">$struct->Nom</span>
+          <span class="card-title">$struct->Nom - $date</span>
           <label>Représentant : $rep->Nom $rep->Prenom - Responsable : $resp->Nom $resp->Prenom</label>
-          <p>$p->Expose</p>
+          <p class="truncate">$p->Expose</p>
         </div>
         <div class="card-action">
           <a href="$acceder">Accéder</a>
@@ -616,8 +651,9 @@ end;
 end;
         return $res;
     }
-    
-    private function recherche($tab){
+
+    private function recherche($tab)
+    {
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
         $path = $requete->getRootUri();
@@ -634,7 +670,7 @@ end;
                 
                 
 end;
-        if(sizeof($struct) == 0){
+        if (sizeof($struct) == 0) {
             $res .= <<<end
                 <div class="col s12">
                         <h5>Aucun résultat</h5>

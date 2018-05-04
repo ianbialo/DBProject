@@ -1,0 +1,45 @@
+--Affichage du formulaire--
+
+@startuml
+index.php -> index.php : get('/')
+activate index.php
+' create controleurFrontOffice.php
+' index.php -> controleurFrontOffice.php : new
+index.php -> controleurFrontOffice.php: index()
+activate controleurFrontOffice.php
+' create vueFrontOffice.php
+' controleurFrontOffice.php -> vueFrontOffice.php : new
+controleurFrontOffice.php -> vueFrontOffice.php : render(VueFrontOffice::AFF_INDEX)
+activate vueFrontOffice.php
+vueFrontOffice.php --> controleurFrontOffice.php : vue du formulaire
+deactivate vueFrontOffice.php
+controleurFrontOffice.php --> index.php : vue du formulaire
+deactivate controleurFrontOffice.php
+index.php -> index.php : echo (vue du formulaire)
+deactivate index.php
+@enduml
+
+--Affichage de l'index du back office--
+
+@startuml
+index.php -> index.php : get('/admin(/)')
+activate index.php
+' create controleurBackOffice.php
+' index.php -> controleurBackOffice.php : new
+index.php -> controleurBackOffice.php: index()
+activate controleurBackOffice.php
+' create vueBackOffice.php
+' controleurBackOffice.php -> vueBackOffice.php : new
+alt Si l'utilisateur n'est pas connecté
+controleurBackOffice.php -> vueBackOffice.php : render(VueBackOffice::AFF_INDEX)
+activate vueBackOffice.php
+vueBackOffice.php --> controleurBackOffice.php : vue du formulaire
+deactivate vueBackOffice.php
+else
+controleurBackOffice.php -> index.php : 
+end
+controleurBackOffice.php --> index.php : vue du formulaire
+deactivate controleurBackOffice.php
+index.php -> index.php : echo (vue du formulaire)
+deactivate index.php
+@enduml

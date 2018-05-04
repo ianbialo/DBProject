@@ -42,7 +42,7 @@ $app->get('/admin/deconnexion(/)',function(){
     (new dbproject\controleur\ControleurBackOffice())->deconnexion();
 })->name("deconnexion");
 
-$app->get('/admin/formulaire(/)', function (){
+$app->get('/admin/formulaire', function (){
     (new dbproject\controleur\ControleurBackOffice())->affichageFormulaires();
 })->name("listeFormulaires");
 

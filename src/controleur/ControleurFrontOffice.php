@@ -48,9 +48,12 @@ class ControleurFrontOffice
         if (! Formulaire::insertionFormulaire())
             $app->redirect($app->urlFor("formulaireEchec"));
         
+        $nom = filter_var($_POST['nomstruct'],FILTER_SANITIZE_STRING);
+        $date = Formulaire::transformerDate(date("Y-m-d"));
+        
         // Envoi de mail
         $subject = "Nouveau dépôt de projet";
-        $msg = "Slt";
+        $msg = "Une nouvelle demande de partenariat/sponsoring/mécénat a été effectué le ".$date." par ".$nom;
         Email::sendMail($subject, $msg);
         $app->redirect($app->urlFor("formulaireOk"));
     }

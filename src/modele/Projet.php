@@ -19,6 +19,10 @@ class Projet extends \Illuminate\Database\Eloquent\Model
     }
     
     public static function getAll(){
-        return $test = Projet::join('structure', 'projet.IdStruct', '=', 'structure.IdStruct')->select("projet.*")->orderBy("structure.Nom")->get();
+        return Projet::join('structure', 'projet.IdStruct', '=', 'structure.IdStruct')->select("projet.*")->orderBy("structure.Nom")->get();
+    }
+    
+    public static function getAllDate(){
+        return Projet::orderBy("dateDep")->get();
     }
 }
