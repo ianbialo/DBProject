@@ -1,45 +1,59 @@
 --Affichage du formulaire--
 
 @startuml
-index.php -> index.php : get('/')
+index.php -> Slim.php : get('/')
 activate index.php
-' create controleurFrontOffice.php
-' index.php -> controleurFrontOffice.php : new
 index.php -> controleurFrontOffice.php: index()
 activate controleurFrontOffice.php
-' create vueFrontOffice.php
-' controleurFrontOffice.php -> vueFrontOffice.php : new
 controleurFrontOffice.php -> vueFrontOffice.php : render(VueFrontOffice::AFF_INDEX)
 activate vueFrontOffice.php
 vueFrontOffice.php --> controleurFrontOffice.php : vue du formulaire
 deactivate vueFrontOffice.php
-controleurFrontOffice.php --> index.php : vue du formulaire
+controleurFrontOffice.php -> controleurFrontOffice.php : print (vue du formulaire)
 deactivate controleurFrontOffice.php
-index.php -> index.php : echo (vue du formulaire)
 deactivate index.php
 @enduml
 
 --Affichage de l'index du back office--
 
 @startuml
-index.php -> index.php : get('/admin(/)')
+index.php -> Slim.php : get('/admin(/)')
 activate index.php
-' create controleurBackOffice.php
-' index.php -> controleurBackOffice.php : new
 index.php -> controleurBackOffice.php: index()
 activate controleurBackOffice.php
-' create vueBackOffice.php
-' controleurBackOffice.php -> vueBackOffice.php : new
 alt Si l'utilisateur n'est pas connecté
 controleurBackOffice.php -> vueBackOffice.php : render(VueBackOffice::AFF_INDEX)
 activate vueBackOffice.php
-vueBackOffice.php --> controleurBackOffice.php : vue du formulaire
+vueBackOffice.php --> controleurBackOffice.php : vue du menu de connexion
 deactivate vueBackOffice.php
-else
-controleurBackOffice.php -> index.php : 
+controleurBackOffice.php -> controleurBackOffice.php : print (vue du menu de connexion)
+else Si l'utilisateur est connecté
+controleurBackOffice.php -> Slim.php : urlFor("listeFormulaires")
+Slim.php --> controleurBackOffice.php : URL de la liste des formulaires
+controleurBackOffice.php -> Slim.php : redirect(URL de la liste des formulaires)
 end
-controleurBackOffice.php --> index.php : vue du formulaire
 deactivate controleurBackOffice.php
-index.php -> index.php : echo (vue du formulaire)
+deactivate index.php
+@enduml
+
+--Affichage d'un projet--
+
+@startuml
+index.php -> Slim.php : get('/admin/formulaire/:no')
+activate index.php
+index.php -> controleurBackOffice.php: affichageProjet($no)
+activate controleurBackOffice.php
+controleurBackOffice.php -> Projet.php : getById($no)
+Projet.php --> controleurBackOffice.php : projet
+alt Si l'utilisateur n'est pas connecté ET si le projet existe
+controleurBackOffice.php -> vueBackOffice.php : render(VueBackOffice::AFF_PROJET,$no)
+activate vueBackOffice.php
+vueBackOffice.php --> controleurBackOffice.php : vue du projet
+deactivate vueBackOffice.php
+controleurBackOffice.php -> controleurBackOffice.php : print (vue du menu de connexion)
+else Si l'utilisateur n'est connecté OU si le projet n'existe pas
+controleurBackOffice.php -> Slim.php : notFound()
+end
+deactivate controleurBackOffice.php
 deactivate index.php
 @enduml
