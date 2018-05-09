@@ -4,7 +4,7 @@ namespace dbproject\conf;
 class Variable
 {
 
-    //Chemin où se situe le projet dans le disque dur
+    //Chemin où se situe le projet sur le disque
     public static $path = "C:\Users\ibialo\Documents\GIT\DBProject";
 
     //Dossier dans le projet (à partir de la racine) où se situent les dossiers de fichiers
