@@ -1,0 +1,16 @@
+Ci-dessous champs du backoffice :
+- intitulé de l,association repris automatiquement depuis la demande -> déja fait
+- date automatique de la demande
+- date réponse DB
+- décision : Deux cases à cocher : Positive / Négative
+- si la réponse est positive, attribuer un numéro chrono annuel
+- montant accordé
+- date envoi convention
+- date réception convention signée
+- date réception reçu / cerfa
+- date envoi chèque
+- observations (block texte)
+- pièces administratives : possibilité de charger des documents (word, pdf, jpg...)
+
+Afficher la date du jour en automatique, avec possibilité de la modifier.
+Dès qu'elle a été modifiée, ou validée, cette date est conservée.

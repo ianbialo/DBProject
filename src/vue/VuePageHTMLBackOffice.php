@@ -45,6 +45,22 @@ class VuePageHTMLBackOffice
             $('.tabs').tabs();
             $('select').formSelect();
             $('.modal').modal({dismissible: false});
+
+            $('.datepicker').datepicker({
+                format : 'dd mmmm yyyy',
+                i18n: {
+                    months: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                    monthsShort: ['Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin', 'Juill', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'],
+                    weekdays: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+                    weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                    weekdaysAbbrev:	['D','L','Ma','Me','J','V','S'],
+                    cancel : 'retour',
+                    clear: 'effacer',
+                },
+                showClearBtn : true,
+                minDate: new Date(),
+});
+
             $(function() {
                 M.updateTextFields();
             });
@@ -122,6 +138,7 @@ end;
         $contact = $app->urlFor('accueil');
         $path = $requete->getRootUri();
         return <<<end
+
     </main>
     <footer class="page-footer orange darken-3">
       <div class="container">

@@ -24,6 +24,6 @@ class VueError404
     	$accueil = $app->urlFor("accueil");
     	$content="<h1>Il semble que la page soit inexistente</h1>";
     	$content.="<a href='$accueil'>Retour à l'accueil</a>";
-    	return VuePageHTMLFrontOffice::header().$content.VuePageHTMLFrontOffice::getFooter();
+    	return $content;
     }
 }

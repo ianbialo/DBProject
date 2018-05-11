@@ -16,78 +16,8 @@ $app = new \Slim\Slim(array(
     'cookies.cipher_mode' => MCRYPT_MODE_CBC
 ));
 
-///////////////////////////////////////
-///               GET               ///
-///////////////////////////////////////
-
-$app->get('/', function (){
-    (new dbproject\controleur\ControleurFrontOffice())->index();
-})->name("accueil");
-
-$app->get('/enregistrement(/)', function (){
-    (new dbproject\controleur\ControleurFrontOffice())->formulaireOk();
-})->name("formulaireOk");
-
-$app->get('/erreur(/)', function (){
-    (new dbproject\controleur\ControleurFrontOffice())->formulaireEchec();
-})->name("formulaireEchec");
-
-////////////////////////////////////
-
-$app->get('/admin(/)', function (){
-    (new dbproject\controleur\ControleurBackOffice())->index();
-})->name("connexionAdmin");
-
-$app->get('/admin/deconnexion(/)',function(){
-    (new dbproject\controleur\ControleurBackOffice())->deconnexion();
-})->name("deconnexion");
-
-$app->get('/admin/formulaire', function (){
-    (new dbproject\controleur\ControleurBackOffice())->affichageFormulaires();
-})->name("listeFormulaires");
-
-$app->get('/admin/formulaire/:no', function ($no){
-    (new dbproject\controleur\ControleurBackOffice())->affichageProjet($no);
-})->name("projet");
-
-$app->get('/admin/formulaire/recherche/:recherche', function ($recherche){
-    (new dbproject\controleur\ControleurBackOffice())->affichageRecherche($recherche);
-})->name("recherche");
-
-
-
-///////////////////////////////////////
-///               POST              ///
-///////////////////////////////////////
-
-$app->post('/postForm(/)',function(){
-    (new dbproject\controleur\ControleurFrontOffice())->postFomulaire();
-})->name("postFormulaire");
-
-/////////////////////////////////////////////
-
-$app->post('/postConnexion(/)',function(){
-    (new dbproject\controleur\ControleurBackOffice())->postConnexion();
-})->name("postConnexion");
-
-$app->post('/postSupprForm(/)',function(){
-    (new dbproject\controleur\ControleurBackOffice())->postSuppressionFomulaire();
-})->name("postSuppressionFormulaire");
-
-$app->post('/postRedirection(/)',function(){
-    (new dbproject\controleur\ControleurBackOffice())->postRedirectionProjet();
-})->name("postRedirection");
-
-
-
-
-///////////////////////////////////////
-///             NOT FOUND           ///
-///////////////////////////////////////
-
-$app->notFound(function(){
-    (new dbproject\controleur\ControleurError404())->affichageErreur();
-});
+//require 'hooks.php';
+require 'routes.php';
 
 //Lancement de Slim
 $app->run();

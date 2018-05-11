@@ -37,7 +37,7 @@ class VueBackOffice
                 $content = $this->recherche($tab);
                 break;
         }
-        return VuePageHTMLBackOffice::header() . $content . VuePageHTMLBackOffice::getFooter();
+        return $content;
     }
 
     private function index()
@@ -303,6 +303,7 @@ end;
                       <li class="tab"><a href="#14c4" class="">Responsable</a></li>
                       <li class="tab"><a href="#14c5" class="">Impliqué(s)</a></li>
                       <li class="tab"><a href="#14c6" class="">Fichier(s)</a></li>
+                      <li class="tab"><a href="#14c7" class="blue-text">Suivi</a></li>
                     <div class="indicator"></div></ul>
                   </div>
                   <div class="card-content grey lighten-4">
@@ -644,10 +645,59 @@ end;
 
 	                   </table>
                     </div>
+                    <div id="14c7" class="active" style="display: block;">
+                        <table>
+                		<thead>
+                			<tr>
+                				<th>Intitulé</th>
+                				<th></th>
+                			</tr>
+                		</thead>
+                
+                		<tbody>
+                			<tr>
+                				<td>Date de la réponse DB</td>
+                				<td><input type="text" class="datepicker" id="date" required></td>
+                			</tr>
+                            <tr>
+                				<td>Décision</td>
+                				<td><input type="text" class="datepicker" id="date" required></td>
+                			</tr>
+                            <tr>
+                				<td>Montant accordé</td>
+                				<td><input type="text" class="datepicker" id="date" required></td>
+                			</tr>
+                            <tr>
+                				<td>Date de l'envoi de la convention</td>
+                				<td><input type="text" class="datepicker" id="date" required></td>
+                			</tr>
+                            <tr>
+                				<td>Date de la réception de la convention signée</td>
+                				<td><input type="text" class="datepicker" id="date" required></td>
+                			</tr>
+                            <tr>
+                				<td>Date de la réception du reçu / cerfa</td>
+                				<td><input type="text" class="datepicker" id="date" required></td>
+                			</tr>
+                            <tr>
+                				<td>Date de l'envoi du chèque</td>
+                				<td><input type="text" class="datepicker" id="date" required></td>
+                			</tr>
+                            <tr>
+                				<td>Observations éventuelles</td>
+                				<td><input type="text" class="datepicker" id="date" required></td>
+                			</tr>
+                		</tbody>
+	                   </table>
+                    </div>
                   </div>
                 </div>
         <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>
         </div>
+<script>
+var instance = M.Datepicker.getInstance('date');
+
+</script>
 end;
         return $res;
     }

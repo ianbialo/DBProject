@@ -6,6 +6,7 @@ use dbproject\modele\Representant;
 use dbproject\modele\Responsable;
 use dbproject\modele\Projet;
 use dbproject\modele\Implique;
+use dbproject\modele\Suivi;
 
 class Formulaire
 {
@@ -45,15 +46,30 @@ class Formulaire
         $res->courriel = filter_var($_POST['courriel'],FILTER_SANITIZE_EMAIL);
         if(!$res->save()) return false;
         
+        //Création du suivi
+        $suivi = new Suivi();
+        $suivi->Chrono = null;
+        $suivi->DateRep = date("Y-m-d");
+        $suivi->Montant = 0;
+        $suivi->DateEnvoiConv = date("Y-m-d");
+        $suivi->DateRecepConv = date("Y-m-d");
+        $suivi->DateRecepRecu = date("Y-m-d");
+        $suivi->DateEnvoiCheque = date("Y-m-d");
+        $suivi->Observations = null;
+        $suivi->Documents = 0;
+        if(!$suivi->save()) return false;
+        
         $IdStruct = $struct->IdStruct;
         $IdRes = $res->IdRes;
         $IdRep = $rep->IdRep;
+        $IdSuivi = $suivi->IdSuivi;
         
         //Ajout du projet
         $proj = new Projet();
         $proj->IdStruct = $IdStruct;
         $proj->IdRes = $IdRes;
         $proj->IdRep = $IdRep;
+        $proj->IdSuivi = $IdSuivi;
         $proj->DateDep = date("Y-m-d");
         $proj->Expose = filter_var($_POST['expose'],FILTER_SANITIZE_STRING);
         $proj->DateDeb = $_POST['datedeb'];

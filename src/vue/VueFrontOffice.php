@@ -23,7 +23,7 @@ class VueFrontOffice
                 $content = $this->echec();
                 break;
         }
-        return VuePageHTMLFrontOffice::header() . $content . VuePageHTMLFrontOffice::getFooter();
+        return $content;
     }
 
     private function index()

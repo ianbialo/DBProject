@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3312
--- Généré le :  mar. 24 avr. 2018 à 11:19
+-- Généré le :  ven. 11 mai 2018 à 16:26
 -- Version du serveur :  10.1.31-MariaDB
 -- Version de PHP :  7.2.3
 
@@ -58,6 +58,7 @@ CREATE TABLE `projet` (
   `IdStruct` int(11) NOT NULL,
   `IdRes` int(11) NOT NULL,
   `IdRep` int(11) NOT NULL,
+  `IdSuivi` int(11) NOT NULL,
   `DateDep` date NOT NULL,
   `Expose` text NOT NULL,
   `DateDeb` date NOT NULL,
@@ -78,9 +79,9 @@ CREATE TABLE `projet` (
 -- Déchargement des données de la table `projet`
 --
 
-INSERT INTO `projet` (`IdProjet`, `IdStruct`, `IdRes`, `IdRep`, `DateDep`, `Expose`, `DateDeb`, `Duree`, `Lieu`, `Aide`, `Budget`, `Fin`, `InteretGeneral`, `Domaine`, `Mecenat`, `Fiscal`, `Valorisation`, `Document`) VALUES
-(1, 1, 1, 1, '2018-04-19', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis volutpat nulla. Pellentesque tincidunt leo venenatis felis sollicitudin metus.', '2018-04-09', 2, 'Chez Zguegz', 1300, 1300, 'Pour les befors', 1, 'Before', 1, 1, 'C\''est bien', 0),
-(6, 6, 6, 6, '2018-04-24', 'Ceci est un test', '2018-07-15', 12, 'Chez moi', 12, 12, 'Oui les fins oui', 1, 'Oui le domaine oui', 1, 1, NULL, 2);
+INSERT INTO `projet` (`IdProjet`, `IdStruct`, `IdRes`, `IdRep`, `IdSuivi`, `DateDep`, `Expose`, `DateDeb`, `Duree`, `Lieu`, `Aide`, `Budget`, `Fin`, `InteretGeneral`, `Domaine`, `Mecenat`, `Fiscal`, `Valorisation`, `Document`) VALUES
+(1, 1, 1, 1, 1, '2018-04-25', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis volutpat nulla. Pellentesque tincidunt leo venenatis felis sollicitudin metus.', '2018-04-09', 2, 'Chez Zguegz', 1300, 1300, 'Pour les befors', 1, 'Before', 1, 1, 'C\''est bien', 0),
+(6, 6, 6, 6, 6, '2018-04-24', 'Ceci est un test', '2018-07-15', 12, 'Chez moi', 12, 12, 'Oui les fins oui', 1, 'Oui le domaine oui', 1, 1, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -143,7 +144,7 @@ CREATE TABLE `structure` (
   `Ville` varchar(255) NOT NULL,
   `Raison` text NOT NULL,
   `Type` varchar(255) NOT NULL,
-  `Site` varchar(255) NOT NULL
+  `Site` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -152,7 +153,34 @@ CREATE TABLE `structure` (
 
 INSERT INTO `structure` (`IdStruct`, `Nom`, `Adresse`, `CodePostal`, `Ville`, `Raison`, `Type`, `Site`) VALUES
 (1, 'Amphux', '2 Ter Boulevard Charlemagne', '54000', 'Nancy', 'Ceci est une raison', 'Une association', 'http://localhost:8012/s3a_s02_bialo_fraschini_holzhammer_tey'),
-(6, 'Unixs', '5, rue des johns', '55555', 'JohnCity', 'Oui la raison oui', 'Une institution', '');
+(6, 'Unixs', '5, rue des johns', '55555', 'JohnCity', 'Oui la raison oui', 'Une institution', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `suivi`
+--
+
+CREATE TABLE `suivi` (
+  `IdSuivi` int(11) NOT NULL,
+  `Chrono` int(11) DEFAULT NULL,
+  `DateRep` date NOT NULL,
+  `Montant` int(11) NOT NULL,
+  `DateEnvoiConv` date NOT NULL,
+  `DateRecepConv` date NOT NULL,
+  `DateRecepRecu` date NOT NULL,
+  `DateEnvoiCheque` date NOT NULL,
+  `Observations` text,
+  `Document` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `suivi`
+--
+
+INSERT INTO `suivi` (`IdSuivi`, `Chrono`, `DateRep`, `Montant`, `DateEnvoiConv`, `DateRecepConv`, `DateRecepRecu`, `DateEnvoiCheque`, `Observations`, `Document`) VALUES
+(1, NULL, '2018-05-11', 0, '2018-05-11', '2018-05-11', '2018-05-11', '2018-05-11', NULL, 0),
+(6, NULL, '2018-05-11', 0, '2018-05-11', '2018-05-11', '2018-05-11', '2018-05-11', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -205,7 +233,8 @@ ALTER TABLE `projet`
   ADD PRIMARY KEY (`IdProjet`),
   ADD KEY `IdStruct` (`IdStruct`),
   ADD KEY `IdRes` (`IdRes`),
-  ADD KEY `IdRep` (`IdRep`);
+  ADD KEY `IdRep` (`IdRep`),
+  ADD KEY `IdSuivi` (`IdSuivi`);
 
 --
 -- Index pour la table `representant`
@@ -224,6 +253,12 @@ ALTER TABLE `responsable`
 --
 ALTER TABLE `structure`
   ADD PRIMARY KEY (`IdStruct`);
+
+--
+-- Index pour la table `suivi`
+--
+ALTER TABLE `suivi`
+  ADD PRIMARY KEY (`IdSuivi`);
 
 --
 -- Index pour la table `user`
@@ -272,6 +307,12 @@ ALTER TABLE `structure`
   MODIFY `IdStruct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT pour la table `suivi`
+--
+ALTER TABLE `suivi`
+  MODIFY `IdSuivi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- Contraintes pour les tables déchargées
 --
 
@@ -287,7 +328,8 @@ ALTER TABLE `implique`
 ALTER TABLE `projet`
   ADD CONSTRAINT `projet_ibfk_1` FOREIGN KEY (`IdStruct`) REFERENCES `structure` (`IdStruct`),
   ADD CONSTRAINT `projet_ibfk_2` FOREIGN KEY (`IdRes`) REFERENCES `responsable` (`IdRes`),
-  ADD CONSTRAINT `projet_ibfk_3` FOREIGN KEY (`IdRep`) REFERENCES `representant` (`IdRep`);
+  ADD CONSTRAINT `projet_ibfk_3` FOREIGN KEY (`IdRep`) REFERENCES `representant` (`IdRep`),
+  ADD CONSTRAINT `projet_ibfk_4` FOREIGN KEY (`IdSuivi`) REFERENCES `suivi` (`IdSuivi`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
