@@ -146,11 +146,20 @@ class Formulaire
     
     public static function transformerDate($date){
         $date = explode("-",$date);
-        $monthArray = array("janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre");
+        $monthArray = array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre");
         $jour = $date[2];
         $mois = $monthArray[$date[1]-1];
         $annee = $date[0];
         return $jour." ".$mois." ".$annee;       
+    }
+    
+    public static function reconstruireDate($date){
+        $date = explode(" ",$date);
+        $monthArray = array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre");
+        $jour = $date[0];
+        $mois = array_search($date[1], $monthArray)+1;
+        $annee = $date[2];
+        return $annee."-".$mois."-".$jour;   
     }
     
     public static function transformerBooleen($int){

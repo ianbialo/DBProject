@@ -8,6 +8,7 @@ use dbproject\modele\Structure;
 use dbproject\modele\Representant;
 use dbproject\modele\Responsable;
 use dbproject\modele\Implique;
+use dbproject\modele\Suivi;
 use dbproject\conf\Variable;
 
 class VueBackOffice
@@ -229,6 +230,7 @@ end;
         $struct = Structure::getById($proj->IdStruct);
         $rep = Representant::getById($proj->IdStruct);
         $resp = Responsable::getById($proj->IdStruct);
+        $suivi = Suivi::getById($proj->IdStruct);
         
         $dossier = null;
         $fichiers = array();
@@ -265,8 +267,55 @@ end;
             }
         }
         
+        //Transformation des dates dans la partie du projet
         $dateDep = Formulaire::transformerDate($proj->DateDep);
         $dateDeb = Formulaire::transformerDate($proj->DateDeb);
+        
+        //Transformation des dates et ajustement des titres dans la partie de suivi
+        if($suivi->DateRep != null){
+            $dateRep = "value='".Formulaire::transformerDate($suivi->DateRep)."'";
+            $titleDateRep = "Date de la réponse DB";
+        }
+        else {
+            $dateRep = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+            $titleDateRep = "<span class='red-text'>Date de la réponse DB - Valeur inchangée</span>";
+        }
+        if($suivi->DateEnvoiConv != null){
+            $dateEnvoiConv = "value='".Formulaire::transformerDate($suivi->DateEnvoiConv);
+            $titleDateEnvoiConv = "Date de l'envoi de la convention";
+        }
+        else {
+            $dateEnvoiConv = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+            $titleDateEnvoiConv = "<span class='red-text'>Date de l'envoi de la convention - Valeur inchangée</span>";
+        }
+        if($suivi->DateRecepConv != null){
+            $dateRecepConv = "value='".Formulaire::transformerDate($suivi->DateRecepConv)."'";
+            $titleDateRecepConv = "Date de la réception de la convention signée";
+        }
+        else {
+            $dateRecepConv = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+            $titleDateRecepConv = "<span class='red-text'>Date de la réception de la convention signée - Valeur inchangée</span>";
+        }
+        if($suivi->DateRecepRecu != null){
+            $dateRecepRecu = "value='".Formulaire::transformerDate($suivi->DateRecepRecu)."'";
+            $titleDateRecepRecu = "Date de la réception du reçu / cerfa";
+        }
+        else {
+            $dateRecepRecu = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+            $titleDateRecepRecu = "<span class='red-text'>Date de la réception du reçu / cerfa - Valeur inchangée</span>";
+        }
+        if($suivi->DateEnvoiCheque != null){
+            $dateEnvoiCheque = "value='".Formulaire::transformerDate($suivi->DateEnvoiCheque)."'";
+            $titleDateEnvoiCheque = "Date de l'envoi du chèque";
+        }
+        else {
+            $dateEnvoiCheque = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+            $titleDateEnvoiCheque = "<span class='red-text'>Date de l'envoi du chèque - Valeur inchangée</span>";
+        }
+        if($suivi->Chrono != null) $titleSuivi = "Suivi - <strong>n° chrono : $suivi->Chrono</strong>";
+        else $titleSuivi = "Suivi";
+        
+        //Transformation des booléens dans la partie du projet
         $interetG = Formulaire::transformerBooleen($proj->InteretGeneral);
         $mecenat = Formulaire::transformerBooleen($proj->Mecenat);
         $fiscal = Formulaire::transformerBooleen($proj->Fiscal);
@@ -283,6 +332,8 @@ end;
         
         $cofin = Implique::getCoFinanceur($no);
         $parrain = Implique::getParrain($no);
+        
+        $modificationSuivi = $app->urlFor("postModificationSuivi");
         
         $res = <<<end
         <div class="container row">
@@ -646,6 +697,12 @@ end;
 	                   </table>
                     </div>
                     <div id="14c7" class="active" style="display: block;">
+                        <div class="hoverable card">
+                        <div class="card-content">
+                        <div class="col s12">
+                        <h5>$titleSuivi</h5>
+                        </div>
+                        <form method="POST" id="formSuivi" action="$modificationSuivi" enctype="multipart/form-data">  
                         <table>
                 		<thead>
                 			<tr>
@@ -656,48 +713,102 @@ end;
                 
                 		<tbody>
                 			<tr>
-                				<td>Date de la réponse DB</td>
-                				<td><input type="text" class="datepicker" id="date" required></td>
+                				<td>$titleDateRep</td>
+                				<td><input type="text" class="datepicker" id="dateRep" name="dateRep" $dateRep></td>
                 			</tr>
                             <tr>
                 				<td>Décision</td>
-                				<td><input type="text" class="datepicker" id="date" required></td>
+                				<td><div class="switch">
+                                        <label>
+                                          Non
+                                          <input type="checkbox">
+                                          <span class="lever"></span>
+                                          Oui
+                                        </label>
+                                        <input type="hidden" id="decision" name="decision">
+                                    </div>
+                                </td>
                 			</tr>
                             <tr>
-                				<td>Montant accordé</td>
-                				<td><input type="text" class="datepicker" id="date" required></td>
+                				<td>Montant accordé (en euros)</td>
+                				<td><input type="number" id="montant" value="$suivi->Montant" required></td>
                 			</tr>
                             <tr>
-                				<td>Date de l'envoi de la convention</td>
-                				<td><input type="text" class="datepicker" id="date" required></td>
+                				<td>$titleDateEnvoiConv</td>
+                				<td><input type="text" class="datepicker" id="dateEnvoiConv" name="dateEnvoiConv" $dateEnvoiConv></td>
                 			</tr>
                             <tr>
-                				<td>Date de la réception de la convention signée</td>
-                				<td><input type="text" class="datepicker" id="date" required></td>
+                				<td>$titleDateRecepConv</td>
+                				<td><input type="text" class="datepicker" id="dateRecepConv" name="dateRecepConv" $dateRecepConv></td>
                 			</tr>
                             <tr>
-                				<td>Date de la réception du reçu / cerfa</td>
-                				<td><input type="text" class="datepicker" id="date" required></td>
+                				<td>$titleDateRecepRecu</td>
+                				<td><input type="text" class="datepicker" id="dateRecepRecu" name="dateRecepRecu" $dateRecepRecu></td>
                 			</tr>
                             <tr>
-                				<td>Date de l'envoi du chèque</td>
-                				<td><input type="text" class="datepicker" id="date" required></td>
+                				<td>$titleDateEnvoiCheque</td>
+                				<td><input type="text" class="datepicker" id="dateEnvoiCheque" name="dateEnvoiCheque" $dateEnvoiCheque></td>
                 			</tr>
                             <tr>
                 				<td>Observations éventuelles</td>
-                				<td><input type="text" class="datepicker" id="date" required></td>
+                				<td><textarea id="textarea1" class="materialize-textarea" id="observations" name="observations"></textarea></td>
                 			</tr>
                 		</tbody>
-	                   </table>
+	                   </table><br>
+                       <button class="btn waves-effect waves-light" type="submit" name="action">Valider
+                        <i class="material-icons right">send</i>
+                      </button>
+                      </form>
+                      </div>
+                      </div>
+
+                      <div class="hoverable card">
+                        <div class="card-content">
+                        <div class="col s12">
+                            <h5>Fichiers</h5>
+                        </div>
+
+                        <table>
+                		<thead>
+                			<tr>
+                                <th></th>
+                				<th>Intitulé</th>
+                				<th></th>
+                			</tr>
+                		</thead>
+                        <tbody>
+                            <tr>
+                				<td><a class="waves-effect waves-light btn red" href="$liste"><i class="material-icons">delete</i></a></td>
+                				<td>àaaaaaaaaaaaaaaaaaaa</td>
+                                <td>insérer</td>
+                			</tr>   
+                		</tbody>
+                        </table>
+                
+                        <div class="file-field input-field">
+                          <div class="btn">
+                            <span>Fichier(s)</span>
+                            <input type="file" multiple>
+                          </div>
+                          <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Insérez un ou plusieurs fichiers">
+                          </div>
+                        </div>
+
+                       <button class="btn waves-effect waves-light" type="submit" name="action">Valider
+                        <i class="material-icons right">send</i>
+                      </button>
+    
+    
+                      </div>
+                      </div>
+
                     </div>
                   </div>
                 </div>
         <a class="waves-effect waves-light btn" href="$liste"><i class="material-icons left">arrow_back</i>Retour</a>
         </div>
-<script>
-var instance = M.Datepicker.getInstance('date');
 
-</script>
 end;
         return $res;
     }

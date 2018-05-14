@@ -81,6 +81,10 @@ $app->post('/postRedirection(/)',function(){
     (new dbproject\controleur\ControleurBackOffice())->postRedirectionProjet();
 })->name("postRedirection");
 
+$app->post('/postModificationSuivi(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postModificationSuivi();
+})->name("postModificationSuivi");
+
 
 
 

@@ -111,4 +111,11 @@ class ControleurBackOffice
         Formulaire::supprimerFormulaire($_POST['IdProjet']);
         $app->redirect($app->urlFor("listeFormulaires"));
     }
+    
+    public function postModificationSuivi(){
+        //echo "slt ".($_POST["dateEnvoiCheque"]==null)."<br>";
+        //echo "slt2 ".(($test=2)==null);
+        echo "1 ".$_POST["dateRep"]."<br>";
+        echo "2 ".Formulaire::reconstruireDate($_POST["dateRep"])."<br>";
+    }
 }

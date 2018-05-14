@@ -40,6 +40,7 @@ class VuePageHTMLBackOffice
     <body>
         <script type="text/javascript" src="$path/js/materialize.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script type="text/javascript" src="$path/js/suivi.js"></script>
         <script>
         $(document).ready(function() {
             $('.tabs').tabs();
@@ -58,7 +59,7 @@ class VuePageHTMLBackOffice
                     clear: 'effacer',
                 },
                 showClearBtn : true,
-                minDate: new Date(),
+                //minDate: new Date(),
 });
 
             $(function() {
@@ -145,9 +146,7 @@ end;
       <div class="row">
         <div class="col l6 s12">
           <h5 class="white-text">Demathieu Bard</h5>
-          <p class="grey-text text-lighten-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris hendrerit velit vel eros finibus, et fringilla massa molestie. Curabitur volutpat mi a cursus suscipit. Praesent commodo at mauris sed semper.</p>
-
-
+          <p class="grey-text text-lighten-4">Réalisation du back office dans le cadre de la gestion des dépots de demande de partenariat / sponsoring / mécénat par Ian Bialo, étudiant en deuxième année en DUT Informatique (Nancy-Charlemange), 2018.</p>
         </div>
         <div class="col l3 s12">
           <h5 class="white-text">A Propos</h5>
