@@ -5,10 +5,13 @@ class Variable
 {
 
     //Chemin où se situe le projet sur le disque
-    public static $path = "C:\Users\ibialo\Documents\GIT\DBProject";
+    public static $path = "C:\\xampp\htdocs\DBProject\DBProject";
 
     //Dossier dans le projet (à partir de la racine) où se situent les dossiers de fichiers
     public static $dossierFichier = "uploads";
+    
+    //Liste des dossiers permettant de différencier les différents types de fichier
+    public static $dossierSpecifique = array("client","perso");
     
     //Format de fichiers autorisé
     public static $formatAutorise = array("jpeg","odt","doc","docx","pdf","xls","xlsx");

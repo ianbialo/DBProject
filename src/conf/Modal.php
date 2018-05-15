@@ -2,12 +2,12 @@
 namespace dbproject\conf;
 
 class Modal{
-    public static function genereModal(){
+    public static function genereModal($titre = "Attention"){
         return <<<end
         
         <div id="modal1" class="modal">
             <div class="modal-content">
-            <h4>Attention</h4>
+            <h4>$titre</h4>
             <p></p>
             </div>
             <div class="modal-footer">

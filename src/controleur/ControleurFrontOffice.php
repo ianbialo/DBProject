@@ -53,7 +53,7 @@ class ControleurFrontOffice
         
         // Envoi de mail
         $subject = "Nouveau dépôt de projet";
-        $msg = "Une nouvelle demande de partenariat/sponsoring/mécénat a été effectué le ".$date." par ".$nom;
+        $msg = 'Une nouvelle demande de partenariat/sponsoring/mécénat a été effectué le '.$date.' par "'.$nom.'".';
         Email::sendMail($subject, $msg);
         $app->redirect($app->urlFor("formulaireOk"));
     }

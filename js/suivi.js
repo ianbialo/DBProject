@@ -33,15 +33,10 @@ let application = (function(){
 				//alert($("#dateRecepRecu").val());
 				//alert($("#dateEnvoiCheque").val());
 				
-			    if($("input").is(":checked")) {
-			      $("#decision").val("1");
-			    }
-			    else {
-			      $("#decision").val("0");
-			    }
+			    
 			    
 			});
-		}
+		},
 	}
 
 })();

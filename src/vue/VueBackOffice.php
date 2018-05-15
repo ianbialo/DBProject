@@ -228,12 +228,14 @@ end;
         
         $proj = Projet::getById($no);
         $struct = Structure::getById($proj->IdStruct);
-        $rep = Representant::getById($proj->IdStruct);
-        $resp = Responsable::getById($proj->IdStruct);
-        $suivi = Suivi::getById($proj->IdStruct);
+        $rep = Representant::getById($proj->IdRep);
+        $resp = Responsable::getById($proj->IdRes);
+        $suivi = Suivi::getById($proj->IdSuivi);
+
         
         $dossier = null;
         $fichiers = array();
+        $folderSpecifique = Variable::$dossierSpecifique[0];
         
         if ($proj->Document != 0) {
             $app = \Slim\Slim::getInstance();
@@ -250,7 +252,7 @@ end;
                     $dossier = $l;
                     
                     // Dossier avec tout les fichiers recherchés
-                    $list2 = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l);
+                    $list2 = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . $folderSpecifique);
                     
                     $zip = null;
                     foreach ($list2 as $i) {
@@ -281,7 +283,7 @@ end;
             $titleDateRep = "<span class='red-text'>Date de la réponse DB - Valeur inchangée</span>";
         }
         if($suivi->DateEnvoiConv != null){
-            $dateEnvoiConv = "value='".Formulaire::transformerDate($suivi->DateEnvoiConv);
+            $dateEnvoiConv = "value='".Formulaire::transformerDate($suivi->DateEnvoiConv)."'";
             $titleDateEnvoiConv = "Date de l'envoi de la convention";
         }
         else {
@@ -320,6 +322,9 @@ end;
         $mecenat = Formulaire::transformerBooleen($proj->Mecenat);
         $fiscal = Formulaire::transformerBooleen($proj->Fiscal);
         
+        if($suivi->Chrono != 0) $checked = 'checked="checked"';
+        else $checked = '';
+        
         if (isset($proj->Valorisation))
             $valor = $proj->Valorisation;
         else
@@ -354,7 +359,7 @@ end;
                       <li class="tab"><a href="#14c4" class="">Responsable</a></li>
                       <li class="tab"><a href="#14c5" class="">Impliqué(s)</a></li>
                       <li class="tab"><a href="#14c6" class="">Fichier(s)</a></li>
-                      <li class="tab"><a href="#14c7" class="blue-text">Suivi</a></li>
+                      <li class="tab"><a href="#suivi" class="blue-text">Suivi</a></li>
                     <div class="indicator"></div></ul>
                   </div>
                   <div class="card-content grey lighten-4">
@@ -677,6 +682,7 @@ end;
 end;
             foreach ($fichiers as $f) {
                 $folder = Variable::$dossierFichier;
+                $folderSpecifique = Variable::$dossierSpecifique[0];
                 if (self::endsWith($f, ".zip"))
                     $nomFichier = "-- Archive contenant tout les fichiers (format .zip) --";
                 else
@@ -684,7 +690,7 @@ end;
                 $res .= <<<end
                             <tr>
                 				<td>$nomFichier</td>
-                				<td><a href="$path/$folder/$dossier/$f">Télécharger</a></td>
+                				<td><a href="$path/$folder/$dossier/$folderSpecifique/$f">Télécharger</a></td>
                 			</tr>
 end;
             }
@@ -696,7 +702,7 @@ end;
 
 	                   </table>
                     </div>
-                    <div id="14c7" class="active" style="display: block;">
+                    <div id="suivi" class="active" style="display: block;">
                         <div class="hoverable card">
                         <div class="card-content">
                         <div class="col s12">
@@ -714,45 +720,44 @@ end;
                 		<tbody>
                 			<tr>
                 				<td>$titleDateRep</td>
-                				<td><input type="text" class="datepicker" id="dateRep" name="dateRep" $dateRep></td>
+                				<td><input type="text" class="datepicker" id="dateRep" name="dateRep" $dateRep /></td>
                 			</tr>
                             <tr>
                 				<td>Décision</td>
-                				<td><div class="switch">
-                                        <label>
-                                          Non
-                                          <input type="checkbox">
-                                          <span class="lever"></span>
-                                          Oui
-                                        </label>
-                                        <input type="hidden" id="decision" name="decision">
-                                    </div>
+                				<td><p>
+                                      <label>
+                                        <input type="checkbox" class="filled-in" id="decision" name="decision" $checked />
+                                        <span>Cochez si validé</span>
+                                      </label>
+                                    </p>
                                 </td>
                 			</tr>
                             <tr>
                 				<td>Montant accordé (en euros)</td>
-                				<td><input type="number" id="montant" value="$suivi->Montant" required></td>
+                				<td><input type="text" id="montant" value="$suivi->Montant" name="montant" pattern="\d*" required /></td>
                 			</tr>
                             <tr>
                 				<td>$titleDateEnvoiConv</td>
-                				<td><input type="text" class="datepicker" id="dateEnvoiConv" name="dateEnvoiConv" $dateEnvoiConv></td>
+                				<td><input type="text" class="datepicker" id="dateEnvoiConv" name="dateEnvoiConv" $dateEnvoiConv /></td>
                 			</tr>
                             <tr>
                 				<td>$titleDateRecepConv</td>
-                				<td><input type="text" class="datepicker" id="dateRecepConv" name="dateRecepConv" $dateRecepConv></td>
+                				<td><input type="text" class="datepicker" id="dateRecepConv" name="dateRecepConv" $dateRecepConv /></td>
                 			</tr>
                             <tr>
                 				<td>$titleDateRecepRecu</td>
-                				<td><input type="text" class="datepicker" id="dateRecepRecu" name="dateRecepRecu" $dateRecepRecu></td>
+                				<td><input type="text" class="datepicker" id="dateRecepRecu" name="dateRecepRecu" $dateRecepRecu /></td>
                 			</tr>
                             <tr>
                 				<td>$titleDateEnvoiCheque</td>
-                				<td><input type="text" class="datepicker" id="dateEnvoiCheque" name="dateEnvoiCheque" $dateEnvoiCheque></td>
+                				<td><input type="text" class="datepicker" id="dateEnvoiCheque" name="dateEnvoiCheque" $dateEnvoiCheque /></td>
                 			</tr>
                             <tr>
                 				<td>Observations éventuelles</td>
-                				<td><textarea id="textarea1" class="materialize-textarea" id="observations" name="observations"></textarea></td>
+                				<td><textarea id="textarea1" class="materialize-textarea" id="observations" name="observations">$suivi->Observations</textarea></td>
                 			</tr>
+                            <input type="hidden" id="IdSuivi" name="IdSuivi" value="$suivi->IdSuivi" />
+                            <input type="hidden" id="IdProjet" name="IdProjet" value="$no" />
                 		</tbody>
 	                   </table><br>
                        <button class="btn waves-effect waves-light" type="submit" name="action">Valider
@@ -780,7 +785,7 @@ end;
                             <tr>
                 				<td><a class="waves-effect waves-light btn red" href="$liste"><i class="material-icons">delete</i></a></td>
                 				<td>àaaaaaaaaaaaaaaaaaaa</td>
-                                <td>insérer</td>
+                                <td><a>Télécharger</a></td>
                 			</tr>   
                 		</tbody>
                         </table>
@@ -810,6 +815,18 @@ end;
         </div>
 
 end;
+        $res .= Modal::genereModal("Modification de suivi") . "
+<script>
+$(document).ready(function() {";
+        ;
+        if (isset($_SESSION['message'])) {
+            $msg = $_SESSION['message'];
+            $res .= Modal::enclencher($msg);
+            $_SESSION['message'] = null;
+        }
+        $res .= "});
+</script>
+";
         return $res;
     }
 

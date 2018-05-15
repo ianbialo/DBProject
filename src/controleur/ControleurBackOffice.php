@@ -113,9 +113,12 @@ class ControleurBackOffice
     }
     
     public function postModificationSuivi(){
-        //echo "slt ".($_POST["dateEnvoiCheque"]==null)."<br>";
-        //echo "slt2 ".(($test=2)==null);
-        echo "1 ".$_POST["dateRep"]."<br>";
-        echo "2 ".Formulaire::reconstruireDate($_POST["dateRep"])."<br>";
+        
+        $app = \Slim\Slim::getInstance();
+        if(Formulaire::majSuiviFormulaire($_POST['IdSuivi'])) $_SESSION['message'] = "Modification du suivi effectué avec succès !";
+        else $_SESSION['message'] = "Une erreur est survenue lors de la modification du suivi. Vérifiez que les champs rentrés soient cohérents. Contactez l'administrateur si le problème persiste.";
+        
+        Formulaire::majChronoSuivi();
+        $app->redirect($app->urlFor("projet",['no'=>$_POST['IdProjet']]));
     }
 }
