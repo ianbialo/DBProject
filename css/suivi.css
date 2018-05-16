@@ -1,0 +1,14 @@
+.label-file {
+    cursor: pointer;
+    color: #00b1ca;
+    font-weight: bold;
+    font-size: 15px;
+}
+.label-file:hover {
+    color: #25a5c4;
+}
+
+#fichierPerso {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}

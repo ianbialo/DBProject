@@ -57,6 +57,10 @@ $app->get('/admin/formulaire/recherche/:recherche', function ($recherche){
     print VuePageHTMLBackOffice::getFooter();
 })->name("recherche");
 
+$app->get('/admin/formulaire/:no/supprimerFichier(/)', function ($no){
+    (new dbproject\controleur\ControleurBackOffice())->supprimerFichier($no);
+})->name("suppFichier");
+
 
 
 ///////////////////////////////////////
@@ -84,6 +88,10 @@ $app->post('/postRedirection(/)',function(){
 $app->post('/postModificationSuivi(/)',function(){
     (new dbproject\controleur\ControleurBackOffice())->postModificationSuivi();
 })->name("postModificationSuivi");
+
+$app->post('/postAjoutFichier(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postAjoutFichier();
+})->name("postAjoutFichier");
 
 
 

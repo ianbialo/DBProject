@@ -6,6 +6,9 @@ use dbproject\modele\Projet;
 use dbproject\conf\Formulaire;
 use dbproject\modele\Structure;
 use dbproject\conf\Authentication;
+use dbproject\conf\Variable;
+use dbproject\conf\Uploads;
+use dbproject\modele\Suivi;
 
 class ControleurBackOffice
 {
@@ -70,6 +73,22 @@ class ControleurBackOffice
             $app->notFound();
     }
 
+    public function supprimerFichier($no)
+    {
+        $app = \Slim\Slim::getInstance();
+        $vue = new VueBackOffice();
+        if (isset($_COOKIE['user'])) {
+            if (isset($_GET['file'])) {
+                Uploads::supprimerFichier($no, $_GET['file']);
+                
+                $app->redirect($app->urlFor("projet", [
+                    'no' => $no
+                ]));
+            } else $app->notFound();
+        } else
+            $app->notFound();
+    }
+
     // /////////////////////////////////////
     // / POST ///
     // /////////////////////////////////////
@@ -93,7 +112,7 @@ class ControleurBackOffice
          */
         if (sizeof($struct) == 1) {
             $idStruct = $struct[0]->IdStruct;
-            $projet = Projet::getById($idStruct);
+            $projet = Projet::getByStructure($idStruct);
             $app->redirect($app->urlFor("projet", [
                 'no' => $projet->IdProjet
             ]));
@@ -111,14 +130,50 @@ class ControleurBackOffice
         Formulaire::supprimerFormulaire($_POST['IdProjet']);
         $app->redirect($app->urlFor("listeFormulaires"));
     }
-    
-    public function postModificationSuivi(){
-        
+
+    public function postModificationSuivi()
+    {
         $app = \Slim\Slim::getInstance();
-        if(Formulaire::majSuiviFormulaire($_POST['IdSuivi'])) $_SESSION['message'] = "Modification du suivi effectué avec succès !";
-        else $_SESSION['message'] = "Une erreur est survenue lors de la modification du suivi. Vérifiez que les champs rentrés soient cohérents. Contactez l'administrateur si le problème persiste.";
+        if (Formulaire::majSuiviFormulaire($_POST['IdSuivi']))
+            $_SESSION['message'] = "Modification du suivi effectué avec succès !";
+        else
+            $_SESSION['message'] = "Une erreur est survenue lors de la modification du suivi. Vérifiez que les champs rentrés soient cohérents. Contactez l'administrateur si le problème persiste.";
         
         Formulaire::majChronoSuivi();
-        $app->redirect($app->urlFor("projet",['no'=>$_POST['IdProjet']]));
+        $app->redirect($app->urlFor("projet", [
+            'no' => $_POST['IdProjet']
+        ]));
+    }
+
+    public function postAjoutFichier()
+    {
+        $app = \Slim\Slim::getInstance();
+        $id = $_POST["IdProjet"];
+        $dir = scandir(Variable::$dossierFichier);
+        $directory = null;
+        foreach ($dir as $d) {
+            if (($val = strpos($d, $id . "_")) === 0)
+                $directory = $d;
+        }
+        
+        if ($directory != null) {
+            $dir = Variable::$dossierFichier . "/" . $directory . "/";
+            Uploads::ajoutFichierMultiples($dir, Variable::$dossierSpecifique[1], 'fileToUpload');
+            
+            $folder = scandir($dir . Variable::$dossierSpecifique[1] . "/");
+            $i = 0;
+            foreach ($folder as $f)
+                if ($f != "." && $f != "..")
+                    $i ++;
+            $projet = Projet::getById($id);
+            $suivi = Suivi::getById($projet->IdSuivi);
+            $suivi->Document = $i;
+            $suivi->save();
+        } else
+            $_SESSION['message'] = "Une erreur est survenue lors de l'enrengistrement du/des fichier(s). Veuillez réessayer. Contactez l'administrateur si le problème persiste.";
+        
+        $app->redirect($app->urlFor("projet", [
+            'no' => $_POST['IdProjet']
+        ]));
     }
 }

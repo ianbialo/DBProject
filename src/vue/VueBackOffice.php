@@ -90,6 +90,12 @@ $(document).ready(function() {";
         if (! isset($_GET['query']))
             $_GET['query'] = 0;
         
+        if (! isset($_GET['vaildate']))
+            $_GET['validate'] = 0;
+        
+        $query = $_GET['query'];
+        $validate = $_GET['validate'];
+        
         $redirection = $app->urlFor("postRedirection");
         
         switch ($_GET['query']) {
@@ -145,21 +151,53 @@ end;
                     <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
                         
 end;
-        if ($_GET['query'] == 0)
-            $res .= '<option value="' . $changementTri . '?query=0" selected>Alphabétique</option>
+        if ($query == 0)
+            $res .= '<option value="' . $changementTri . '?query=' . $query . '&validate=' . $validate . '" selected>Alphabétique</option>
                         ';
         else
-            $res .= '<option value="' . $changementTri . '?query=0">Alphabétique</option>
+            $res .= '<option value="' . $changementTri . '?query=' . $query . '&validate=' . $validate . '">Alphabétique</option>
                         ';
-        if ($_GET['query'] == 1)
-            $res .= '<option value="' . $changementTri . '?query=1" selected>Date de création</option>
-';
+        if ($query == 1)
+            $res .= '<option value="' . $changementTri . '?query=' . $query . '&validate=' . $validate . '" selected>Date de création</option>
+                        ';
         else
-            $res .= '<option value="' . $changementTri . '?query=1">Date de création</option>
-';
+            $res .= '<option value="' . $changementTri . '?query=' . $query . '&validate=' . $validate . '">Date de création</option>
+                        ';
         $res .= <<<end
                     </select>
                     <label>Trier par</label>
+                  </div>
+                  <div class="row col s6">
+                    <div class="col s2">
+                    <p>
+                      <label>
+end;
+        if ($validate == 0)
+            $res .= '';
+        else
+            $res .= '';
+            $res .= <<<end
+                        <input name="group1" type="radio" onclick="window.location.href='http://www.google.fr'" checked />
+                        <span>Tous</span>
+                      </label>
+                    </p>
+                    </div>
+                    <div class="col s2">
+                    <p>
+                      <label>
+                        <input name="group1" type="radio" onclick="window.location.href='http://www.google.fr'" checked />
+                        <span>Traités</span>
+                      </label>
+                    </p>
+                    </div>
+                    <div class="col s2">
+                    <p>
+                      <label>
+                        <input name="group1" type="radio" onclick="window.location.href='http://www.google.fr'" checked />
+                        <span>Non-traités</span>
+                      </label>
+                    </p>
+                    </div>
                   </div>
             
             
@@ -231,8 +269,8 @@ end;
         $rep = Representant::getById($proj->IdRep);
         $resp = Responsable::getById($proj->IdRes);
         $suivi = Suivi::getById($proj->IdSuivi);
-
         
+        // Recherche des fichiers uploadés par le créateur du projet
         $dossier = null;
         $fichiers = array();
         $folderSpecifique = Variable::$dossierSpecifique[0];
@@ -269,61 +307,88 @@ end;
             }
         }
         
-        //Transformation des dates dans la partie du projet
+        // Recherche des fichiers uploadés par les personnes ayant accès au backoffice
+        $fichiersPerso = array();
+        $folderSpecifique = Variable::$dossierSpecifique[1];
+        
+        if ($suivi->Document != 0) {
+            $app = \Slim\Slim::getInstance();
+            $requete = $app->request();
+            $path = $requete->getRootUri();
+            
+            // Dossier avec tout les dossiers
+            $list = scandir(Variable::$path . "\\" . Variable::$dossierFichier);
+            
+            foreach ($list as $l) {
+                $id = explode("_", $l)[0];
+                if ($no == $id) {
+                    
+                    // Dossier avec tout les fichiers recherchés
+                    $list2 = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . $folderSpecifique);
+                    
+                    foreach ($list2 as $i) {
+                        if ($i != "." && $i != "..") {
+                            array_push($fichiersPerso, $i);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Transformation des dates dans la partie du projet
         $dateDep = Formulaire::transformerDate($proj->DateDep);
         $dateDeb = Formulaire::transformerDate($proj->DateDeb);
         
-        //Transformation des dates et ajustement des titres dans la partie de suivi
-        if($suivi->DateRep != null){
-            $dateRep = "value='".Formulaire::transformerDate($suivi->DateRep)."'";
+        // Transformation des dates et ajustement des titres dans la partie de suivi
+        if ($suivi->DateRep != null) {
+            $dateRep = "value='" . Formulaire::transformerDate($suivi->DateRep) . "'";
             $titleDateRep = "Date de la réponse DB";
-        }
-        else {
-            $dateRep = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+        } else {
+            $dateRep = "placeholder='" . Formulaire::transformerDate(Date("Y-m-d")) . "'";
             $titleDateRep = "<span class='red-text'>Date de la réponse DB - Valeur inchangée</span>";
         }
-        if($suivi->DateEnvoiConv != null){
-            $dateEnvoiConv = "value='".Formulaire::transformerDate($suivi->DateEnvoiConv)."'";
+        if ($suivi->DateEnvoiConv != null) {
+            $dateEnvoiConv = "value='" . Formulaire::transformerDate($suivi->DateEnvoiConv) . "'";
             $titleDateEnvoiConv = "Date de l'envoi de la convention";
-        }
-        else {
-            $dateEnvoiConv = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+        } else {
+            $dateEnvoiConv = "placeholder='" . Formulaire::transformerDate(Date("Y-m-d")) . "'";
             $titleDateEnvoiConv = "<span class='red-text'>Date de l'envoi de la convention - Valeur inchangée</span>";
         }
-        if($suivi->DateRecepConv != null){
-            $dateRecepConv = "value='".Formulaire::transformerDate($suivi->DateRecepConv)."'";
+        if ($suivi->DateRecepConv != null) {
+            $dateRecepConv = "value='" . Formulaire::transformerDate($suivi->DateRecepConv) . "'";
             $titleDateRecepConv = "Date de la réception de la convention signée";
-        }
-        else {
-            $dateRecepConv = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+        } else {
+            $dateRecepConv = "placeholder='" . Formulaire::transformerDate(Date("Y-m-d")) . "'";
             $titleDateRecepConv = "<span class='red-text'>Date de la réception de la convention signée - Valeur inchangée</span>";
         }
-        if($suivi->DateRecepRecu != null){
-            $dateRecepRecu = "value='".Formulaire::transformerDate($suivi->DateRecepRecu)."'";
+        if ($suivi->DateRecepRecu != null) {
+            $dateRecepRecu = "value='" . Formulaire::transformerDate($suivi->DateRecepRecu) . "'";
             $titleDateRecepRecu = "Date de la réception du reçu / cerfa";
-        }
-        else {
-            $dateRecepRecu = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+        } else {
+            $dateRecepRecu = "placeholder='" . Formulaire::transformerDate(Date("Y-m-d")) . "'";
             $titleDateRecepRecu = "<span class='red-text'>Date de la réception du reçu / cerfa - Valeur inchangée</span>";
         }
-        if($suivi->DateEnvoiCheque != null){
-            $dateEnvoiCheque = "value='".Formulaire::transformerDate($suivi->DateEnvoiCheque)."'";
+        if ($suivi->DateEnvoiCheque != null) {
+            $dateEnvoiCheque = "value='" . Formulaire::transformerDate($suivi->DateEnvoiCheque) . "'";
             $titleDateEnvoiCheque = "Date de l'envoi du chèque";
-        }
-        else {
-            $dateEnvoiCheque = "placeholder='".Formulaire::transformerDate(Date("Y-m-d"))."'";
+        } else {
+            $dateEnvoiCheque = "placeholder='" . Formulaire::transformerDate(Date("Y-m-d")) . "'";
             $titleDateEnvoiCheque = "<span class='red-text'>Date de l'envoi du chèque - Valeur inchangée</span>";
         }
-        if($suivi->Chrono != null) $titleSuivi = "Suivi - <strong>n° chrono : $suivi->Chrono</strong>";
-        else $titleSuivi = "Suivi";
+        if ($suivi->Chrono != null)
+            $titleSuivi = "Suivi - <strong>n° chrono : $suivi->Chrono</strong>";
+        else
+            $titleSuivi = "Suivi";
         
-        //Transformation des booléens dans la partie du projet
+        // Transformation des booléens dans la partie du projet
         $interetG = Formulaire::transformerBooleen($proj->InteretGeneral);
         $mecenat = Formulaire::transformerBooleen($proj->Mecenat);
         $fiscal = Formulaire::transformerBooleen($proj->Fiscal);
         
-        if($suivi->Chrono != 0) $checked = 'checked="checked"';
-        else $checked = '';
+        if ($suivi->Chrono != 0)
+            $checked = 'checked="checked"';
+        else
+            $checked = '';
         
         if (isset($proj->Valorisation))
             $valor = $proj->Valorisation;
@@ -339,6 +404,7 @@ end;
         $parrain = Implique::getParrain($no);
         
         $modificationSuivi = $app->urlFor("postModificationSuivi");
+        $ajoutFichier = $app->urlFor("postAjoutFichier");
         
         $res = <<<end
         <div class="container row">
@@ -718,10 +784,6 @@ end;
                 		</thead>
                 
                 		<tbody>
-                			<tr>
-                				<td>$titleDateRep</td>
-                				<td><input type="text" class="datepicker" id="dateRep" name="dateRep" $dateRep /></td>
-                			</tr>
                             <tr>
                 				<td>Décision</td>
                 				<td><p>
@@ -735,6 +797,10 @@ end;
                             <tr>
                 				<td>Montant accordé (en euros)</td>
                 				<td><input type="text" id="montant" value="$suivi->Montant" name="montant" pattern="\d*" required /></td>
+                			</tr>
+                			<tr>
+                				<td>$titleDateRep</td>
+                				<td><input type="text" class="datepicker" id="dateRep" name="dateRep" $dateRep /></td>
                 			</tr>
                             <tr>
                 				<td>$titleDateEnvoiConv</td>
@@ -774,35 +840,69 @@ end;
                         </div>
 
                         <table>
-                		<thead>
+end;
+        if (sizeof($fichiersPerso) == 0) {
+            $res .= <<<end
+
+                        <thead>
+                			<tr>
+                				<th></th>
+                			</tr>
+                		</thead>
+            
+                		<tbody>
+                			<tr>
+                				<td>Aucun fichier à télécharger</td>
+                			</tr>
+                		</tbody>
+end;
+        } else {
+            $res .= <<<end
+
+                        <thead>
                 			<tr>
                                 <th></th>
                 				<th>Intitulé</th>
                 				<th></th>
                 			</tr>
                 		</thead>
-                        <tbody>
+            
+                		<tbody>
+end;
+            foreach ($fichiersPerso as $f) {
+                $folder = Variable::$dossierFichier;
+                $folderSpecifique = Variable::$dossierSpecifique[1];
+                $nomFichier = $f;
+                $suppFichier = $app->urlFor("suppFichier", [
+                    "no" => $no
+                ]) . "?file=" . $f;
+                $res .= <<<end
                             <tr>
-                				<td><a class="waves-effect waves-light btn red" href="$liste"><i class="material-icons">delete</i></a></td>
-                				<td>àaaaaaaaaaaaaaaaaaaa</td>
-                                <td><a>Télécharger</a></td>
-                			</tr>   
-                		</tbody>
-                        </table>
-                
-                        <div class="file-field input-field">
-                          <div class="btn">
-                            <span>Fichier(s)</span>
-                            <input type="file" multiple>
-                          </div>
-                          <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" placeholder="Insérez un ou plusieurs fichiers">
-                          </div>
-                        </div>
+                                <td><a class="waves-effect waves-light btn red" href="$suppFichier"><i class="material-icons">delete</i></a></td>
+                				<td>$nomFichier</td>
+                				<td><a href="$path/$folder/$dossier/$folderSpecifique/$f">Télécharger</a></td>
+                			</tr>
+end;
+            }
+            $res .= "
+                        </tbody>";
+        }
+        
+        $res .= <<<end
 
-                       <button class="btn waves-effect waves-light" type="submit" name="action">Valider
-                        <i class="material-icons right">send</i>
-                      </button>
+	                   </table>
+                
+                        <form method="POST" id="formFormulaire" action="$ajoutFichier" enctype="multipart/form-data">
+                            <div class="col s12" id="fichierPerso">
+                                <label for="fileToUpload" class="label-file">Ajouter un/plusieurs fichier(s)</label>
+                                <input class="input-file" type="file" name="fileToUpload[]" id="fileToUpload" multiple hidden>
+                                <span id="nomFichier">- Aucun fichier sélectionné</span>
+                            </div>
+                            <input id="IdProjet" name="IdProjet" type="hidden" value="$no">
+                            <button class="btn waves-effect waves-light" type="submit" name="action">Valider
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </form>
     
     
                       </div>
@@ -869,7 +969,7 @@ end;
               <!-- Modal Structure -->
               <div id="modal$p->IdProjet" class="modal">
                 <div class="modal-content">
-                  <h4>Modal Header</h4>
+                  <h4>Suppression de projet</h4>
                   <p>Supprimer le projet de $s->Nom est un acte irréversible. Êtes-vous sûr de vouloir continuer ?</p>
                 </div>
                 <div class="modal-footer">

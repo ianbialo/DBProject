@@ -36,6 +36,7 @@ class VuePageHTMLBackOffice
         <!--Import materialize.css-->
         <link type="text/css" rel="stylesheet" href="$path/css/materialize.css"  media="screen,projection"/>
         <link href="$path/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+        <link href="$path/css/suivi.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     </head>
     <body>
         <script type="text/javascript" src="$path/js/materialize.min.js"></script>
