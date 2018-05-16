@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3312
--- Généré le :  ven. 11 mai 2018 à 16:26
+-- Généré le :  mer. 16 mai 2018 à 16:34
 -- Version du serveur :  10.1.31-MariaDB
 -- Version de PHP :  7.2.3
 
@@ -45,7 +45,10 @@ INSERT INTO `implique` (`IdImpl`, `IdProjet`, `Nom`, `Prenom`, `Role`) VALUES
 (2, 1, 'Teyssandier', 'Clément', 0),
 (3, 1, 'Holzhammer', 'David', 0),
 (4, 1, 'Ober', 'Ober', 0),
-(5, 1, 'Szpynda', 'Gab', 1);
+(5, 1, 'Szpynda', 'Gab', 1),
+(12, 16, 'Conom1', 'Coprenom1', 0),
+(13, 16, 'Conom2', 'Coprenom2', 0),
+(14, 16, 'Conom3', 'Coprenom3', 0);
 
 -- --------------------------------------------------------
 
@@ -81,7 +84,8 @@ CREATE TABLE `projet` (
 
 INSERT INTO `projet` (`IdProjet`, `IdStruct`, `IdRes`, `IdRep`, `IdSuivi`, `DateDep`, `Expose`, `DateDeb`, `Duree`, `Lieu`, `Aide`, `Budget`, `Fin`, `InteretGeneral`, `Domaine`, `Mecenat`, `Fiscal`, `Valorisation`, `Document`) VALUES
 (1, 1, 1, 1, 1, '2018-04-25', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis volutpat nulla. Pellentesque tincidunt leo venenatis felis sollicitudin metus.', '2018-04-09', 2, 'Chez Zguegz', 1300, 1300, 'Pour les befors', 1, 'Before', 1, 1, 'C\''est bien', 0),
-(6, 6, 6, 6, 6, '2018-04-24', 'Ceci est un test', '2018-07-15', 12, 'Chez moi', 12, 12, 'Oui les fins oui', 1, 'Oui le domaine oui', 1, 1, NULL, 2);
+(6, 6, 6, 6, 6, '2018-04-24', 'Ceci est un test', '2018-07-15', 12, 'Chez moi', 12, 12, 'Oui les fins oui', 1, 'Oui le domaine oui', 1, 1, NULL, 2),
+(16, 18, 18, 18, 16, '2018-05-15', 'alors voila bah le projet c&#39;est ça et c&#39;est tout', '2018-10-11', 5, 'quelque part', 5, 5, 'pour plein de choses', 1, 'Ceci est le domaine', 1, 1, 'c&#39;est cool', 2);
 
 -- --------------------------------------------------------
 
@@ -101,8 +105,9 @@ CREATE TABLE `representant` (
 --
 
 INSERT INTO `representant` (`IdRep`, `Nom`, `Prenom`, `Qualite`) VALUES
-(1, 'Rem', 'Zguegz', 'Goyot'),
-(6, 'RepJohn', 'RepJohnny', 'http://localhost:8012/DBProject/');
+(1, 'Rem', 'Zguegz', 'Gogo'),
+(6, 'RepJohn', 'RepJohnny', 'http://localhost:8012/DBProject/'),
+(18, 'Ian', 'Bialo', 'oui la qualité');
 
 -- --------------------------------------------------------
 
@@ -127,8 +132,9 @@ CREATE TABLE `responsable` (
 --
 
 INSERT INTO `responsable` (`IdRes`, `Nom`, `Prenom`, `Position`, `Adresse`, `CodePostal`, `Ville`, `Tel`, `Courriel`) VALUES
-(1, 'Berhu', 'Baptiste', 'Goyot', '2 Ter Boulevard Charlemagne', '54000', 'Nancy', '0606060606', 'ian.bialo9@etu.univ-lorraine.fr'),
-(6, 'ResJohn', 'ResJohnny', 'oui la position oui', '5, rue des johns', '55555', 'JohnCity', '0606060606', 'ian.bialo@demathieu-bard.fr');
+(1, 'Berhu', 'Baptiste', 'Gogo', '2 Ter Boulevard Charlemagne', '54000', 'Nancy', '0606060606', 'ian.bialo9@etu.univ-lorraine.fr'),
+(6, 'ResJohn', 'ResJohnny', 'oui la position oui', '5, rue des johns', '55555', 'JohnCity', '0606060606', 'ian.bialo@demathieu-bard.fr'),
+(18, 'nom du responsable', 'prenom du responsable', 'la position ouai', '5, rue des johns', '55555', 'JohnCity', '0606060606', 'ian.bialo@demathieu-bard.fr');
 
 -- --------------------------------------------------------
 
@@ -153,7 +159,8 @@ CREATE TABLE `structure` (
 
 INSERT INTO `structure` (`IdStruct`, `Nom`, `Adresse`, `CodePostal`, `Ville`, `Raison`, `Type`, `Site`) VALUES
 (1, 'Amphux', '2 Ter Boulevard Charlemagne', '54000', 'Nancy', 'Ceci est une raison', 'Une association', 'http://localhost:8012/s3a_s02_bialo_fraschini_holzhammer_tey'),
-(6, 'Unixs', '5, rue des johns', '55555', 'JohnCity', 'Oui la raison oui', 'Une institution', NULL);
+(6, 'Unixs', '5, rue des johns', '55555', 'JohnCity', 'Oui la raison oui', 'Une institution', NULL),
+(18, 'Je suis une structure', '5, rue des johns', '55555', 'JohnCity', 'je suis la raison', 'Une institution', 'http://localhost:8012/DBProject/DBProject/');
 
 -- --------------------------------------------------------
 
@@ -163,13 +170,13 @@ INSERT INTO `structure` (`IdStruct`, `Nom`, `Adresse`, `CodePostal`, `Ville`, `R
 
 CREATE TABLE `suivi` (
   `IdSuivi` int(11) NOT NULL,
-  `Chrono` int(11) DEFAULT NULL,
-  `DateRep` date NOT NULL,
+  `Chrono` int(11) NOT NULL DEFAULT '0',
   `Montant` int(11) NOT NULL,
-  `DateEnvoiConv` date NOT NULL,
-  `DateRecepConv` date NOT NULL,
-  `DateRecepRecu` date NOT NULL,
-  `DateEnvoiCheque` date NOT NULL,
+  `DateRep` date DEFAULT NULL,
+  `DateEnvoiConv` date DEFAULT NULL,
+  `DateRecepConv` date DEFAULT NULL,
+  `DateRecepRecu` date DEFAULT NULL,
+  `DateEnvoiCheque` date DEFAULT NULL,
   `Observations` text,
   `Document` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -178,9 +185,10 @@ CREATE TABLE `suivi` (
 -- Déchargement des données de la table `suivi`
 --
 
-INSERT INTO `suivi` (`IdSuivi`, `Chrono`, `DateRep`, `Montant`, `DateEnvoiConv`, `DateRecepConv`, `DateRecepRecu`, `DateEnvoiCheque`, `Observations`, `Document`) VALUES
-(1, NULL, '2018-05-11', 0, '2018-05-11', '2018-05-11', '2018-05-11', '2018-05-11', NULL, 0),
-(6, NULL, '2018-05-11', 0, '2018-05-11', '2018-05-11', '2018-05-11', '2018-05-11', NULL, 0);
+INSERT INTO `suivi` (`IdSuivi`, `Chrono`, `Montant`, `DateRep`, `DateEnvoiConv`, `DateRecepConv`, `DateRecepRecu`, `DateEnvoiCheque`, `Observations`, `Document`) VALUES
+(1, 1, 2, NULL, '2018-05-01', '2018-05-01', '2018-05-01', '2018-05-01', NULL, 0),
+(6, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 2),
+(16, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -280,37 +288,37 @@ ALTER TABLE `user_temp`
 -- AUTO_INCREMENT pour la table `implique`
 --
 ALTER TABLE `implique`
-  MODIFY `IdImpl` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `IdImpl` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `projet`
 --
 ALTER TABLE `projet`
-  MODIFY `IdProjet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IdProjet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `representant`
 --
 ALTER TABLE `representant`
-  MODIFY `IdRep` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IdRep` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `responsable`
 --
 ALTER TABLE `responsable`
-  MODIFY `IdRes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IdRes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `structure`
 --
 ALTER TABLE `structure`
-  MODIFY `IdStruct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IdStruct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `suivi`
 --
 ALTER TABLE `suivi`
-  MODIFY `IdSuivi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `IdSuivi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Contraintes pour les tables déchargées

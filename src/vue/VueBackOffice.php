@@ -87,23 +87,29 @@ $(document).ready(function() {";
         $requete = $app->request();
         $path = $requete->getRootUri();
         
-        if (! isset($_GET['query']))
-            $_GET['query'] = 0;
+        $testQuery = array(0,1);
+        $testValidate = array(0,1,2);
         
-        if (! isset($_GET['vaildate']))
-            $_GET['validate'] = 0;
+        if (isset($_GET['query'])){
+            if(in_array($_GET['query'], $testQuery)){
+                $query = $_GET['query'];
+            } else $query = 0;
+        } else $query = 0;
         
-        $query = $_GET['query'];
-        $validate = $_GET['validate'];
+        if (isset($_GET['validate'])){
+            if(in_array($_GET['validate'], $testValidate)){
+                $validate = $_GET['validate'];
+            } else $validate = 0;
+        } else $validate = 0;
         
         $redirection = $app->urlFor("postRedirection");
         
-        switch ($_GET['query']) {
+        switch ($query) {
             case 1:
-                $listeProj = Projet::getAllDate();
+                $listeProj = Projet::getAllDate($validate);
                 break;
             default:
-                $listeProj = Projet::getAll();
+                $listeProj = Projet::getAll($validate);
                 break;
         }
         
@@ -152,16 +158,16 @@ end;
                         
 end;
         if ($query == 0)
-            $res .= '<option value="' . $changementTri . '?query=' . $query . '&validate=' . $validate . '" selected>Alphabétique</option>
+            $res .= '<option value="' . $changementTri . '?query=0&validate=' . $validate . '" selected>Alphabétique</option>
                         ';
         else
-            $res .= '<option value="' . $changementTri . '?query=' . $query . '&validate=' . $validate . '">Alphabétique</option>
+            $res .= '<option value="' . $changementTri . '?query=0&validate=' . $validate . '">Alphabétique</option>
                         ';
         if ($query == 1)
-            $res .= '<option value="' . $changementTri . '?query=' . $query . '&validate=' . $validate . '" selected>Date de création</option>
+            $res .= '<option value="' . $changementTri . '?query=1&validate=' . $validate . '" selected>Date de création</option>
                         ';
         else
-            $res .= '<option value="' . $changementTri . '?query=' . $query . '&validate=' . $validate . '">Date de création</option>
+            $res .= '<option value="' . $changementTri . '?query=1&validate=' . $validate . '">Date de création</option>
                         ';
         $res .= <<<end
                     </select>
@@ -173,11 +179,11 @@ end;
                       <label>
 end;
         if ($validate == 0)
-            $res .= '';
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=0&#39;" checked />';
         else
-            $res .= '';
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=0&#39;" />';
             $res .= <<<end
-                        <input name="group1" type="radio" onclick="window.location.href='http://www.google.fr'" checked />
+
                         <span>Tous</span>
                       </label>
                     </p>
@@ -185,7 +191,13 @@ end;
                     <div class="col s2">
                     <p>
                       <label>
-                        <input name="group1" type="radio" onclick="window.location.href='http://www.google.fr'" checked />
+end;
+        if ($validate == 1)
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=1&#39;" checked />';
+        else
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=1&#39;" />';
+            $res .= <<<end
+
                         <span>Traités</span>
                       </label>
                     </p>
@@ -193,7 +205,13 @@ end;
                     <div class="col s2">
                     <p>
                       <label>
-                        <input name="group1" type="radio" onclick="window.location.href='http://www.google.fr'" checked />
+end;
+        if ($validate == 2)
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=2&#39;" checked />';
+        else
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=2&#39;" />';
+            $res .= <<<end
+
                         <span>Non-traités</span>
                       </label>
                     </p>
@@ -206,13 +224,16 @@ end;
         foreach ($listeProj as $p) {
             $struct = Structure::getById($p->IdStruct);
             $rep = Representant::getById($p->IdRep);
-            $resp = Responsable::getById($p->IdRep);
+            $resp = Responsable::getById($p->IdRes);
+            $suivi = Suivi::getById($p->IdSuivi);
             $acceder = $app->urlFor("projet", [
                 'no' => $p->IdProjet
             ]);
             $supprimer = $app->urlFor("postSuppressionFormulaire");
             
             $date = Formulaire::transformerDate($p->DateDep);
+            if($suivi->Chrono != "0")$titre = $struct->Nom." - ".$date." - <span class='green-text text-accent-4'>n° Chrono : ".$suivi->Chrono."</span>";
+            else $valide = $titre = $struct->Nom." - ".$date;
             $res .= <<<end
 
               <!-- Modal Structure -->
@@ -234,7 +255,7 @@ end;
     <div class="col s12">
       <div class="hoverable card">
         <div class="card-content">
-          <span class="card-title">$struct->Nom - $date</span>
+          <span class="card-title">$titre</span>
           <label>Représentant : $rep->Nom $rep->Prenom - Responsable : $resp->Nom $resp->Prenom</label>
           <p class="truncate">$p->Expose</p>
         </div>
