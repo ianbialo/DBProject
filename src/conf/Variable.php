@@ -11,6 +11,7 @@ class Variable
     public static $dossierFichier = "uploads";
     
     //Liste des dossiers permettant de différencier les différents types de fichier
+    //Ne pas changer les deux premières valeurs ainsi que leurs positions !
     public static $dossierSpecifique = array("client","perso");
     
     //Format de fichiers autorisé

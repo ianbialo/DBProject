@@ -108,14 +108,14 @@ end;
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
         $path = $requete->getRootUri();
-        $acc = $app->urlFor("accueil");
+        $acc = $app->urlFor("connexionAdmin");
         $disconnect = $app->urlFor("deconnexion");
         return <<<end
 
             <header>
             <nav class="white" role="navigation">
             <div class="nav-wrapper container">
-                <a id="logo-container" href="#" class="brand-logo">DBProject</a>
+                <a id="logo-container" href="$acc" class="brand-logo">DBProject</a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="$disconnect">Deconnexion</a></li>
                 </ul>

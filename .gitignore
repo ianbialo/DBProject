@@ -1,6 +1,6 @@
 #A laisser juste le temps que tout le monde ai le fichier
 .ini
-uploads/
+uploads/*
 
 #==========================================================================================#
 

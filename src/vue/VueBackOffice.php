@@ -916,11 +916,11 @@ end;
                         <form method="POST" id="formFormulaire" action="$ajoutFichier" enctype="multipart/form-data">
                             <div class="col s12" id="fichierPerso">
                                 <label for="fileToUpload" class="label-file">Ajouter un/plusieurs fichier(s)</label>
-                                <input class="input-file" type="file" name="fileToUpload[]" id="fileToUpload" multiple hidden>
+                                <input class="input-file" type="file" name="fileToUpload[]" id="fileToUpload" multiple required hidden>
                                 <span id="nomFichier">- Aucun fichier sélectionné</span>
                             </div>
                             <input id="IdProjet" name="IdProjet" type="hidden" value="$no">
-                            <button class="btn waves-effect waves-light" type="submit" name="action">Valider
+                            <button class="btn waves-light" type="submit" name="action">Valider
                                 <i class="material-icons right">send</i>
                             </button>
                         </form>

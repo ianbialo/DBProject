@@ -83,7 +83,7 @@ CREATE TABLE `projet` (
 --
 
 INSERT INTO `projet` (`IdProjet`, `IdStruct`, `IdRes`, `IdRep`, `IdSuivi`, `DateDep`, `Expose`, `DateDeb`, `Duree`, `Lieu`, `Aide`, `Budget`, `Fin`, `InteretGeneral`, `Domaine`, `Mecenat`, `Fiscal`, `Valorisation`, `Document`) VALUES
-(1, 1, 1, 1, 1, '2018-04-25', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis volutpat nulla. Pellentesque tincidunt leo venenatis felis sollicitudin metus.', '2018-04-09', 2, 'Chez Zguegz', 1300, 1300, 'Pour les befors', 1, 'Before', 1, 1, 'C\''est bien', 0),
+(1, 1, 1, 1, 1, '2018-04-25', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis volutpat nulla. Pellentesque tincidunt leo venenatis felis sollicitudin metus.', '2018-04-09', 2, 'Chez Zguegz', 1300, 1300, 'Pour les befors', 1, 'Before', 1, 1, 'C\'est bien', 0),
 (6, 6, 6, 6, 6, '2018-04-24', 'Ceci est un test', '2018-07-15', 12, 'Chez moi', 12, 12, 'Oui les fins oui', 1, 'Oui le domaine oui', 1, 1, NULL, 2),
 (16, 18, 18, 18, 16, '2018-05-15', 'alors voila bah le projet c&#39;est ça et c&#39;est tout', '2018-10-11', 5, 'quelque part', 5, 5, 'pour plein de choses', 1, 'Ceci est le domaine', 1, 1, 'c&#39;est cool', 2);
 

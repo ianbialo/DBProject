@@ -1,0 +1,17 @@
+--Creation de la base de données sur Azur--
+
+-1) Creation de la base de données-
+CREATE DATABASE dbdatabase;
+
+-1.1) Placement dans la base de données-
+USE dbdatabase;
+
+-2) Creation du compte qui accedera à la BDD-
+CREATE USER 'hr'@'localhost' IDENTIFIED BY 'MDPAINSERER';
+
+GRANT ALL PRIVILEGES ON dbdatabase TO 'hr'@'localhost';
+
+FLUSH PRIVILEGES;
+
+-3) Creation des tables avec les données-
+(voir fichier de création)
