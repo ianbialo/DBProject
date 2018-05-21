@@ -1,0 +1,18 @@
+{
+	"config": {
+       "platform": {
+           "php": "5.6.4"
+       }
+    },
+
+  "require": {
+    "illuminate/database":"5.3.23",
+    "php": "5.6.4",
+    "slim/slim" : "2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "dbproject\\": "./src"
+    }
+  }
+}
