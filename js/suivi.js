@@ -13,6 +13,32 @@ let application = (function(){
 			if(application.isset($("#formSuivi"))){
 				application.listener();
 			}
+			
+			/**var mysql = require('mysql');
+
+			var con = mysql.createConnection({
+			  host: "localhost",
+			  user: "hr",
+			  password: "ib1234admin"
+			});
+
+			con.connect(function(err) {
+			  if (err) throw err;
+			  console.log("Connected!");
+			});*/
+			
+			/**require(["mysql"],function(mysql){
+				var con = mysql.createConnection({
+					  host: "localhost",
+					  user: "hr",
+					  password: "ib1234admin"
+					});
+
+					con.connect(function(err) {
+					  if (err) throw err;
+					  console.log("Connected!");
+					});
+			});*/
 		},
 
 		//Méthode déterminant si un élément existe sur la page

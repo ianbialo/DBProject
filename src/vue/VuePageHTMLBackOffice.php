@@ -41,6 +41,7 @@ class VuePageHTMLBackOffice
     <body>
         <script type="text/javascript" src="$path/js/materialize.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <!--<script type="text/javascript" src="$path/js/r.js"></script>-->
         <script type="text/javascript" src="$path/js/suivi.js"></script>
         <script>
         $(document).ready(function() {

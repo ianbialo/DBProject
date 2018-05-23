@@ -92,15 +92,17 @@ $(document).ready(function() {";
         
         if (isset($_GET['query'])){
             if(in_array($_GET['query'], $testQuery)){
-                $query = $_GET['query'];
+                $query = filter_var($_GET['query'],FILTER_SANITIZE_NUMBER_INT);
             } else $query = 0;
         } else $query = 0;
+        echo $query."<br>";
         
         if (isset($_GET['validate'])){
             if(in_array($_GET['validate'], $testValidate)){
-                $validate = $_GET['validate'];
+                $validate = filter_var($_GET['validate'],FILTER_SANITIZE_NUMBER_INT);
             } else $validate = 0;
         } else $validate = 0;
+        echo $validate;
         
         $redirection = $app->urlFor("postRedirection");
         
