@@ -38,6 +38,7 @@ class VueFrontOffice
         <div class="panel">
 
         <h1>Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
+            <h3>Veuillez renseigner ci-dessus les informations nécessaires dans le cadre d'une demande de partenariat / sponsoring / mécénat.</h3>
             <div class="formulaire">
             <form method="POST" id="formFormulaire" action="$val" enctype="multipart/form-data">            
 
