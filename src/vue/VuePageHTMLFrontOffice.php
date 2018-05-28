@@ -29,11 +29,11 @@ class VuePageHTMLFrontOffice
     <body>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript" src="$path/js/formulaire.js"></script>
-        <header>
+        <!--<header>
             <a href="/" title="Accueil" rel="home" id="logo-img">
             <img class="site-logo" src="$path/img/db_accueil.jpg" alt="Accueil" pagespeed_no_transform="">
             </a>
-        </header>
+        </header>-->
         <main>
 
 end;
@@ -53,9 +53,9 @@ end;
         return <<<end
 
             </main>
-        <footer>
+        <!--<footer>
              <p>Ceci est le footer</p>
-        </footer>
+        </footer>-->
     </body>
 </html>
 end;

@@ -1,8 +1,4 @@
-header {
-	/* background-color: #0000a0; */	
-}
-
-textarea {
+/*textarea {
   width: 300px;
   height: 150px;
 }
@@ -11,6 +7,8 @@ textarea {
 	border: 1px solid #e2dcdc;
 	text-align: center;
 	font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	margin-left: 10%;
+	margin-right: 10%;
 }
 
 .formulaire div.info {
@@ -40,4 +38,112 @@ textarea {
     background: #e6e6e6;
     border: 1px solid #999;
     font-family: inherit;
+}*/
+
+html {
+	/*line-height: 1.5;*/
 }
+
+body {
+	/*font-size: 87.5%;*/
+}
+
+.panel {
+	border: 1px solid #e2dcdc;
+	text-align: left;
+	font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0px;
+	margin-left: auto;
+	width: 980px;
+}
+
+.header {
+	margin: 1em;
+}
+
+.header > img{
+	text-align: right;
+}
+
+.picture img{
+	margin: 0.5%;
+	width: 99%;
+	height: 100%;
+}
+
+.title {
+	border-bottom: 1px solid #EA670F;
+	/*background: url(https://www.demathieu-bard.fr/sites/all/themes/adaptivetheme/at_demathieubard/images/puce-db.png) no-repeat 0 4px;*/
+}
+
+h1{
+	color: #022D60;
+	padding-left: 0.5em;
+	font-size: 1em;
+    font-weight: normal;
+}
+
+h3{
+	color: #022D60;
+	padding-left: 0.5em;
+	font-size: 0.9em;
+    font-weight: normal;
+}
+
+label{
+	color: #022D60;
+	font-size: 0.9em;
+    font-weight: normal;
+    padding-bottom: 0.3em;
+}
+
+.formulaire{
+	padding-left: 1.5em;
+}
+
+.formulaire div.info {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.grandeTaille{
+	width: 350px;
+}
+
+
+.info > input {
+	display: block;
+}
+
+.info > label {
+	display: block;
+}
+
+#in {
+	display: inline;
+}
+
+div input{
+	/*padding-left: 1.5em;*/
+}
+
+input[type=button], input[type=submit]{
+	height: 2em;
+    background: #e6e6e6;
+    border: 1px solid #999;
+    font-family: inherit;
+}
+
+#submitButton {
+	width: 220px;
+	text-align: center;
+}
+
+/*Element*/
+textarea {
+  width: 300px;
+  height: 150px;
+}
+
