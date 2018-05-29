@@ -33,7 +33,7 @@ class VueFrontOffice
         $path = $requete->getRootUri();
         $val = $app->urlFor("postFormulaire");
         $res = <<<end
-
+        <div class="content">
         <div class="panel">
 
         <div class="header">
@@ -42,7 +42,7 @@ class VueFrontOffice
             </a>
         </div>
         <div class="picture">
-            <img src="https://www.demathieu-bard.fr/sites/default/files/styles/bandeau/public/images-illustrations/contact.png?itok=AExohBay" alt="">
+            <img src="https://www.demathieu-bard.fr/sites/default/files/styles/bandeau/public/images-illustrations/contact.png?itok=AExohBay">
         </div>
 
         <div class="title">
@@ -52,7 +52,7 @@ class VueFrontOffice
             <div class="formulaire">
             <form method="POST" id="formFormulaire" action="$val" enctype="multipart/form-data">            
 
-                <span><strong>STRUCTURE</strong></span>
+                <span class="groupTitle"><strong>STRUCTURE</strong></span>
                 <div class="info">
                     <label>Nom de la structure demanderesse <span style="color: red;"><span style="color: red;">*</span></span></label>
                     <div><input type="text" id="nomstruct" name="nomstruct" maxlength="90" autofocus required></div>
@@ -92,7 +92,7 @@ class VueFrontOffice
                 </div>
                 
             
-                <span><strong>PERSONNEL</strong></span>
+                <span class="groupTitle"><strong>PERSONNEL</strong></span>
                 <div class="info">
                     <label>Nom et prénom du représentant légal (qui signera la convention)<span style="color: red;"><span style="color: red;">*</span></span></label>
                     <div id="in">
@@ -132,7 +132,7 @@ class VueFrontOffice
                 </div>
                 
 
-                <span><strong>PROJET</strong></span>
+                <span class="groupTitle"><strong>PROJET</strong></span>
                 <div class="info">
                     <label>Exposé synthétique du projet ou des actions à soutenir <span style="color: red;"><span style="color: red;">*</span></span></label>
                     <textarea rows="5" cols="50" style="resize:none" id="expose" name="expose" maxlength="300" required></textarea>
@@ -219,9 +219,18 @@ class VueFrontOffice
                     <textarea rows="3" cols="50" style="resize:none" id="valorev" name="valorev" maxlength="300"></textarea>
                 </div>
                 <br><input type="submit" id="submitButton" value="Valider et envoyer votre demande" name="submit">
-                </div>
-              </form>
+              </form>                
+            </div>
           </div>
+          <div class="footer">
+                <ul>
+                    <li><a href="https://www.demathieu-bard.fr/cr%C3%A9dits">Crédits</a></li>
+                    <li><a href="https://www.demathieu-bard.fr/mentions-l%C3%A9gales">Mentions légales</a></li>
+                </ul>
+            </div>
+          </div>
+
+          
           <!--<div class="block-inner clearfix">  
             <div class="block-content content"><ul class="menu clearfix"><li class="first leaf active-trail menu-depth-1 menu-item-354"><a href="/cr%C3%A9dits" class="active-trail active">Crédits</a></li><li class="last leaf menu-depth-1 menu-item-356"><a href="/mentions-l%C3%A9gales">Mentions légales</a></li></ul></div>
           </div>-->
@@ -232,15 +241,71 @@ end;
 
     private function succes()
     {
+        $app = \Slim\Slim::getInstance();
+        $requete = $app->request();
+        $path = $requete->getRootUri();
         return <<<end
+
+        <div class="content">
+        <div class="panel" style="height: 800px;">
+
+        <div class="header">
+            <a href="https://www.demathieu-bard.fr/" title="Accueil" rel="home" id="logo-img">
+                <img class="site-logo" src="$path/img/db_accueil.jpg" alt="Accueil" pagespeed_no_transform="">
+            </a>
+        </div>
+        <div class="picture">
+            <img src="https://www.demathieu-bard.fr/sites/default/files/styles/bandeau/public/images-illustrations/contact.png?itok=AExohBay">
+        </div>
+
+        <div class="title">
+        <h1><img src="$path/img/puce-db.png" alt=""> Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
+        </div>
         <h3>Nous avons bien pris en compte votre demande et prendrons contact avec vous par mail au plus vite.</h3>
+        </div>
+        <div class="footer">
+            <ul>
+                <li><a href="https://www.demathieu-bard.fr/cr%C3%A9dits">Crédits</a></li>
+                <li><a href="https://www.demathieu-bard.fr/mentions-l%C3%A9gales">Mentions légales</a></li>
+            </ul>
+        </div>
+        </div>
+
 end;
     }
         
     private function echec()
     {
+        $app = \Slim\Slim::getInstance();
+        $requete = $app->request();
+        $path = $requete->getRootUri();
         return <<<end
-        <h3>Une erreur est survenue.</h3>
+        
+        <div class="content">
+        <div class="panel" style="height: 800px;">
+        
+        <div class="header">
+            <a href="https://www.demathieu-bard.fr/" title="Accueil" rel="home" id="logo-img">
+                <img class="site-logo" src="$path/img/db_accueil.jpg" alt="Accueil" pagespeed_no_transform="">
+            </a>
+        </div>
+        <div class="picture">
+            <img src="https://www.demathieu-bard.fr/sites/default/files/styles/bandeau/public/images-illustrations/contact.png?itok=AExohBay">
+        </div>
+        
+        <div class="title">
+        <h1><img src="$path/img/puce-db.png" alt=""> Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
+        </div>
+        <h3>Une erreur est survenue. Veuillez réessayer ou contactez l'administrateur du site.</h3>
+        </div>
+        <div class="footer">
+            <ul>
+                <li><a href="https://www.demathieu-bard.fr/cr%C3%A9dits">Crédits</a></li>
+                <li><a href="https://www.demathieu-bard.fr/mentions-l%C3%A9gales">Mentions légales</a></li>
+            </ul>
+        </div>
+        </div>
+        
 end;
     }
 }

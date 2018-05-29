@@ -19,7 +19,7 @@ $app->get('/enregistrement(/)', function (){
     print VuePageHTMLFrontOffice::getFooter();
 })->name("formulaireOk");
 
-$app->get('/erreur(/)', function (){
+$app->get('/echec(/)', function (){
     print VuePageHTMLFrontOffice::header();
     (new dbproject\controleur\ControleurFrontOffice())->formulaireEchec();
     print VuePageHTMLFrontOffice::getFooter();
