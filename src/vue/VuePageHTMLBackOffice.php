@@ -4,13 +4,18 @@ namespace dbproject\vue;
 
 use dbproject\modele\Structure;
 
+/**
+ * Classe répertoriant les codes HTML liés au header et au footer du Back Office. 
+ * @author IBIALO
+ *
+ */
 class VuePageHTMLBackOffice
 {
 
 
     /**
-     *
-     * @return string HTML du Début de chaque page (header)
+     * Méthode générant le début du code HTML du back office
+     * @return string début du code HTML du back office
      */
     public static function header()
     {
@@ -87,7 +92,11 @@ end;
 		
         return $res;
     }
-        
+    
+    /**
+     * Méthode complétant la méthode header() utilisée dans le cas où l'utilisateur est connecté
+     * @return string code HTML
+     */
     private static function getHeaderPasCo(){
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
@@ -105,6 +114,10 @@ end;
 end;
     }
         
+    /**
+     * Méthode complétant la méthode header() utilisée dans le cas où l'utilisateur n'est pas connecté
+     * @return string code HTML
+     */
     private static function getHeaderCo(){
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
@@ -131,8 +144,8 @@ end;
     }
 
     /**
-     *
-     * @return string Affichage du footer sur chaque page
+     * Méthode générant la fin du code HTML du back office
+     * @return string fin du code HTML du back office
      */
     public static function getFooter()
     {

@@ -3,56 +3,36 @@
  * 
  */
 
-//Application regroupant toutes les fonctions utiles au formulaires
+/**
+ * Application regroupant toutes les fonctions utiles au formulaires
+ */
 let application = (function(){
 
 	return{
 
-		//Méthode lancée au chargement de la page
+		/**
+		 * Méthode lancée au chargement de la page
+		 */
 		run : function(){
 			if(application.isset($("#formSuivi"))){
 				application.listener();
 			}
 			
-			/**var mysql = require('mysql');
-
-			var con = mysql.createConnection({
-			  host: "localhost",
-			  user: "hr",
-			  password: "ib1234admin"
-			});
-
-			con.connect(function(err) {
-			  if (err) throw err;
-			  console.log("Connected!");
-			});*/
-			
-			/**require(["mysql"],function(mysql){
-				var con = mysql.createConnection({
-					  host: "localhost",
-					  user: "hr",
-					  password: "ib1234admin"
-					});
-
-					con.connect(function(err) {
-					  if (err) throw err;
-					  console.log("Connected!");
-					});
-			});*/
 		},
 
-		//Méthode déterminant si un élément existe sur la page
+		/**
+		 * Méthode déterminant si un élément existe sur la page
+		 */
 		isset : function(element){
 			return element.length > 0;
 		},
 
-		//Méthode initialisant tout les listeners sur les éléments de la page
+		/**
+		 * Méthode initialisant tout les listeners sur les éléments de la page
+		 */
 		listener : function(){
-			//$("#dateRep").on("input", function() {
-			//    alert("Change to " + this.value);
-			//});
-
-			$(document).on('change', '.file-field input[type="file"]', function () {
+			
+			/**$(document).on('change', '.file-field input[type="file"]', function () {
 				var file_field = $(this).closest('.file-field');
 				var path_input = file_field.find('input.file-path');
 				var files      = $(this)[0].files;      
@@ -63,8 +43,12 @@ let application = (function(){
 				path_input.val(file_names.join(", "));
 				path_input.trigger('change');
 				console.log(file_names);
-			});
+				alert("J'existe");
+			});*/
 
+			/**
+			 * Méthode lancée lors de l'ajout/suppression d'un fichier dans l'input file
+			 */ 
 			$("input:file").change(function (){
 				let inp = document.getElementById('fileToUpload');
 				let res = "";
@@ -73,20 +57,9 @@ let application = (function(){
 					res += " - "+name;
 					//alert("here is a file name: " + name);
 				}
+				//On modifie le texte selon les fichiers enrengistrés.
 				if(res == "") $("#nomFichier").text("- Aucun fichier sélectionné");
 				else $("#nomFichier").text(res);
-			});
-
-
-			$('#formSuivi').submit(function(){
-				//alert($("#dateRep").val());
-				//alert($("#dateEnvoiConv").val());
-				//alert($("#dateRecepConv").val());
-				//alert($("#dateRecepRecu").val());
-				//alert($("#dateEnvoiCheque").val());
-
-
-
 			});
 		},
 	}

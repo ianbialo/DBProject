@@ -6,6 +6,11 @@ use dbproject\modele\User;
 class Authentication
 {
 
+    /**
+     * Méthode d'authentification LDAP à l'Active Directory de l'entreprise
+     * @param int $id id de l'utilisateur (ici son adresse mail)
+     * @param string $password mot de passe de l'utilisateur
+     */
     public static function authenticate($id, $password)
     {
         $app = \Slim\Slim::getInstance();
@@ -39,6 +44,9 @@ class Authentication
         }
     }
 
+    /**
+     * Méthode de déconnexion de l'utilisateur au back office
+     */
     public static function disconnect()
     {
         if (isset($_COOKIE['user'])) {

@@ -11,17 +11,44 @@ use dbproject\modele\Implique;
 use dbproject\modele\Suivi;
 use dbproject\conf\Variable;
 
+/**
+ * Classe répertoriant les codes HTML liés au Back Office.
+ * @author IBIALO
+ *
+ */
 class VueBackOffice
 {
 
+    /**
+     * Selecteur de l'index
+     * @var integer
+     */
     const AFF_INDEX = 0;
 
+    /**
+     * Selecteur de la liste des formulaires
+     * @var integer
+     */
     const AFF_FORMULAIRE = 1;
 
+    /**
+     * Selecteur d'un projet
+     * @var integer
+     */
     const AFF_PROJET = 2;
 
+    /**
+     * Selecteur de la recherche
+     * @var integer
+     */
     const AFF_RECHERCHE = 3;
 
+    /**
+     * Selecteur permettant de facilement faire appel aux méthode de la classe
+     * @param int $selecteur selecteur permettant d'accéder à la méthode souhaitée
+     * @param object $tab données pouvant être transmises depuis le controleur
+     * @return string
+     */
     public function render($selecteur, $tab = null)
     {
         switch ($selecteur) {
@@ -41,6 +68,11 @@ class VueBackOffice
         return $content;
     }
 
+    /**
+     * Méthode générant le code HTML de l'index du back office
+     * @return string code HTML de l'index du back office
+     *
+     */
     private function index()
     {
         $app = \Slim\Slim::getInstance();
@@ -81,6 +113,10 @@ $(document).ready(function() {";
         return $res;
     }
 
+    /**
+     * Méthode générant le code HTML de la page de la liste des projets
+     * @return string code HTML de la page de la liste des projets
+     */
     private function formulaire()
     {
         $app = \Slim\Slim::getInstance();
@@ -280,6 +316,11 @@ end;
         return $res;
     }
 
+    /**
+     * Méthode générant le code HTML de la page d'un projet
+     * @param int $no id du projet
+     * @return string code HTML de la page de la liste des projets
+     */
     private function projet($no)
     {
         $app = \Slim\Slim::getInstance();
@@ -951,6 +992,11 @@ $(document).ready(function() {";
         return $res;
     }
 
+    /**
+     * Méthode générant le code HTML de la page de recherche projet
+     * @param int $tab nom du projet
+     * @return string code HTML de la page de recherche projet
+     */
     private function recherche($tab)
     {
         $app = \Slim\Slim::getInstance();
@@ -1036,6 +1082,12 @@ end;
         return $res;
     }
 
+    /**
+     * Méthode permettant de savoir si une chaîne est situé à la fin d'une autre
+     * @param string $haystack chaîne principale où l'on doit chercher une chaîne à la fin
+     * @param string $needle chaîne de recherche
+     * @return boolean indicatif de réussite
+     */
     function endsWith($haystack, $needle)
     {
         $length = strlen($needle);

@@ -2,6 +2,12 @@
 namespace dbproject\conf;
 
 class Modal{
+    
+    /**
+     * Méthode de génération de code HTML d'un modal (boîte de dialogue)
+     * @param string $titre titre du modal
+     * @return string code HTML du modal
+     */
     public static function genereModal($titre = "Attention"){
         return <<<end
         
@@ -17,7 +23,12 @@ class Modal{
 
 end;
     }
-        
+      
+    /**
+     * Méthode permettant le déclenchement d'un modal avec un message personnalisé
+     * @param string $msg message à insérer au modal
+     * @return string code HTML du modal
+     */
     public static function enclencher($msg){
         return <<<end
         

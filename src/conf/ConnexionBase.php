@@ -4,6 +4,10 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class ConnexionBase
 {
+    /**
+     * Méthode de connexion à la base de donnée mysql
+     * @param string $file chemin vers le fichier de configuration
+     */
     public static function initialisation($file){
         $connection = parse_ini_file($file);
         $db = new DB();

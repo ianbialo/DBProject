@@ -2,6 +2,11 @@
 
 namespace dbproject\vue;
 
+/**
+ * Classe répertoriant la méthode liée à l'erreur 404
+ * @author IBIALO
+ *
+ */
 class VueError404
 {
 
@@ -12,13 +17,12 @@ class VueError404
         $this->objet = $array;
     }
 
-    /**
-     * @param $num
-     * @return string
+    /**   
+     * Méthode générant le code HTML de la page 404
+     * @return string code HTML de la page 404
      * 
-     * Méthode pour afficher la page 404
      */
-    public function render($num = null)
+    public function render()
     {
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();

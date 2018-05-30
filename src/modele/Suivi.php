@@ -1,9 +1,16 @@
 <?php
 namespace dbproject\modele;
 
+/**
+ * Modèle de suivi de projet
+ * @author IBIALO
+ *
+ */
 class Suivi extends \Illuminate\Database\Eloquent\Model
 {
-    
+    /**
+     * @var string Nom de la table dans la base de données
+     */
     protected $table = 'suivi';
     protected $primaryKey = 'IdSuivi';
     public $timestamps = false;

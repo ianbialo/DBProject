@@ -7,9 +7,17 @@ use dbproject\modele\Suivi;
 class Uploads
 {
 
+    /**
+     * Méthode permettant l'ajout de fichiers selon un formulaire donné
+     * @param int $id id du formulaire
+     * @return boolean
+     */
     public function ajoutFichierFormulaire($id)
     {
+        //S'il existe des fichiers à ajouter
         if ($_POST['nbFile'] > 0) {
+            
+            //Caractères parasites à remplacer
             $aremplacer = array(
                 " ",
                 "'",
@@ -18,13 +26,14 @@ class Uploads
             $str = str_replace($aremplacer, "_", $_POST['nomstruct']);
             $str = strtolower($str);
             
+            //Création du dossier contenant tout les fichiers du projet
             $date = new \DateTime();
-            $dir = Variable::$dossierFichier . "/" . $id . "_" . $str . "_" . $date->format('d_m_Y_H_i_s') . "/";
-            
+            $dir = Variable::$dossierFichier . "/" . $id . "_" . $str . "_" . $date->format('d_m_Y_H_i_s') . "/";            
             $oldmask = umask(0);
             mkdir($dir, 0777);
             umask($oldmask);
             
+            //Création de tout les sous-dossiers
             foreach (Variable::$dossierSpecifique as $ds) {
                 $dir = Variable::$dossierFichier . "/" . $id . "_" . $str . "_" . $date->format('d_m_Y_H_i_s') . "/" . $ds . "/";
                 $oldmask = umask(0);
@@ -32,8 +41,10 @@ class Uploads
                 umask($oldmask);
             }
             
+            //Sélection du dossier qui va contenir les fichiers uploadés
             $dir = Variable::$dossierFichier . "/" . $id . "_" . $str . "_" . $date->format('d_m_Y_H_i_s') . "/";
             
+            //Ajout des fichiers dans le dossier
             $x = $_POST['nbFile'];
             $y = 0;
             $liste = array();
@@ -48,12 +59,20 @@ class Uploads
                 $y ++;
             }
             
+            //Création du fichier archivé
             if (! self::creationZip($dir, Variable::$dossierSpecifique[0], $liste))
                 return false;
         }
         return true;
     }
 
+    /**
+     * Méthode de création d'un dossier compressé contenant tout les fichiers passés en paramètre
+     * @param string $dir chemin vers le répertoire contenant les dossiers du formulaire
+     * @param string $dossierSpecifique dossier où trouver les fichiers à archiver
+     * @param array $liste fichiers à archiver
+     * @return boolean indicatif de réussite de création d'un dossier compressé
+     */
     public function creationZip($dir, $dossierSpecifique, $liste)
     {
         $zip = new \ZipArchive();
@@ -70,60 +89,54 @@ class Uploads
         return $zip->close();
     }
 
+    /**
+     * Méthode d'ajout d'un fichier dans un répertoire spécifique
+     * @param string $dir chemin vers le répertoire contenant les dossiers du formulaire
+     * @param string $dossierSpecifique dossier où trouver les fichiers
+     * @param string $fileName nom du fichier
+     * @return string|NULL indicatif de réussite d'ajout de fichier dans un répertoire spécifique
+     */
     public function ajoutFichier($dir, $dossierSpecifique, $fileName)
     {
         $target_dir = $dir . $dossierSpecifique . "/";
         $target_file = $target_dir . basename($_FILES[$fileName]["name"]);
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-        // Check if image file is a actual image or fake image
-        /**
-         * if(isset($_POST["submit"])) {
-         * $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-         * if($check !== false) {
-         * echo "File is an image - " .
-         * $check["mime"] . ".";
-         * $uploadOk = 1;
-         * } else {
-         * echo "File is not an image.";
-         * $uploadOk = 0;
-         * }
-         * }
-         */
-        // Check if file already exists
+
+        // On vérifie si le fichier existe.
         if (file_exists($target_file)) {
-            // echo "Désolé, le fichier existe déjà.";
             $uploadOk = 0;
         }
         
-        // Check file size
-        if ($_FILES[$fileName]["size"] > 2000000) {
+        // On vérifie la taille du fichier : il doit inférieur à 2MB.
+        if ($_FILES[$fileName]["size"] > 2097152) {
             // echo "Désolé, le fichier est trop large.";
             $uploadOk = 0;
         }
-        // Allow certain file formats
-        if (/**
-         * $imageFileType != "odt" && $imageFileType != "docx" && $imageFileType != "pdf"
-         */
-        ! in_array($imageFileType, Variable::$formatAutorise)) {
-            // echo "Désolé, seuls les fichiers ODT, DOCX & PDF sont autorisés.";
+        // On vérifie les types des fichiers.
+        if (! in_array($imageFileType, Variable::$formatAutorise)) {
             $uploadOk = 0;
         }
-        // Check if $uploadOk is set to 0 by an error
+        // On vérifie qu'il n'y a pas eu d'erreurs.
         if ($uploadOk == 0) {
             echo "Désolé, votre fichier n'a pas été uploadé.";
-            // if everything is ok, try to upload file
         } else {
             if (move_uploaded_file($_FILES[$fileName]["tmp_name"], $target_file)) {
-                // echo "Le fichier " . basename($_FILES[$fileName]["name"]) . " a été uploadé.";
+                echo "Le fichier " . basename($_FILES[$fileName]["name"]) . " a été uploadé.";
                 return basename($_FILES[$fileName]["name"]);
             } else {
-                // echo "Désolé, il y a eu une erreur avec l'upload du fichier.";
+                echo "Désolé, il y a eu une erreur avec l'upload du fichier.";
             }
         }
         return null;
     }
 
+    /**
+     * Méthode d'ajout de plusieurs fichiers dans un répertoire spécifique
+     * @param string $dir chemin vers le répertoire contenant les dossiers du formulaire
+     * @param string $dossierSpecifique dossier où trouver les fichiers
+     * @param string $fileName nom du fichier
+     */
     public function ajoutFichierMultiples($dir, $dossierSpecifique, $fileName)
     {
         $target_dir = $dir . $dossierSpecifique . "/";
@@ -131,36 +144,24 @@ class Uploads
             $target_file = $target_dir . basename($_FILES[$fileName]['name'][$i]);
             $uploadOk = 1;
             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-            // Check if image file is a actual image or fake image
-            /**
-             * if(isset($_POST["submit"])) {
-             * $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-             * if($check !== false) {
-             * echo "File is an image - " .
-             * $check["mime"] . ".";
-             * $uploadOk = 1;
-             * } else {
-             * echo "File is not an image.";
-             * $uploadOk = 0;
-             * }
-             * }
-             */
+
             // Check if file already exists
             if (file_exists($target_file)) {
                 $_SESSION['message'] = "Désolé, parmis le(s) fichier(s) uploadé(s), un existe déjà.";
                 $uploadOk = 0;
             }
             
-            // Check file size
-            if ($_FILES[$fileName]["size"][$i] > 2000000) {
+            // On vérifie la taille du fichier : il doit inférieur à 2MB.
+            if ($_FILES[$fileName]["size"][$i] > 2097152) {
                 $uploadOk = 0;
             }
-            // Allow certain file formats
+            
+            // On vérifie les types des fichiers.
             if (! in_array($imageFileType, Variable::$formatAutorise)) {
                 $_SESSION['message'] = "Désolé, seuls les fichiers ODT, DOCX & PDF sont autorisés. Parmis le(s) fichier(s) uploadé(s), un ne respecte pas cette condition";
                 $uploadOk = 0;
             }
-            // Check if $uploadOk is set to 0 by an error
+            // On vérifie qu'il n'y a pas eu d'erreurs.
             if ($uploadOk == 0) {
                 return null;
             } else {
@@ -172,9 +173,13 @@ class Uploads
                 }
             }
         }
-        return null;
     }
 
+    /**
+     * Méthode de suppression d'un fichier du formulaire (pour le suivi)
+     * @param int $id id du formulaire
+     * @param string $nom nom du fichier à supprimer
+     */
     public function supprimerFichier($id, $nom)
     {
         // Dossier avec tout les dossiers
@@ -208,6 +213,10 @@ class Uploads
         }
     }
 
+    /**
+     * Méthode de suppression des fichier et dossiers d'un formulaire
+     * @param int $id id du formulaire
+     */
     public function supprimerFichierFormulaire($id)
     {
         
@@ -235,7 +244,5 @@ class Uploads
                 rmdir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l);
             }
         }
-        
-        return true;
     }
 }

@@ -9,28 +9,29 @@ use PHPMailer\PHPMailer\PHPMailer;
 class Email
 {
 
+    /**
+     * Méthode d'envoi de mail
+     * @param string $subject sujet du mail
+     * @param string $msg message contenu dans le mail
+     * @return boolean indicatif de réussite d'envoi de mail
+     */
     public static function sendMail($subject,$msg)
     {
-        /**$subject = "Selection At Google oueoue";
-        $txt = "Congratulations blablabla";
-        $headers = "From: SupervisionDB@demathieu-bard.fr";
-        return mail($to,$subject,$txt,$headers);*/
         $mail = new PHPMailer();
         $mail->isSMTP();
-        $mail->SMTPDebug = 0; // 0 = off (for production use) - 1 = client messages - 2 = client and server messages
-        $mail->Host = "smtp.office365.com"; // use $mail->Host = gethostbyname('smtp.gmail.com'); // if your network does not support SMTP over IPv6
-        $mail->Port = 587; // TLS only
-        $mail->SMTPSecure = 'tls'; // ssl is depracated
+        $mail->SMTPDebug = 0;
+        $mail->Host = "smtp.office365.com";
+        $mail->Port = 587;
+        $mail->SMTPSecure = 'tls';
         $mail->SMTPAuth = true;
         $mail->Username = "SupervisionDB@demathieu-bard.fr";
         $mail->Password = "Passw0rd15";
         $mail->setFrom("SupervisionDB@demathieu-bard.fr");
         foreach(Variable::$annuaire as $annuaire => $nom)$mail->AddCC($annuaire,$nom);
         $mail->Subject = $subject;
-        $mail->msgHTML($msg); //$mail->msgHTML(file_get_contents('contents.html'), __DIR__); //Read an HTML message body from an external file, convert referenced images to embedded,
+        $mail->msgHTML($msg);
         $mail->AltBody = 'HTML messaging not supported';
         $mail->CharSet = 'UTF-8';
-        // $mail->addAttachment('images/phpmailer_mini.png'); //Attach an image file
         return $mail->send();
     }
 }

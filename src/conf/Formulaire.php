@@ -11,8 +11,10 @@ use dbproject\modele\Suivi;
 class Formulaire
 {
 
-    public static $insertionOk = false;
-
+    /**
+     * Méthode d'insertion d'un nouveau formulaire complet dans la base de données
+     * @return boolean indicatif de réussite d'insertion de formulaire
+     */
     public static function insertionFormulaire()
     {
         // Ajout de la structure
@@ -135,6 +137,11 @@ class Formulaire
         return true;
     }
 
+    /**
+     * Méthode de mise à jour de suivi de formulaire
+     * @param int $id id du formulaire
+     * @return boolean indicatif de réussite de mise à jour de formulaire
+     */
     public static function majSuiviFormulaire($id)
     {
         $suivi = Suivi::getById($id);
@@ -170,10 +177,11 @@ class Formulaire
         return $suivi->save();
     }
 
+    //Méthode de suppression complète du formulaire
     public static function supprimerFormulaire($id)
     {
         
-        // Supprimer ici les fichiers
+        //Supprimer ici les fichiers
         Uploads::supprimerFichierFormulaire($id);
         
         $implique = Implique::getImplique($id);
@@ -193,6 +201,7 @@ class Formulaire
         Formulaire::majChronoSuivi();
     }
 
+    //Méthode de mise à jour des numéros chrono
     public static function majChronoSuivi()
     {
         $listeSuivi = Suivi::getAllDate();
@@ -213,14 +222,7 @@ class Formulaire
         }
     }
 
-    public static function switchFormulaireOk()
-    {
-        if (self::$insertionOk)
-            self::$insertionOk = false;
-        else
-            self::$insertionOk = true;
-    }
-
+    //Méthode de transformation de date de type "année-mois-jour" en "jour mois année" (le mois n'étant plus un entier).
     public static function transformerDate($date)
     {
         $date = explode("-", $date);
@@ -244,6 +246,7 @@ class Formulaire
         return $jour . " " . $mois . " " . $annee;
     }
 
+    //Méthode de transformation de date de type "jour mois année" (le mois n'étant plus un entier) en "année-mois-jour".
     public static function reconstruireDate($date)
     {
         $date = explode(" ", $date);
@@ -267,6 +270,7 @@ class Formulaire
         return $annee . "-" . $mois . "-" . $jour;
     }
 
+    //Méthode de transformation d'un booléen (entier) en chaîne de caractère
     public static function transformerBooleen($int)
     {
         if ($int == 0)

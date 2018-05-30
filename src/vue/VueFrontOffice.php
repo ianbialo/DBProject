@@ -1,6 +1,13 @@
 <?php
 namespace dbproject\vue;
 
+use dbproject\conf\Variable;
+
+/**
+ * Classe répertoriant les codes HTML liés au Front Office.
+ * @author IBIALO
+ *
+ */
 class VueFrontOffice
 {
 
@@ -10,6 +17,12 @@ class VueFrontOffice
     
     const AFF_ECHEC = 2;
 
+    /**
+     * Selecteur permettant de facilement faire appel aux méthode de la classe
+     * @param int $selecteur selecteur permettant d'accéder à la méthode souhaitée
+     * @param object $tab données pouvant être transmises depuis le controleur
+     * @return string
+     */
     public function render($selecteur, $tab = null)
     {
         switch ($selecteur) {
@@ -26,11 +39,17 @@ class VueFrontOffice
         return $content;
     }
 
+    /**
+     * Méthode générant le code HTML de l'index du front office
+     * @return string code HTML de l'index du front office
+     *
+     */
     private function index()
     {
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
         $path = $requete->getRootUri();
+        $formatAutorise = Variable::$formatAutorise;
         $val = $app->urlFor("postFormulaire");
         $res = <<<end
         <div class="content">
@@ -138,7 +157,11 @@ class VueFrontOffice
                     <textarea rows="5" cols="50" style="resize:none" id="expose" name="expose" maxlength="300" required></textarea>
                 </div>
                 <div class="info">
-                    <label>Documents de présentation éventuels (flyer, affiche…) - 5 maximum</label>
+                    <label>Documents de présentation éventuels (flyer, affiche…) - 5 maximum (taille de 2MB maximum)<br>Format autorisé :
+end;
+        foreach ($formatAutorise as $fa) $res .= " ".$fa;
+        $res .= <<<end
+.</label>
                     <div class="coFile">
                     </div>
                     <br>
@@ -239,6 +262,10 @@ end;
         return $res;
     }
 
+    /**
+     * Méthode générant le code HTML de la page de succès
+     * @return string code HTML de la page de succès
+     */
     private function succes()
     {
         $app = \Slim\Slim::getInstance();
@@ -274,6 +301,10 @@ end;
 end;
     }
         
+    /**
+     * Méthode générant le code HTML de la page d'echec
+     * @return string code HTML de la page d'echec
+     */
     private function echec()
     {
         $app = \Slim\Slim::getInstance();

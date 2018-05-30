@@ -3,30 +3,46 @@
  * 
  */
 
-//Application regroupant toutes les fonctions utiles au formulaires
+/**
+ * Application regroupant toutes les fonctions utiles au formulaires 
+ */
 let application = (function(){
 
-	//Booléen permettant de récupérer les informations sur la structure si il est mentionné "autre"
+	/**
+	 * Booléen permettant de récupérer les informations sur la structure si il est mentionné "autre"
+	 */
 	let changed = true;
 
-	//Booléen utilisé dans l'identification du parrain
+	/**
+	 * Booléen utilisé dans l'identification du parrain
+	 */
 	let changed2 = true;
 
-	//Nombre de co-fondateurs
+	/**
+	 * Nombre de co-fondateurs
+	 */
 	let nbCo = 0;
 
-	//Iterateur utilisé dans la récupération des co-fondateurs
+	/**
+	 * Iterateur utilisé dans la récupération des co-fondateurs
+	 */
 	let valNbCo = 0;
 
-	//Nombre de fichier visible à l'écran
+	/**
+	 * Nombre de fichier visible à l'écran
+	 */
 	let nbFile = 0;
 
-	//Iterateur utilisé dans la récupération des fichiers
+	/**
+	 * Iterateur utilisé dans la récupération des fichiers
+	 */
 	let valNbFile = 0;
 
 	return{
 		
-		//Méthode lancée au chargement de la page
+		/**
+		 * Méthode lancée au chargement de la page
+		 */
 		run : function(){
 			if(application.isset($("#selecteur"))){
 				$("#selecteur").find("#divautre").toggle();
@@ -35,15 +51,21 @@ let application = (function(){
 			}
 		},
 
-		//Méthode déterminant si un élément existe sur la page
+		/**
+		 * Méthode déterminant si un élément existe sur la page
+		 */
 		isset : function(element){
 			return element.length > 0;
 		},
 
-		//Méthode initialisant tout les listeners sur les éléments de la page
+		/**
+		 * Méthode initialisant tout les listeners sur les éléments de la page
+		 */
 		listener : function(){
 			
-			//Méthode enclenchée dès lors que le formulaire est soumis
+			/**
+			 * Méthode enclenchée dès lors que le formulaire est soumis
+			 */
 			$('#formFormulaire').submit(function() {
 				
 				//On vérifie qu'il n'existe pas des fichiers joints identiques
@@ -68,7 +90,9 @@ let application = (function(){
 			
 			
 			
-			//Méthode enclenché si on appuie sur le bouton d'ajout de co-fondateur
+			/**
+			 * Méthode enclenché si on appuie sur le bouton d'ajout de co-fondateur
+			 */
 			$("#boutoncofin").on("click",function(){
 
 				//S'il y a moins de 5 co-fondateurs
@@ -92,7 +116,9 @@ let application = (function(){
 				}
 			}),
 
-			//Méthode enclenché si on appuie sur le bouton d'ajout de pièce jointe
+			/**
+			 * Méthode enclenché si on appuie sur le bouton d'ajout de pièce jointe
+			 */
 			$("#boutonfileajout").on("click",function(){
 
 				//S'il y a moins de 5 co-fondateurs
@@ -117,7 +143,9 @@ let application = (function(){
 			}),
 
 			
-			//Méthode enclenché si on interagit avec le combobox lié au type de la structure
+			/**
+			 * Méthode enclenché si on interagit avec le combobox lié au type de la structure
+			 */
 			$("#vousetes").change(function() {
 				
 				//Si l'option "autre" est sélectionné
@@ -137,7 +165,9 @@ let application = (function(){
 				}
 			});
 
-			//Méthode enclenché si on interagit avec les radio buttons liés au parrain
+			/**
+			 * Méthode enclenché si on interagit avec les radio buttons liés au parrain
+			 */
 			$('#parrain').change(function() {
 
 				//Si le bouton vient d'être changé sur "Vrai"

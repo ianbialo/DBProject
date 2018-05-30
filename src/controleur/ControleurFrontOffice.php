@@ -7,30 +7,35 @@ use dbproject\conf\Formulaire;
 
 class ControleurFrontOffice
 {
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Il s'agit des méthodes rédirigées par Slim pour la partie Front Office.                            //
+    //Elles sont séparées en deux catégorie : GET et POST suivant le type d'action effectué sur la page //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     // /////////////////////////////////////
     // / GET ///
     // /////////////////////////////////////
+    /**
+     * Méthode d'accès à l'index du site.
+     */
     public function index()
     {
         $vue = new VueFrontOffice();
         print $vue->render(VueFrontOffice::AFF_INDEX);
     }
 
+    /**
+     * Méthode d'affichage de la page de réussite
+     */
     public function formulaireOk()
     {
-        // if ($form::$insertionOk) {
-        // Formulaire::switchFormulaireOk();
         $vue = new VueFrontOffice();
         print $vue->render(VueFrontOffice::AFF_OK);
-    /**
-     * } else {
-     * $app = \Slim\Slim::getInstance();
-     * return $app->notFound();
-     * }
-     */
     }
 
+    /**
+     * Méthode d'affichage de la page d'échec
+     */
     public function formulaireEchec()
     {
         $vue = new VueFrontOffice();
@@ -40,6 +45,9 @@ class ControleurFrontOffice
     // /////////////////////////////////////
     // / POST ///
     // /////////////////////////////////////
+    /**
+     * Méthode d'ajout de formulaire dans la base de données et envoi de mail pour confirmer l'ajout en cas de réussite, sinon renvoie une page inexistante.
+     */
     public function postFomulaire()
     {
         $app = \Slim\Slim::getInstance();

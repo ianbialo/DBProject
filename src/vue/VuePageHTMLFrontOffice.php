@@ -2,13 +2,18 @@
 
 namespace dbproject\vue;
 
+/**
+ * Classe répertoriant les codes HTML liés au header et au footer du Front Office.
+ * @author IBIALO
+ *
+ */
 class VuePageHTMLFrontOffice
 {
 
 
     /**
-     *
-     * @return string HTML du Début de chaque page (header)
+     * Méthode générant le début du code HTML du front office
+     * @return string début du code HTML du front office
      */
     public static function header()
     {
@@ -41,21 +46,14 @@ end;
     }
 
     /**
-     *
-     * @return string Affichage du footer sur chaque page
+     * Méthode générant la fin du code HTML du front office
+     * @return string fin du code HTML du front office
      */
     public static function getFooter()
     {
-        $app = \Slim\Slim::getInstance();
-        $requete = $app->request();
-        $contact = $app->urlFor('accueil');
-        $path = $requete->getRootUri();
         return <<<end
 
             </main>
-        <!--<footer>
-             <p>Ceci est le footer</p>
-        </footer>-->
     </body>
 </html>
 end;
