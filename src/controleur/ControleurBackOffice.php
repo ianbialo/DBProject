@@ -3,6 +3,7 @@ namespace dbproject\controleur;
 
 use dbproject\vue\VueBackOffice;
 use dbproject\modele\Projet;
+use dbproject\modele\User;
 use dbproject\conf\Formulaire;
 use dbproject\modele\Structure;
 use dbproject\conf\Authentication;
@@ -46,6 +47,26 @@ class ControleurBackOffice
             $app->redirect($app->urlFor("connexionAdmin"));
         } else
             $app->notFound();
+    }
+    
+    public function gestionCompte(){
+        $app = \Slim\Slim::getInstance();
+        $vue = new VueBackOffice();
+        //Si la personne est authentifiée
+        if (isset($_COOKIE['user']))
+            print $vue->render(VueBackOffice::AFF_GESTION);
+            else
+                $app->notFound();
+    }
+    
+    public function creationCompte(){
+        $app = \Slim\Slim::getInstance();
+        $vue = new VueBackOffice();
+        //Si la personne est authentifiée
+        if (isset($_COOKIE['user']))
+            print $vue->render(VueBackOffice::AFF_CREATION);
+            else
+                $app->notFound();
     }
 
     /**
@@ -123,9 +144,42 @@ class ControleurBackOffice
      */
     public function postConnexion()
     {
+        $app = \Slim\Slim::getInstance();
         $id = filter_var($_POST['loginCo'], FILTER_SANITIZE_EMAIL);
         $password = filter_var($_POST['mdpCo'], FILTER_SANITIZE_STRING);
         Authentication::authenticate($id, $password);
+        $app->redirect($app->urlFor("listeFormulaires"));
+    }
+    
+    public function postCreationCompte(){
+        $app = \Slim\Slim::getInstance();
+        $id = filter_var($_POST['loginInscr'], FILTER_SANITIZE_EMAIL);
+        $password = filter_var($_POST['mdpInscr'], FILTER_SANITIZE_STRING);
+        $statut = $_POST['selectStatut'];
+        Authentication::createUser($id, $password,$statut);
+        $app->redirect($app->urlFor("gestionCompte"));
+    }
+    
+    public function postModificationCompte(){
+        $app = \Slim\Slim::getInstance();
+        $user = User::getById($_POST['idUser']);
+        $user->droit = $_POST['selectDroit'];
+        
+        if(isset($_POST['checkbox'])){
+            $i = $_POST['numGestion'];
+            $user->mdp = password_hash($_POST['mdpModif'.$i."w1"], PASSWORD_DEFAULT, Array(
+                'cost' => 12
+                ));
+        }        
+        $user->save();
+        $_SESSION['message'] = "Les modifications ont été enrengistrés avec succès.";
+        $app->redirect($app->urlFor("gestionCompte"));
+    }
+    
+    public function postSuppressionCompte(){
+        $app = \Slim\Slim::getInstance();
+        Authentication::delete($_POST["idUserModal"]);
+        $app->redirect($app->urlFor("gestionCompte"));       
     }
 
     /**

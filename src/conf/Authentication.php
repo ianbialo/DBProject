@@ -5,13 +5,32 @@ use dbproject\modele\User;
 
 class Authentication
 {
+    
+    public static function createUser($id, $mdp, $droit=0)
+    {
+        $app = \Slim\Slim::getInstance();
+        $userTest = User::getById($id);
+        if ($userTest == null) {
+            $mdp = password_hash($mdp, PASSWORD_DEFAULT, Array(
+                'cost' => 12
+                ));
+            $u = new User();
+            $u->login = filter_var($id, FILTER_SANITIZE_EMAIL);
+            $u->mdp = filter_var($mdp, FILTER_SANITIZE_STRING);
+            $u->droit = $droit;
+            $u->save();
+        } else {
+            $_SESSION['message'] = "L'utilisateur existe déjà. Veuillez utiliser un autre login.";
+            $app->redirect($app->urlFor("inscription"));
+        }
+    }
 
     /**
      * Méthode d'authentification LDAP à l'Active Directory de l'entreprise
      * @param int $id id de l'utilisateur (ici son adresse mail)
      * @param string $password mot de passe de l'utilisateur
      */
-    public static function authenticate($id, $password)
+    /**public static function authenticate($id, $password)
     {
         $app = \Slim\Slim::getInstance();
         
@@ -42,6 +61,25 @@ class Authentication
             $_SESSION['message'] = "Les renseignements fournis ne sont pas corrects. Veuillez réessayer.";
             $app->redirect($app->urlFor("connexionAdmin"));
         }
+    }*/
+    
+    public static function authenticate($id, $password){
+        $app = \Slim\Slim::getInstance();
+        $id = filter_var($id, FILTER_SANITIZE_EMAIL);
+        $user = User::getById($id);
+        if ($user != null) {
+            if (password_verify($password, $user->mdp)) {
+                $app->setEncryptedCookie("user", $id, time() + 60 * 60 * 24 * 30, "/");
+                unset($_COOKIE['user']);
+                setcookie('user', '', time() - 60 * 60 * 24, '/');
+            } else {
+                $_SESSION['message'] = "Les renseignements fournis ne sont pas corrects. Veuillez réessayer";
+                $app->redirect($app->urlFor("connexionAdmin"));
+            }
+        } else {
+            $_SESSION['message'] = "Les renseignements fournis ne sont pas corrects. Veuillez réessayer";
+            $app->redirect($app->urlFor("connexionAdmin"));
+        }
     }
 
     /**
@@ -53,5 +91,10 @@ class Authentication
             unset($_COOKIE['user']);
             setcookie('user', '', time() - 60 * 60 * 24, '/'); // valeur vide et temps dans le passé
         }
+    }
+    
+    public static function delete($id){
+        $user = User::getById($id);
+        $user->delete();
     }
 }

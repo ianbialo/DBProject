@@ -53,6 +53,7 @@ class VuePageHTMLBackOffice
             $('.tabs').tabs();
             $('select').formSelect();
             $('.modal').modal({dismissible: false});
+            $('.collapsible').collapsible();
 
             $('.datepicker').datepicker({
                 format : 'dd mmmm yyyy',
@@ -124,6 +125,7 @@ end;
         $path = $requete->getRootUri();
         $acc = $app->urlFor("connexionAdmin");
         $disconnect = $app->urlFor("deconnexion");
+        $gestion = $app->urlFor("gestionCompte");
         return <<<end
 
             <header>
@@ -131,6 +133,7 @@ end;
             <div class="nav-wrapper container">
                 <a id="logo-container" href="$acc" class="brand-logo">DBProject</a>
                 <ul class="right hide-on-med-and-down">
+                    <li><a href="$gestion">Gestionnaire de compte</a></li>
                     <li><a href="$disconnect">Deconnexion</a></li>
                 </ul>
                 <ul id="nav-mobile" class="sidenav">

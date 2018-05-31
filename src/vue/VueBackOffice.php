@@ -10,43 +10,67 @@ use dbproject\modele\Responsable;
 use dbproject\modele\Implique;
 use dbproject\modele\Suivi;
 use dbproject\conf\Variable;
+use dbproject\modele\User;
+use dbproject\conf\Authentication;
 
 /**
  * Classe répertoriant les codes HTML liés au Back Office.
- * @author IBIALO
  *
+ * @author IBIALO
+ *        
  */
 class VueBackOffice
 {
 
     /**
      * Selecteur de l'index
+     *
      * @var integer
      */
     const AFF_INDEX = 0;
 
     /**
      * Selecteur de la liste des formulaires
+     *
      * @var integer
      */
     const AFF_FORMULAIRE = 1;
 
     /**
      * Selecteur d'un projet
+     *
      * @var integer
      */
     const AFF_PROJET = 2;
 
     /**
      * Selecteur de la recherche
+     *
      * @var integer
      */
     const AFF_RECHERCHE = 3;
 
     /**
+     * Selecteur de la gestion de compte
+     *
+     * @var integer
+     */
+    const AFF_GESTION = 4;
+    
+    /**
+     * Selecteur de la création de compte
+     *
+     * @var integer
+     */
+    const AFF_CREATION = 5;
+
+    /**
      * Selecteur permettant de facilement faire appel aux méthode de la classe
-     * @param int $selecteur selecteur permettant d'accéder à la méthode souhaitée
-     * @param object $tab données pouvant être transmises depuis le controleur
+     *
+     * @param int $selecteur
+     *            selecteur permettant d'accéder à la méthode souhaitée
+     * @param object $tab
+     *            données pouvant être transmises depuis le controleur
      * @return string
      */
     public function render($selecteur, $tab = null)
@@ -64,14 +88,21 @@ class VueBackOffice
             case VueBackOffice::AFF_RECHERCHE:
                 $content = $this->recherche($tab);
                 break;
+            case VueBackOffice::AFF_GESTION:
+                $content = $this->gestionCompte();
+                break;
+            case VueBackOffice::AFF_CREATION:
+                $content = $this->creationCompte();
+                break;
         }
         return $content;
     }
 
     /**
      * Méthode générant le code HTML de l'index du back office
-     * @return string code HTML de l'index du back office
      *
+     * @return string code HTML de l'index du back office
+     *        
      */
     private function index()
     {
@@ -115,6 +146,7 @@ $(document).ready(function() {";
 
     /**
      * Méthode générant le code HTML de la page de la liste des projets
+     *
      * @return string code HTML de la page de la liste des projets
      */
     private function formulaire()
@@ -122,21 +154,33 @@ $(document).ready(function() {";
         $app = \Slim\Slim::getInstance();
         $requete = $app->request();
         $path = $requete->getRootUri();
+        $mail = $app->getEncryptedCookie("user");
         
-        $testQuery = array(0,1);
-        $testValidate = array(0,1,2);
+        $testQuery = array(
+            0,
+            1
+        );
+        $testValidate = array(
+            0,
+            1,
+            2
+        );
         
-        if (isset($_GET['query'])){
-            if(in_array($_GET['query'], $testQuery)){
-                $query = filter_var($_GET['query'],FILTER_SANITIZE_NUMBER_INT);
-            } else $query = 0;
-        } else $query = 0;
+        if (isset($_GET['query'])) {
+            if (in_array($_GET['query'], $testQuery)) {
+                $query = filter_var($_GET['query'], FILTER_SANITIZE_NUMBER_INT);
+            } else
+                $query = 0;
+        } else
+            $query = 0;
         
-        if (isset($_GET['validate'])){
-            if(in_array($_GET['validate'], $testValidate)){
-                $validate = filter_var($_GET['validate'],FILTER_SANITIZE_NUMBER_INT);
-            } else $validate = 0;
-        } else $validate = 0;
+        if (isset($_GET['validate'])) {
+            if (in_array($_GET['validate'], $testValidate)) {
+                $validate = filter_var($_GET['validate'], FILTER_SANITIZE_NUMBER_INT);
+            } else
+                $validate = 0;
+        } else
+            $validate = 0;
         
         $redirection = $app->urlFor("postRedirection");
         
@@ -153,7 +197,7 @@ $(document).ready(function() {";
 
 
             <div class="container">
-                <h3>Liste des projets</h3>
+                <h3>Liste des projets - $mail</h3>
    
                     <div class="input-field col s12">
                         <select size="1" name="links" onchange="window.location.href=this.value;">
@@ -215,10 +259,10 @@ end;
                       <label>
 end;
         if ($validate == 0)
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=0&#39;" checked />';
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=0&#39;" checked />';
         else
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=0&#39;" />';
-            $res .= <<<end
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=0&#39;" />';
+        $res .= <<<end
 
                         <span>Tous</span>
                       </label>
@@ -229,10 +273,10 @@ end;
                       <label>
 end;
         if ($validate == 1)
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=1&#39;" checked />';
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=1&#39;" checked />';
         else
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=1&#39;" />';
-            $res .= <<<end
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=1&#39;" />';
+        $res .= <<<end
 
                         <span>Traités</span>
                       </label>
@@ -243,10 +287,10 @@ end;
                       <label>
 end;
         if ($validate == 2)
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=2&#39;" checked />';
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=2&#39;" checked />';
         else
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;'. $changementTri . '?query=' . $query . '&validate=2&#39;" />';
-            $res .= <<<end
+            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=2&#39;" />';
+        $res .= <<<end
 
                         <span>Non-traités</span>
                       </label>
@@ -268,8 +312,10 @@ end;
             $supprimer = $app->urlFor("postSuppressionFormulaire");
             
             $date = Formulaire::transformerDate($p->DateDep);
-            if($suivi->Chrono != "0")$titre = $struct->Nom." - ".$date." - <span class='green-text text-accent-4'>n° Chrono : ".$suivi->Chrono."</span>";
-            else $valide = $titre = $struct->Nom." - ".$date;
+            if ($suivi->Chrono != "0")
+                $titre = $struct->Nom . " - " . $date . " - <span class='green-text text-accent-4'>n° Chrono : " . $suivi->Chrono . "</span>";
+            else
+                $valide = $titre = $struct->Nom . " - " . $date;
             $res .= <<<end
 
               <!-- Modal Structure -->
@@ -318,7 +364,9 @@ end;
 
     /**
      * Méthode générant le code HTML de la page d'un projet
-     * @param int $no id du projet
+     *
+     * @param int $no
+     *            id du projet
      * @return string code HTML de la page de la liste des projets
      */
     private function projet($no)
@@ -994,7 +1042,9 @@ $(document).ready(function() {";
 
     /**
      * Méthode générant le code HTML de la page de recherche projet
-     * @param int $tab nom du projet
+     *
+     * @param int $tab
+     *            nom du projet
      * @return string code HTML de la page de recherche projet
      */
     private function recherche($tab)
@@ -1082,10 +1132,284 @@ end;
         return $res;
     }
 
+    private function gestionCompte()
+    {
+        $app = \Slim\Slim::getInstance();
+        $user = User::getById($app->getEncryptedCookie("user"));
+        if ($user->droit == "0")
+            return self::gestionCompteNormal();
+        else
+            return self::gestionCompteAdmin();
+    }
+
+    private function gestionCompteAdmin()
+    {
+        $app = \Slim\Slim::getInstance();
+        
+        $retour = $app->urlFor("listeFormulaires");
+        $modifCompte = $app->urlFor("postModifCompte");
+        $suppCompte = $app->urlFor("postSuppCompte");
+        $ajoutCompte = $app->urlFor("creationCompte");
+        
+        $user = User::getById($app->getEncryptedCookie("user"));
+        $users = User::getAll();
+        
+        $res = <<<end
+        <div class="container">
+            <h3>Menu de gestion des comptes du back-office</h3>
+        <div class="card-panel hoverable">
+
+            <ul class="collapsible">
+end;
+        $i=0;
+        foreach($users as $u){
+            $icon = $u->droit;
+            $mail = $u->login;
+            
+            if($icon == "2"){
+                if($u->login != $user->login)$icon = "people";
+                else $icon = "person_pin";
+                $selection = '<option value="2" disabled>Super Administrateur</option>';
+            }
+            if($icon == "1"){
+                if($u->login != $user->login)$icon = "person";
+                else $icon = "person_pin";
+                $selection = '<option value="1" selected>Administrateur</option>
+                          <option value="0">Normal</option>';
+            }
+            if($icon == "0"){
+                $icon = "perm_identity";
+                $selection = '<option value="1">Administrateur</option>
+                          <option value="0" selected>Normal</option>';
+            }
+            
+            $mdpModif1 = 'mdpModif'.$i."w1";
+            $mdpModif2 = 'mdpModif'.$i."w2";
+            
+            $res .= <<<end
+
+                <li>
+                  <div class="collapsible-header"><i class="material-icons">$icon</i>$u->login</div>
+                  <div class="collapsible-body">
+                    <form id="formModifCompte$i" name="formModifCompte$i" action="$modifCompte" method="POST" autocomplete="off">
+                        <div class="input-field col s12">
+                        <select name="selectDroit">
+                          $selection
+                        </select>
+                        <label>Selection des droits</label>
+                      </div>
+                        <div class="card-panel hoverable">
+                            <label>
+                                <input id="cbmdp$i" name="checkbox" type="checkbox" class="filled-in"/>
+                                <span>Cochez si vous voulez changer le mot de passe</span>
+                             </label>
+
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">https</i>
+                                <input disabled type="password" minlength="6" id="$mdpModif1" name="$mdpModif1"><br>
+                                <label for="$mdpModif1">Nouveau mot de passe</label>
+                            </div>
+                            
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">https</i>
+                                <input disabled type="password" id="$mdpModif2" name="$mdpModif2"><br>
+                                <label for="$mdpModif2">Répétez le mot de passe</label>
+                                
+                            </div>
+            
+                        </div>
+                        <input type="hidden" name="numGestion" id="numGestion$i" value="$i">
+                        <input type="hidden" name="idUser" id="idUser$i" value="$u->login">
+
+end;
+            if($u->login != $user->login && $u->droit != "2") $res .= '                        <a class="btn red modal-trigger" href="#modalw$i"><i class="material-icons left">delete</i>Supprimer</a>';
+            $res .= <<<end
+
+                        <button class="btn" type="submit" name="action">Modifier
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </form>
+                  </div>
+                </li>
+end;
+            if($u->login != $user->login) {$res .= <<<end
+
+                <!-- Modal Structure -->
+              <div id="modalw$i" class="modal">
+                <div class="modal-content">
+                  <h4>Suppression d'un utilisateur</h4>
+                  <p>Supprimer l'utilisateur $mail est un acte irréversible. Êtes-vous sûr de vouloir continuer ?</p>
+                </div>
+                <div class="modal-footer">
+                  <form methode="POST" action="$suppCompte">
+                    <a href="" class="modal-action modal-close waves-effect waves-green btn-flat">Annuler</a>
+                    <input type="hidden" name="idUserModal" id="idUserModal$i" value="$u->login">
+                    <input type="submit" formmethod="post" value="Confirmer" class="modal-action modal-close waves-effect waves-green btn-flat">
+                  </form>
+                </div>
+              </div>                
+
+
+end;
+            }
+        
+        $res .= Modal::genereModal() . "
+<script>
+$(document).ready(function() {";
+        
+        if (isset($_SESSION['message'])) {
+            $msg = $_SESSION['message'];
+            $res .= Modal::enclencher($msg);
+            $_SESSION['message'] = null;
+        }
+        $res .= <<<end
+});
+$('#formModifCompte$i').submit(function() {
+    let id1 = $('#$mdpModif1').val(); //if #id1 is input element change from .text() to .val()
+    let id2 = $('#$mdpModif2').val(); //if #id2 is input element change from .text() to .val()
+    if (id1 != id2) {
+end;
+        $msg = "Les deux mot de passe ne correspondent pas. Veuillez réessayer.";
+        $res .= Modal::enclencher($msg);
+        $res .= <<<end
+        return false;
+    }
+    return true;
+});
+</script>
+
+<script>
+$("#cbmdp$i").click(function() {
+    if($(this).is(":checked")){
+        $("#$mdpModif1").prop('disabled', false);
+        $("#$mdpModif2").prop('disabled', false);
+        $("#$mdpModif1").prop('required', true);
+        $("#$mdpModif2").prop('required', true);
+    }else{
+        $("#$mdpModif1").prop('disabled', true);
+        $("#$mdpModif2").prop('disabled', true);
+        $("#$mdpModif1").prop('required', false);
+        $("#$mdpModif2").prop('required', false);
+        $("#$mdpModif1").val('');
+        $("#$mdpModif2").val('');
+    }
+});
+</script>
+end;
+            $i++;
+        }
+                $res .= <<<end
+              </ul>
+
+            <div class="col s1 offset-s6"><a class="waves-effect waves-light btn green" href="$ajoutCompte"><i class="material-icons">person_add</i></a></div>
+
+            </div>
+
+            <div class="row">
+            <a class="waves-effect waves-light btn" href="$retour"><i class="material-icons left">arrow_back</i>Retour</a>
+            </div>
+        </div>
+end;
+        return $res;
+    }
+
+    private function gestionCompteNormal()
+    {}
+    
+    private function creationCompte(){
+        $app = \Slim\Slim::getInstance();
+        
+        $creation = $app->urlFor("postCreationCompte"); 
+        $retour = $app->urlFor("gestionCompte");
+        
+        $res = <<<end
+        <div class="container">
+            <h3>Création d'un nouveau compte</h3>
+            <div class="card-panel hoverable">
+                <form id="formInscr" class="col s12" method="POST" action="$creation" autocomplete="off">
+            
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">account_circle</i>
+                        <input type="email" id="loginInscr" name="loginInscr" class="validate" required><br>
+                        <label for="loginInscr">Login</label>
+                        <span class="helper-text" data-error="Il faut rentrer une adresse mail valide" ></span>
+                    </div>
+        
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">https</i>
+                        <input type="password" minlength="6" id="mdpInscr" name="mdpInscr" required><br>
+                        <label for="mdpInscr">Mot de passe</label>
+                    </div>
+        
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">https</i>
+                        <input type="password" id="mdpInscr2" name="mdpInscr2" required><br>
+                        <label for="mdpInscr2">Répétez le mot de passe</label>
+        
+                    </div>
+        
+                    <div class="input-field col s12">
+                        <select name="selectStatut">
+                          <option value="1">Administrateur</option>
+                          <option value="0" selected>Normal</option>
+                        </select>
+                        <label>Selection des droits.</label>
+                    </div>
+
+                    <button class="btn" type="submit" name="action">Créer
+                        <i class="material-icons right">send</i>
+                    </button>
+
+            </div>
+                    <a class="waves-effect waves-light btn" href="$retour"><i class="material-icons left">arrow_back</i>Retour</a>
+                </form>
+        </div>
+        
+end;
+        
+        $res .= Modal::genereModal() . "<script>
+$(document).ready(function() {";
+        
+        if (isset($_SESSION['message'])) {
+            $msg = $_SESSION['message'];
+            $res .= Modal::enclencher($msg);
+            $_SESSION['message'] = null;
+        }
+        $res .= <<<end
+});
+$('#formInscr').submit(function() {
+    let id1 = $('#mdpInscr').val(); //if #id1 is input element change from .text() to .val() 
+    let id2 = $('#mdpInscr2').val(); //if #id2 is input element change from .text() to .val()
+    let tel = $('#telInscr').val();
+    if (!(/\d/.test(id1)) || !(/[a-z]/.test(id1)) || !(/[A-Z]/.test(id1))) {
+end;
+        $msg = "Le mot de passe doit contenir au moins une lettre majuscule et minuscule ainsi qu'un chiffre.";
+        $res .= Modal::enclencher($msg);
+        $res .= <<<end
+        return false;
+    }
+
+    if (id1 != id2) {
+end;
+        $msg = "Les deux mot de passe ne correspondent pas. Veuillez réessayer.";
+        $res .= Modal::enclencher($msg);
+        $res .= <<<end
+        return false;
+    }    
+    return true;
+});
+</script>
+end;
+        return $res;
+    }
+
     /**
      * Méthode permettant de savoir si une chaîne est situé à la fin d'une autre
-     * @param string $haystack chaîne principale où l'on doit chercher une chaîne à la fin
-     * @param string $needle chaîne de recherche
+     *
+     * @param string $haystack
+     *            chaîne principale où l'on doit chercher une chaîne à la fin
+     * @param string $needle
+     *            chaîne de recherche
      * @return boolean indicatif de réussite
      */
     function endsWith($haystack, $needle)

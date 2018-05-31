@@ -39,6 +39,18 @@ $app->get('/admin/deconnexion(/)',function(){
     print VuePageHTMLBackOffice::getFooter();
 })->name("deconnexion");
 
+$app->get('/admin/gestion(/)',function(){
+    print VuePageHTMLBackOffice::header();
+    (new dbproject\controleur\ControleurBackOffice())->gestionCompte();
+    print VuePageHTMLBackOffice::getFooter();
+})->name("gestionCompte");
+
+$app->get('/admin/gestion/creation(/)',function(){
+    print VuePageHTMLBackOffice::header();
+    (new dbproject\controleur\ControleurBackOffice())->creationCompte();
+    print VuePageHTMLBackOffice::getFooter();
+})->name("creationCompte");
+
 $app->get('/admin/formulaire', function (){
     print VuePageHTMLBackOffice::header();
     (new dbproject\controleur\ControleurBackOffice())->affichageFormulaires();
@@ -76,6 +88,18 @@ $app->post('/postForm(/)',function(){
 $app->post('/postConnexion(/)',function(){
     (new dbproject\controleur\ControleurBackOffice())->postConnexion();
 })->name("postConnexion");
+
+$app->post('/postCreationCompte(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postCreationCompte();
+})->name("postCreationCompte");
+
+$app->post('/postModifCompte(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postModificationCompte();
+})->name("postModifCompte");
+    
+$app->post('/postSuppCompte(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postSuppressionCompte();
+})->name("postSuppCompte");
 
 $app->post('/postSupprForm(/)',function(){
     (new dbproject\controleur\ControleurBackOffice())->postSuppressionFomulaire();

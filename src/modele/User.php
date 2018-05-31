@@ -28,4 +28,8 @@ class User extends \Illuminate\Database\Eloquent\Model
         $id = filter_var($id, FILTER_SANITIZE_EMAIL);
         return User::where('login', '=', $id)->first();
     }
+    
+    public static function getAll(){
+        return User::all();
+    }
 }
