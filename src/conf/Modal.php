@@ -32,7 +32,7 @@ end;
     public static function enclencher($msg){
         return <<<end
         
-        $(".modal div p:first").text("$msg");
+        $("#modal1 div p:first").text("$msg");
             var elem = document.querySelector('#modal1');
             var instance = M.Modal.getInstance(elem);
             instance.open();

@@ -315,7 +315,8 @@ end;
             if ($suivi->Chrono != "0")
                 $titre = $struct->Nom . " - " . $date . " - <span class='green-text text-accent-4'>n° Chrono : " . $suivi->Chrono . "</span>";
             else
-                $valide = $titre = $struct->Nom . " - " . $date;
+                $titre = $struct->Nom . " - " . $date;
+            if($p->Nouv == "1") $titre = "<span class='red-text text-accent-4'>New</span> ".$titre;
             $res .= <<<end
 
               <!-- Modal Structure -->
@@ -1153,10 +1154,15 @@ end;
         
         $user = User::getById($app->getEncryptedCookie("user"));
         $users = User::getAll();
+        $admin = User::getSuperAdmin();
         
         $res = <<<end
         <div class="container">
             <h3>Menu de gestion des comptes du back-office</h3>
+            <div class="col s1 offset-s6"><span><i class="material-icons tiny">person_pin</i> Vous</span></div>
+            <div class="col s1 offset-s6"><span><i class="material-icons tiny">people</i> Super Administrateur</span></div>
+            <div class="col s1 offset-s6"><span><i class="material-icons tiny">person</i> Administrateur</span></div>
+            <div class="col s1 offset-s6"><span><i class="material-icons tiny">perm_identity</i> Utilisateur normal</span></div>
         <div class="card-panel hoverable">
 
             <ul class="collapsible">
@@ -1169,7 +1175,7 @@ end;
             if($icon == "2"){
                 if($u->login != $user->login)$icon = "people";
                 else $icon = "person_pin";
-                $selection = '<option value="2" disabled>Super Administrateur</option>';
+                $selection = '<option value="2" selected>Super Administrateur</option>';
             }
             if($icon == "1"){
                 if($u->login != $user->login)$icon = "person";
@@ -1222,17 +1228,20 @@ end;
                         <input type="hidden" name="idUser" id="idUser$i" value="$u->login">
 
 end;
-            if($u->login != $user->login && $u->droit != "2") $res .= '                        <a class="btn red modal-trigger" href="#modalw$i"><i class="material-icons left">delete</i>Supprimer</a>';
-            $res .= <<<end
-
-                        <button class="btn" type="submit" name="action">Modifier
+            if($u->login != $user->login && $u->droit != "2") $res .= '                        <a class="btn red modal-trigger" href="#modalw'.$i.'"><i class="material-icons left">delete</i>Supprimer</a>
+';
+            if($user->droit == "2" || ($u->droit != "2" && $u->login != $admin->login)) $res .= '                           <button class="btn" type="submit" name="action">Modifier
                             <i class="material-icons right">send</i>
-                        </button>
+                          </button>
+';
+            $res .= <<<end
+                        
                     </form>
                   </div>
                 </li>
 end;
-            if($u->login != $user->login) {$res .= <<<end
+            if($u->login != $user->login) {
+                $res .= <<<end
 
                 <!-- Modal Structure -->
               <div id="modalw$i" class="modal">
@@ -1252,28 +1261,27 @@ end;
 
 end;
             }
-        
-        $res .= Modal::genereModal() . "
-<script>
-$(document).ready(function() {";
-        
-        if (isset($_SESSION['message'])) {
-            $msg = $_SESSION['message'];
-            $res .= Modal::enclencher($msg);
-            $_SESSION['message'] = null;
-        }
         $res .= <<<end
-});
+
+<script>
 $('#formModifCompte$i').submit(function() {
-    let id1 = $('#$mdpModif1').val(); //if #id1 is input element change from .text() to .val()
-    let id2 = $('#$mdpModif2').val(); //if #id2 is input element change from .text() to .val()
+    let id1 = $('#mdpInscr').val(); //if #id1 is input element change from .text() to .val() 
+    let id2 = $('#mdpInscr2').val(); //if #id2 is input element change from .text() to .val()
+    if (!(/\d/.test(id1)) || !(/[a-z]/.test(id1)) || !(/[A-Z]/.test(id1))) {
+end;
+        $msg = "Le mot de passe doit contenir au moins une lettre majuscule et minuscule ainsi qu'un chiffre.";
+        $res .= Modal::enclencher($msg);
+        $res .= <<<end
+        return false;
+    }
+
     if (id1 != id2) {
 end;
         $msg = "Les deux mot de passe ne correspondent pas. Veuillez réessayer.";
         $res .= Modal::enclencher($msg);
         $res .= <<<end
         return false;
-    }
+    }    
     return true;
 });
 </script>
@@ -1300,6 +1308,19 @@ end;
         }
                 $res .= <<<end
               </ul>
+end;
+                $res .= Modal::genereModal() . "
+<script>
+$(document).ready(function() {";
+                
+                if (isset($_SESSION['message'])) {
+                    $msg = $_SESSION['message'];
+                    $res .= Modal::enclencher($msg);
+                    $_SESSION['message'] = null;
+                }
+                $res .= <<<end
+});
+</script>
 
             <div class="col s1 offset-s6"><a class="waves-effect waves-light btn green" href="$ajoutCompte"><i class="material-icons">person_add</i></a></div>
 
@@ -1314,7 +1335,100 @@ end;
     }
 
     private function gestionCompteNormal()
-    {}
+    {
+        $app = \Slim\Slim::getInstance();
+        
+        $retour = $app->urlFor("listeFormulaires");
+        $modifCompte = $app->urlFor("postModifCompte");
+        
+        $user = User::getById($app->getEncryptedCookie("user"));
+        
+        $res = <<<end
+        <div class="container">
+            <h3>Menu de gestion de compte</h3>
+            <div class="card-panel hoverable">
+
+                <form id="formModifCompte" name="formModifCompte" action="$modifCompte" method="POST" autocomplete="off">
+
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">account_circle</i>
+                        <input type="email" id="login" name="login" class="validate" value="$user->login" disabled required><br>
+                        <label for="login">Login (inchangeable)</label>
+                    </div>
+    
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">account_balance</i>
+                        <input type="text" id="orgInscr" name="orgInscr" value="Compte normal" disabled required><br>
+                        <input type="hidden" id="selectDroit" name="selectDroit" value="0">
+                        <label for="orgInscr">Statut (inchangeable)</label>    
+                    </div>
+
+                    <input type="hidden" id="checkbox" name="checkbox" value="salut">
+                    <input type="hidden" id="numGestion" name="numGestion" value="0">
+                    <input type="hidden" id="idUser" name="idUser" value="$user->login">
+
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">https</i>
+                        <input type="password" minlength="6" id="mdpModif0w1" name="mdpModif0w1" required><br>
+                        <label for="mdpModif0w1">Mot de passe</label>
+                    </div>
+        
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">https</i>
+                        <input type="password" id="mdpModif0w2" name="mdpModif0w2" required><br>
+                        <label for="mdpModif0w2">Répétez le mot de passe</label>   
+                    </div>
+                      <button class="btn" type="submit" name="action">Modifier
+                        <i class="material-icons right">send</i>
+                      </button>
+                </form>
+            </div>
+
+            <a class="waves-effect waves-light btn" href="$retour"><i class="material-icons left">arrow_back</i>Retour</a>
+
+        </div>
+end;
+        $res .= <<<end
+        
+<script>
+$('#formModifCompte').submit(function() {
+    let id1 = $('#mdpModif0w1').val(); //if #id1 is input element change from .text() to .val()
+    let id2 = $('#mdpModif0w2').val(); //if #id2 is input element change from .text() to .val()
+    if (!(/\d/.test(id1)) || !(/[a-z]/.test(id1)) || !(/[A-Z]/.test(id1))) {
+end;
+        $msg = "Le mot de passe doit contenir au moins une lettre majuscule et minuscule ainsi qu'un chiffre.";
+        $res .= Modal::enclencher($msg);
+        $res .= <<<end
+        return false;
+    }
+    
+    if (id1 != id2) {
+end;
+        $msg = "Les deux mot de passe ne correspondent pas. Veuillez réessayer.";
+        $res .= Modal::enclencher($msg);
+        $res .= <<<end
+        return false;
+    }
+    return true;
+});
+</script>
+end;
+                $res .= Modal::genereModal() . "
+<script>
+$(document).ready(function() {";
+                
+                if (isset($_SESSION['message'])) {
+                    $msg = $_SESSION['message'];
+                    $res .= Modal::enclencher($msg);
+                    $_SESSION['message'] = null;
+                }
+                $res .= <<<end
+});
+</script>
+end;
+        return $res;
+        
+    }
     
     private function creationCompte(){
         $app = \Slim\Slim::getInstance();
@@ -1380,7 +1494,6 @@ $(document).ready(function() {";
 $('#formInscr').submit(function() {
     let id1 = $('#mdpInscr').val(); //if #id1 is input element change from .text() to .val() 
     let id2 = $('#mdpInscr2').val(); //if #id2 is input element change from .text() to .val()
-    let tel = $('#telInscr').val();
     if (!(/\d/.test(id1)) || !(/[a-z]/.test(id1)) || !(/[A-Z]/.test(id1))) {
 end;
         $msg = "Le mot de passe doit contenir au moins une lettre majuscule et minuscule ainsi qu'un chiffre.";

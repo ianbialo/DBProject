@@ -1,0 +1,5 @@
+Réutiliser l'inscription du sprint 1
++
+-	Avoir la possibilité de modifier moi-même les informations renseignées par les demandeurs. Si en plus, cette police pouvait se mettre d’office en bleu italique ce serait top ;
+-	Avoir une mention ‘New’ qui s’affiche à un endroit des demandes arrivées après ma dernière connexion sur la plateforme ;
+-	Pour les numéros chrono qui s’affichent en automatique, est-il possible de les avoir en ‘annuel’ : C’est-à-dire qu’il repartent à 1 à chaque nouvelle année. Aussi il faudrait les faire précéder par le millésime de l’année en cours.

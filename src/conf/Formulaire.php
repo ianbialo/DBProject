@@ -98,6 +98,7 @@ class Formulaire
         else
             $proj->Valorisation = null;
         $proj->Document = $_POST['nbFile'];
+        $proj->Nouv = 1;
         if (! $proj->save())
             return false;
         
@@ -214,7 +215,7 @@ class Formulaire
                         $chrono = 1;
                         $date = explode("-", $suivi->DateDep)[0];
                     }
-                    $suivi->Chrono = $chrono;
+                    $suivi->Chrono = $date."_".$chrono;
                     $suivi->save();
                     $chrono ++;
                 }

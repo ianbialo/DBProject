@@ -18,10 +18,11 @@ class Authentication
             $u->login = filter_var($id, FILTER_SANITIZE_EMAIL);
             $u->mdp = filter_var($mdp, FILTER_SANITIZE_STRING);
             $u->droit = $droit;
+            $u->dateCreation = date("Y-m-d");
             $u->save();
         } else {
             $_SESSION['message'] = "L'utilisateur existe déjà. Veuillez utiliser un autre login.";
-            $app->redirect($app->urlFor("inscription"));
+            $app->redirect($app->urlFor("creationCompte"));
         }
     }
 

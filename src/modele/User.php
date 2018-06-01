@@ -30,6 +30,10 @@ class User extends \Illuminate\Database\Eloquent\Model
     }
     
     public static function getAll(){
-        return User::all();
+        return User::orderBy("dateCreation")->get();
+    }
+    
+    public static function getSuperAdmin(){
+        return User::where('droit', '=', "2")->first();
     }
 }
