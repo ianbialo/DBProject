@@ -133,6 +133,13 @@ let application = (function(){
 					//Ajoute à l'input caché le (nouveau) nombre de co-fondateurs
 					$( "#nbFile" ).val(nbFile);
 
+					$( "#fileToUpload"+x ).on("change",function() {
+					    if(this.files[0].size > 2097152){
+					       alert("Le fichier est trop lourd !");
+					       this.value = "";
+					    };
+					});
+					
 					//Ajout du listener sur le nouveau bonton créé : supprime l'input et décrémente la valeur de l'input caché
 					$( "#btnFile"+x ).on("click",function(){
 						$( "#divFile"+x ).remove();
