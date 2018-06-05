@@ -109,6 +109,30 @@ $app->post('/postRedirection(/)',function(){
     (new dbproject\controleur\ControleurBackOffice())->postRedirectionProjet();
 })->name("postRedirection");
 
+$app->post('/postModificationProjet(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postModificationProjet();
+})->name("postModificationProjet");
+
+$app->post('/postModificationRepresentant(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postModificationRepresentant();
+})->name("postModificationRepresentant");
+
+$app->post('/postModificationResponsable(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postModificationResponsable();
+})->name("postModificationResponsable");
+
+$app->post('/postModificationStructure(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postModificationStructure();
+})->name("postModificationStructure");
+
+$app->post('/postModificationCoFinanceur(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postModificationCoFinanceur();
+})->name("postModificationCofinanceur");
+
+$app->post('/postModificationParrain(/)',function(){
+    (new dbproject\controleur\ControleurBackOffice())->postModificationParrain();
+})->name("postModificationParrain");
+
 $app->post('/postModificationSuivi(/)',function(){
     (new dbproject\controleur\ControleurBackOffice())->postModificationSuivi();
 })->name("postModificationSuivi");

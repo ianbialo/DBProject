@@ -137,6 +137,7 @@ end;
                     <li><a href="$disconnect">Deconnexion</a></li>
                 </ul>
                 <ul id="nav-mobile" class="sidenav">
+                    <li><a href="$gestion">Gestionnaire de compte</a></li>
                     <li><a href="$disconnect">Deconnexion</a></li>
                 </ul>
                 <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>

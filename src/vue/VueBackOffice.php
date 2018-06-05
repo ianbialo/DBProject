@@ -56,7 +56,7 @@ class VueBackOffice
      * @var integer
      */
     const AFF_GESTION = 4;
-    
+
     /**
      * Selecteur de la création de compte
      *
@@ -75,6 +75,16 @@ class VueBackOffice
      */
     public function render($selecteur, $tab = null)
     {
+        //On vérifie que l'utilisateur n'a pas été supprimé depuis sa connexion au BackOffice
+        $app = \Slim\Slim::getInstance();
+        $mail = $app->getEncryptedCookie("user");
+        $user = User::getById($mail);
+        if ($selecteur != VueBackOffice::AFF_INDEX) {
+            if ($user == null) {
+                Authentication::disconnect();
+                $app->redirect($app->urlFor("connexionAdmin"));
+            }
+        }
         switch ($selecteur) {
             case VueBackOffice::AFF_INDEX:
                 $content = $this->index();
@@ -117,6 +127,7 @@ class VueBackOffice
                 <i class="material-icons prefix">account_circle</i>
                 <input id="loginCo" type="email" name="loginCo" class="validate active" required><br>
                 <label for="loginCo">Login</label>
+                <span class="helper-text" data-error="Il faut rentrer une adresse mail valide" ></span>
             </div>
             <div class="input-field col s12">
                 <i class="material-icons prefix">https</i>
@@ -316,7 +327,8 @@ end;
                 $titre = $struct->Nom . " - " . $date . " - <span class='green-text text-accent-4'>n° Chrono : " . $suivi->Chrono . "</span>";
             else
                 $titre = $struct->Nom . " - " . $date;
-            if($p->Nouv == "1") $titre = "<span class='red-text text-accent-4'>New</span> ".$titre;
+            if ($p->Nouv == "1")
+                $titre = "<span class='red-text text-accent-4'>New</span> " . $titre;
             $res .= <<<end
 
               <!-- Modal Structure -->
@@ -491,10 +503,14 @@ end;
         else
             $titleSuivi = "Suivi";
         
+        
         // Transformation des booléens dans la partie du projet
-        $interetG = Formulaire::transformerBooleen($proj->InteretGeneral);
-        $mecenat = Formulaire::transformerBooleen($proj->Mecenat);
-        $fiscal = Formulaire::transformerBooleen($proj->Fiscal);
+        //$interetG = Formulaire::transformerBooleen($proj->InteretGeneral);
+        $interetG = self::generateSelectOuiNon("group0",$proj->InteretGeneral); 
+        //$mecenat = Formulaire::transformerBooleen($proj->Mecenat);
+        $mecenat = self::generateSelectOuiNon("group2",$proj->Mecenat);
+        //$fiscal = Formulaire::transformerBooleen($proj->Fiscal);
+        $fiscal = self::generateSelectOuiNon("group3",$proj->Fiscal);
         
         if ($suivi->Chrono != 0)
             $checked = 'checked="checked"';
@@ -514,6 +530,12 @@ end;
         $cofin = Implique::getCoFinanceur($no);
         $parrain = Implique::getParrain($no);
         
+        $modificationProjet = $app->urlFor("postModificationProjet");
+        $modificationStructure = $app->urlFor("postModificationStructure");
+        $modificationRepresentant = $app->urlFor("postModificationRepresentant");
+        $modificationResponsable = $app->urlFor("postModificationResponsable");
+        $modificationCofinanceur = $app->urlFor("postModificationCofinanceur");
+        $modificationParrain = $app->urlFor("postModificationParrain");
         $modificationSuivi = $app->urlFor("postModificationSuivi");
         $ajoutFichier = $app->urlFor("postAjoutFichier");
         
@@ -541,6 +563,7 @@ end;
                   </div>
                   <div class="card-content grey lighten-4">
                     <div id="14c1" class="active" style="display: block;">
+                        <form method="POST" id="formSuivi" action="$modificationProjet" autocomplete="off">
                         <table>
                 		<thead>
                 			<tr>
@@ -552,31 +575,31 @@ end;
                 		<tbody>
                 			<tr>
                 				<td>Exposé synthétique du projet ou des actions à soutenir</td>
-                				<td>$proj->Expose</td>
+                				<td><input type="text" name="expose" id="expose" size="50" value="$proj->Expose" required></td>
                 			</tr>
                 			<tr>
                 				<td>Date de début du projet</td>
-                				<td>$dateDeb</td>
+                				<td><input type="text" class="datepicker" name="datedeb" id="datedeb" value="$dateDeb" required></td>
                 			</tr>
                 			<tr>
                 				<td>Durée (en mois)</td>
-                				<td>$proj->Duree</td>
+                				<td><input type="number" name="duree" id="duree" value="$proj->Duree" required></td>
                 			</tr>
                 			<tr>
                 				<td>Lieu</td>
-                				<td>$proj->Lieu</td>
+                				<td><input type="text" name="lieu" id="lieu" value="$proj->Lieu" required></td>
                 			</tr>
                 			<tr>
                 				<td>Montant de l'aide financière sollicitée (en euros)</td>
-                				<td>$proj->Aide</td>
+                				<td><input type="number" name="aide" id="aide" value="$proj->Aide" required></td>
                 			</tr>
                 			<tr>
                 				<td>Budget prévisionnel global du projet (en euros)</td>
-                				<td>$proj->Budget</td>
+                				<td><input type="number" name="budget" id="budget" value="$proj->Budget" required><td>
                 			</tr>
                 			<tr>
                 				<td>Fins utilisé du montant demandé à Demathieu Bard</td>
-                				<td>$proj->Fin</td>
+                				<td><input type="text" name="findb" id="findb" value="$proj->Fin" required></td>
                 			</tr>
                             <tr>
                 				<td>Le projet est-il d'intérêt général ?</td>
@@ -584,7 +607,7 @@ end;
                 			</tr>
                             <tr>
                 				<td>Domaine principal du projet</td> 
-                				<td>$proj->Domaine</td>
+                				<td><input type="text" name="domaine" id="domaine" value="$proj->Domaine" required></td>
                 			</tr>
                             <tr>
                 				<td>Possibilité d'établir une convention de Mécénat ?</td>
@@ -596,12 +619,19 @@ end;
                 			</tr>
                             <tr>
                 				<td>Valorisation éventuelle</td>
-                				<td>$valor</td>
+                				<td><input type="text" name="valorev" id="valorev" value="$valor" required></td>
                 			</tr>
                 		</tbody>
 	                   </table>
+                        <br>
+                        <input type="hidden" value="$no" name="IdProjet" id="IdProjet">
+                        <button class="btn waves-light" type="submit" name="action">Modifier
+                            <i class="material-icons right">send</i>
+                        </button>
+                        </form>
                     </div>
                     <div id="14c2" class="" style="display: none;">
+                        <form method="POST" id="formStructure" action="$modificationStructure" autocomplete="off">
                         <table>
                 		<thead>
                 			<tr>
@@ -613,36 +643,44 @@ end;
                 		<tbody>
                 			<tr>
                 				<td>Nom</td>
-                				<td>$struct->Nom</td>
+                				<td><input type="text" name="nomstruct" id="nomstruct" value="$struct->Nom" required></td>
                 			</tr>
                 			<tr>
                 				<td>Adresse</td>
-                				<td>$struct->Adresse</td>
+                				<td><input type="text" name="adrstruct" id="adrstruct" value="$struct->Adresse" required></td>
                 			</tr>
                 			<tr>
                 				<td>Code Postal</td>
-                				<td>$struct->CodePostal</td>
+                				<td><input type="text" name="cpostalstruct" id="cpostalstruct" value="$struct->CodePostal" required></td>
                 			</tr>
                 			<tr>
                 				<td>Ville</td>
-                				<td>$struct->Ville</td>
+                				<td><input type="text" name="villestruct" id="villestruct" value="$struct->Ville" required></td>
                 			</tr>
                 			<tr>
                 				<td>Type</td>
-                				<td>$struct->Type</td>
+                				<td><input type="text" name="vousetes" id="vousetes" value="$struct->Type" required></td>
                 			</tr>
                 			<tr>
                 				<td>Site</td>
-                				<td>$site</td>
+                				<td><input type="text" name="site" id="site" value="$site" required></td>
                 			</tr>
                 			<tr>
                 				<td>Raison</td>
-                				<td>$struct->Raison</td>
+                				<td><input type="text" name="raisonstruct" id="raisonstruct" value="$struct->Raison" required></td>
                 			</tr>
                 		</tbody>
 	                   </table>
+                        <br>
+                        <input type="hidden" value="$no" name="IdProjet" id="IdProjet">
+                        <input type="hidden" value="$struct->IdStruct" name="IdStruct" id="IdStruct">
+                        <button class="btn waves-light" type="submit" name="action">Modifier
+                            <i class="material-icons right">send</i>
+                        </button>
+                        </form>
                     </div>
                     <div id="14c3" class="" style="display: none;">
+                        <form method="POST" id="formRepresentant" action="$modificationRepresentant" autocomplete="off">
                         <table>
                 		<thead>
                 			<tr>
@@ -654,20 +692,28 @@ end;
                 		<tbody>
                 			<tr>
                 				<td>Nom</td>
-                				<td>$rep->Nom</td>
+                				<td><input type="text" name="nomrpzlegal" id="nomrpzlegal" value="$rep->Nom" required></td>
                 			</tr>
                 			<tr>
                 				<td>Prenom</td>
-                				<td>$rep->Prenom</td>
+                				<td><input type="text" name="prenomrpzlegal" id="prenomrpzlegal" value="$rep->Prenom" required</td>
                 			</tr>
                 			<tr>
                 				<td>Qualité</td>
-                				<td>$rep->Qualite</td>
+                				<td><input type="text" name="qualite" id="qualite" value="$rep->Qualite" required></td>
                 			</tr>
                 		</tbody>
 	                   </table>
+                        <br>
+                        <input type="hidden" value="$no" name="IdProjet" id="IdProjet">
+                        <input type="hidden" value="$rep->IdRep" name="IdRep" id="IdRep">
+                        <button class="btn waves-light" type="submit" name="action">Modifier
+                            <i class="material-icons right">send</i>
+                        </button>
+                        </form>
                     </div>
                     <div id="14c4" class="" style="display: none;">
+                        <form method="POST" id="formRepresentant" action="$modificationResponsable" autocomplete="off">
                         <table>
                 		<thead>
                 			<tr>
@@ -679,44 +725,52 @@ end;
                 		<tbody>
                 			<tr>
                 				<td>Nom</td>
-                				<td>$resp->Nom</td>
+                				<td><input type="text" name="nomresplegal" id="nomresplegal" value="$resp->Nom" required></td>
                 			</tr>
                 			<tr>
                 				<td>Prenom</td>
-                				<td>$resp->Prenom</td>
+                				<td><input type="text" name="prenomresplegal" id="prenomresplegal" value="$resp->Prenom" required></td>
                 			</tr>
                 			<tr>
                 				<td>Position</td>
-                				<td>$resp->Position</td>
+                				<td><input type="text" name="position" id="position" value="$resp->Position" required></td>
                 			</tr>
                 			<tr>
                 				<td>Adresse</td>
-                				<td>$resp->Adresse</td>
+                				<td><input type="text" name="adrport" id="adrport" value="$resp->Adresse" required></td>
                 			</tr>
                 			<tr>
                 				<td>Code Postal</td>
-                				<td>$resp->CodePostal</td>
+                				<td><input type="text" name="cpostalport" id="cpostalport" value="$resp->CodePostal" required></td>
                 			</tr>
                 			<tr>
                 				<td>Ville</td>
-                				<td>$resp->Ville</td>
+                				<td><input type="text" name="villeport" id="villeport" value="$resp->Ville" required></td>
                 			</tr>
                 			<tr>
                 				<td>Tel</td>
-                				<td>$resp->Tel</td>
+                				<td><input type="text" name="tel" id="tel" value="$resp->Tel" required></td>
                 			</tr>
                             <tr>
                 				<td>Courriel</td>
-                				<td>$resp->Courriel</td>
+                				<td><input type="text" name="courriel" id="courriel" value="$resp->Courriel" required></td>
                 			</tr>
                 		</tbody>
 	                   </table>
+                        <br>
+                        <input type="hidden" value="$no" name="IdProjet" id="IdProjet">
+                        <input type="hidden" value="$resp->IdRes" name="IdResp" id="IdResp">
+                        <button class="btn waves-light" type="submit" name="action">Modifier
+                            <i class="material-icons right">send</i>
+                        </button>
+                        </form>
                     </div>
                     <div id="14c5" class="" style="display: none;">
+                        <form method="POST" id="formSuivi" action="$modificationCofinanceur" autocomplete="off">
                         <div class="hoverable card">
                         <div class="card-content">
                         <div class="col s12">
-                        <h5 >Co-fondateurs</h5>
+                        <h5 >Co-financeur(s)</h5>
                         </div>
 end;
         if (sizeof($cofin) == 0) {
@@ -730,7 +784,7 @@ end;
                 
                 		<tbody>
                 			<tr>
-                				<td>Aucun co-fondateur enrengistré</td>
+                				<td>Aucun co-financeur enrengistré</td>
                 			</tr>
                 		</tbody>
 	                   </table>
@@ -748,20 +802,28 @@ end;
                 
                 		<tbody>
 end;
+            $i=0;
             foreach ($cofin as $co) {
                 $res .= <<<end
 
                             <tr>
-                				<td>$co->Nom</td>
-                				<td>$co->Prenom</td>
+                				<td><input type="text" name="nomco$i" id="nomco$i" value="$co->Nom" required></td>
+                				<td><input type="text" name="prenomco$i" id="prenomco$i" value="$co->Prenom" required></td>
                 			</tr>
    
 end;
+                $i++;
             }
             $res .= <<<end
 
                 		</tbody>
 	                   </table>
+                        <br>
+                        <input type="hidden" value="$no" name="IdProjet" id="IdProjet">
+                        <button class="btn waves-light" type="submit" name="action">Modifier
+                            <i class="material-icons right">send</i>
+                        </button>
+                        </form>
 end;
         }
         $res .= <<<end
@@ -770,7 +832,7 @@ end;
                        </div>
 
 <!--///////////////////////////////////////////////////////////-->
-
+                        <form method="POST" id="formSuivi" action="$modificationParrain" autocomplete="off">
                         <div class="hoverable card">
                         <div class="card-content">
                         <div class="col s12">
@@ -810,8 +872,8 @@ end;
                 $res .= <<<end
 
                             <tr>
-                				<td>$p->Nom</td>
-                				<td>$p->Prenom</td>
+                				<td><input type="text" name="nomparrain" id="nomparrain" value="$p->Nom" required></td>
+                				<td><input type="text" name="prenomparrain" id="prenomparrain" value="$p->Prenom" required></td>
                 			</tr>
    
 end;
@@ -820,6 +882,12 @@ end;
 
                 		</tbody>
 	                   </table>
+                        <br>
+                        <input type="hidden" value="$no" name="IdProjet" id="IdProjet">
+                        <button class="btn waves-light" type="submit" name="action">Modifier
+                            <i class="material-icons right">send</i>
+                        </button>
+                        </form>
 end;
         }
         $res .= <<<end
@@ -885,7 +953,7 @@ end;
                         <div class="col s12">
                         <h5>$titleSuivi</h5>
                         </div>
-                        <form method="POST" id="formSuivi" action="$modificationSuivi" enctype="multipart/form-data">  
+                        <form method="POST" id="formSuivi" action="$modificationSuivi" enctype="multipart/form-data" autocomplete="off">  
                         <table>
                 		<thead>
                 			<tr>
@@ -1167,30 +1235,34 @@ end;
 
             <ul class="collapsible">
 end;
-        $i=0;
-        foreach($users as $u){
+        $i = 0;
+        foreach ($users as $u) {
             $icon = $u->droit;
             $mail = $u->login;
             
-            if($icon == "2"){
-                if($u->login != $user->login)$icon = "people";
-                else $icon = "person_pin";
+            if ($icon == "2") {
+                if ($u->login != $user->login)
+                    $icon = "people";
+                else
+                    $icon = "person_pin";
                 $selection = '<option value="2" selected>Super Administrateur</option>';
             }
-            if($icon == "1"){
-                if($u->login != $user->login)$icon = "person";
-                else $icon = "person_pin";
+            if ($icon == "1") {
+                if ($u->login != $user->login)
+                    $icon = "person";
+                else
+                    $icon = "person_pin";
                 $selection = '<option value="1" selected>Administrateur</option>
                           <option value="0">Normal</option>';
             }
-            if($icon == "0"){
+            if ($icon == "0") {
                 $icon = "perm_identity";
                 $selection = '<option value="1">Administrateur</option>
                           <option value="0" selected>Normal</option>';
             }
             
-            $mdpModif1 = 'mdpModif'.$i."w1";
-            $mdpModif2 = 'mdpModif'.$i."w2";
+            $mdpModif1 = 'mdpModif' . $i . "w1";
+            $mdpModif2 = 'mdpModif' . $i . "w2";
             
             $res .= <<<end
 
@@ -1228,9 +1300,11 @@ end;
                         <input type="hidden" name="idUser" id="idUser$i" value="$u->login">
 
 end;
-            if($u->login != $user->login && $u->droit != "2") $res .= '                        <a class="btn red modal-trigger" href="#modalw'.$i.'"><i class="material-icons left">delete</i>Supprimer</a>
+            if ($u->login != $user->login && $u->droit != "2")
+                $res .= '                        <a class="btn red modal-trigger" href="#modalw' . $i . '"><i class="material-icons left">delete</i>Supprimer</a>
 ';
-            if($user->droit == "2" || ($u->droit != "2" && $u->login != $admin->login)) $res .= '                           <button class="btn" type="submit" name="action">Modifier
+            if ($user->droit == "2" || ($u->droit != "2" && $u->login != $admin->login))
+                $res .= '                           <button class="btn" type="submit" name="action">Modifier
                             <i class="material-icons right">send</i>
                           </button>
 ';
@@ -1240,7 +1314,7 @@ end;
                   </div>
                 </li>
 end;
-            if($u->login != $user->login) {
+            if ($u->login != $user->login) {
                 $res .= <<<end
 
                 <!-- Modal Structure -->
@@ -1261,27 +1335,29 @@ end;
 
 end;
             }
-        $res .= <<<end
+            $res .= <<<end
 
 <script>
 $('#formModifCompte$i').submit(function() {
-    let id1 = $('#mdpInscr').val(); //if #id1 is input element change from .text() to .val() 
-    let id2 = $('#mdpInscr2').val(); //if #id2 is input element change from .text() to .val()
+    if($("#cbmdp$i").is(":checked")){
+    let id1 = $('#$mdpModif1').val(); //if #id1 is input element change from .text() to .val() 
+    let id2 = $('#$mdpModif2').val(); //if #id2 is input element change from .text() to .val()
     if (!(/\d/.test(id1)) || !(/[a-z]/.test(id1)) || !(/[A-Z]/.test(id1))) {
 end;
-        $msg = "Le mot de passe doit contenir au moins une lettre majuscule et minuscule ainsi qu'un chiffre.";
-        $res .= Modal::enclencher($msg);
-        $res .= <<<end
+            $msg = "Le mot de passe doit contenir au moins une lettre majuscule et minuscule ainsi qu'un chiffre.";
+            $res .= Modal::enclencher($msg);
+            $res .= <<<end
         return false;
     }
 
     if (id1 != id2) {
 end;
-        $msg = "Les deux mot de passe ne correspondent pas. Veuillez réessayer.";
-        $res .= Modal::enclencher($msg);
-        $res .= <<<end
+            $msg = "Les deux mot de passe ne correspondent pas. Veuillez réessayer.";
+            $res .= Modal::enclencher($msg);
+            $res .= <<<end
         return false;
-    }    
+    }
+}    
     return true;
 });
 </script>
@@ -1304,21 +1380,21 @@ $("#cbmdp$i").click(function() {
 });
 </script>
 end;
-            $i++;
+            $i ++;
         }
-                $res .= <<<end
+        $res .= <<<end
               </ul>
 end;
-                $res .= Modal::genereModal() . "
+        $res .= Modal::genereModal() . "
 <script>
 $(document).ready(function() {";
-                
-                if (isset($_SESSION['message'])) {
-                    $msg = $_SESSION['message'];
-                    $res .= Modal::enclencher($msg);
-                    $_SESSION['message'] = null;
-                }
-                $res .= <<<end
+        
+        if (isset($_SESSION['message'])) {
+            $msg = $_SESSION['message'];
+            $res .= Modal::enclencher($msg);
+            $_SESSION['message'] = null;
+        }
+        $res .= <<<end
 });
 </script>
 
@@ -1413,27 +1489,27 @@ end;
 });
 </script>
 end;
-                $res .= Modal::genereModal() . "
+        $res .= Modal::genereModal() . "
 <script>
 $(document).ready(function() {";
-                
-                if (isset($_SESSION['message'])) {
-                    $msg = $_SESSION['message'];
-                    $res .= Modal::enclencher($msg);
-                    $_SESSION['message'] = null;
-                }
-                $res .= <<<end
+        
+        if (isset($_SESSION['message'])) {
+            $msg = $_SESSION['message'];
+            $res .= Modal::enclencher($msg);
+            $_SESSION['message'] = null;
+        }
+        $res .= <<<end
 });
 </script>
 end;
         return $res;
-        
     }
-    
-    private function creationCompte(){
+
+    private function creationCompte()
+    {
         $app = \Slim\Slim::getInstance();
         
-        $creation = $app->urlFor("postCreationCompte"); 
+        $creation = $app->urlFor("postCreationCompte");
         $retour = $app->urlFor("gestionCompte");
         
         $res = <<<end
@@ -1514,6 +1590,21 @@ end;
 </script>
 end;
         return $res;
+    }
+    
+    function generateSelectOuiNon($name,$booleen=0){
+        $select = '<div class="input-field col s12">
+                        <select name="'.$name.'" id="'.$name.'">
+                          ';
+        if($booleen == 0) $select .= '<option value="0" selected>Non</option>
+                          <option value="1">Oui</option>';
+        else $select .= '<option value="0">Non</option>
+                          <option value="1" selected>Oui</option>
+';
+                          
+        $select .= '                        </select>
+                      </div>';
+        return $select;
     }
 
     /**

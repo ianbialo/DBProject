@@ -10,6 +10,9 @@ use dbproject\conf\Authentication;
 use dbproject\conf\Variable;
 use dbproject\conf\Uploads;
 use dbproject\modele\Suivi;
+use dbproject\modele\Representant;
+use dbproject\modele\Responsable;
+use dbproject\modele\Implique;
 
 class ControleurBackOffice
 {
@@ -238,10 +241,114 @@ class ControleurBackOffice
      */
     public function postSuppressionFomulaire()
     {
-        // echo $_POST['IdProjet'];
         $app = \Slim\Slim::getInstance();
         Formulaire::supprimerFormulaire($_POST['IdProjet']);
         $app->redirect($app->urlFor("listeFormulaires"));
+    }
+
+    public function postModificationProjet()
+    {
+        $app = \Slim\Slim::getInstance();
+        $proj = Projet::getById($_POST['IdProjet']);
+        $proj->Expose = filter_var($_POST['expose'], FILTER_SANITIZE_STRING);
+        $proj->DateDeb = Formulaire::reconstruireDate($_POST['datedeb']);
+        $proj->Duree = filter_var($_POST['duree'], FILTER_SANITIZE_NUMBER_INT);
+        $proj->Lieu = filter_var($_POST['lieu'], FILTER_SANITIZE_STRING);
+        $proj->Aide = filter_var($_POST['aide'], FILTER_SANITIZE_NUMBER_INT);
+        $proj->Budget = filter_var($_POST['budget'], FILTER_SANITIZE_NUMBER_INT);
+        $proj->Fin = filter_var($_POST['findb'], FILTER_SANITIZE_STRING);
+        $proj->InteretGeneral = filter_var($_POST['group0'], FILTER_SANITIZE_NUMBER_INT);
+        $proj->Domaine = filter_var($_POST['domaine'], FILTER_SANITIZE_STRING);
+        $proj->Mecenat = filter_var($_POST['group2'], FILTER_SANITIZE_NUMBER_INT);
+        $proj->Fiscal = filter_var($_POST['group3'], FILTER_SANITIZE_NUMBER_INT);
+        if (strlen($_POST['valorev']) != 0)
+            $proj->Valorisation = filter_var($_POST['valorev'], FILTER_SANITIZE_STRING);
+        else
+            $proj->Valorisation = null;
+        $proj->save();
+        $_SESSION['message'] = "Modification de projet effectué avec succès !";
+        $app->redirect($app->urlFor("projet", [
+            'no' => $_POST['IdProjet']
+        ]));
+    }
+
+    public function postModificationStructure()
+    {
+        $app = \Slim\Slim::getInstance();
+        $struct = Structure::getById($_POST['IdStruct']);
+        $struct->Nom = filter_var($_POST['nomstruct'], FILTER_SANITIZE_STRING);
+        $struct->Adresse = filter_var($_POST['adrstruct'], FILTER_SANITIZE_STRING);
+        $struct->CodePostal = filter_var($_POST['cpostalstruct'], FILTER_SANITIZE_STRING);
+        $struct->Ville = filter_var($_POST['villestruct'], FILTER_SANITIZE_STRING);
+        $struct->Raison = filter_var($_POST['raisonstruct'], FILTER_SANITIZE_STRING);
+        $struct->Type = filter_var($_POST['vousetes'], FILTER_SANITIZE_STRING);
+        $struct->Site = filter_var($_POST['site'], FILTER_SANITIZE_URL);
+        $struct->save();
+        $_SESSION['message'] = "Modification de structure effectué avec succès !";
+        $app->redirect($app->urlFor("projet", [
+            'no' => $_POST['IdProjet']
+        ]));
+    }
+    
+    public function postModificationCoFinanceur(){
+        $app = \Slim\Slim::getInstance();
+        $cofin = Implique::getCoFinanceur($_POST['IdProjet']);
+        $i = 0;
+        foreach($cofin as $co){
+            $co->Nom = $_POST['nomco'.$i];
+            $co->Prenom = $_POST['prenomco'.$i];
+            $co->save();
+            $i++;
+        }
+        $_SESSION['message'] = "Modification de co-financeur(s) effectué avec succès !";
+        $app->redirect($app->urlFor("projet", [
+            'no' => $_POST['IdProjet']
+        ]));
+    }
+    
+    public function postModificationParrain(){
+        $app = \Slim\Slim::getInstance();
+        $parrain = Implique::getParrain($_POST['IdProjet']);
+        foreach($parrain as $p){
+            $p->Nom = $_POST['nomparrain'];
+            $p->Prenom = $_POST['prenomparrain'];
+            $p->save();
+        }
+        $_SESSION['message'] = "Modification de parrain effectué avec succès !";
+        $app->redirect($app->urlFor("projet", [
+            'no' => $_POST['IdProjet']
+        ]));
+    }
+    
+    public function postModificationRepresentant(){
+        $app = \Slim\Slim::getInstance();
+        $rep = Representant::getById($_POST['IdRep']);
+        $rep->Nom = filter_var($_POST['nomrpzlegal'], FILTER_SANITIZE_STRING);
+        $rep->Prenom = filter_var($_POST['prenomrpzlegal'], FILTER_SANITIZE_STRING);
+        $rep->Qualite = filter_var($_POST['qualite'], FILTER_SANITIZE_STRING);
+        $rep->save();
+        $_SESSION['message'] = "Modification de représentant effectué avec succès !";
+        $app->redirect($app->urlFor("projet", [
+            'no' => $_POST['IdProjet']
+        ]));
+    }
+    
+    public function postModificationResponsable(){
+        $app = \Slim\Slim::getInstance();
+        $res = Responsable::getById($_POST["IdResp"]);
+        $res->Nom = filter_var($_POST['nomresplegal'], FILTER_SANITIZE_STRING);
+        $res->Prenom = filter_var($_POST['prenomresplegal'], FILTER_SANITIZE_STRING);
+        $res->Position = filter_var($_POST['position'], FILTER_SANITIZE_STRING);
+        $res->Adresse = filter_var($_POST['adrport'], FILTER_SANITIZE_STRING);
+        $res->CodePostal = filter_var($_POST['cpostalport'], FILTER_SANITIZE_STRING);
+        $res->Ville = filter_var($_POST['villeport'], FILTER_SANITIZE_STRING);
+        $res->Tel = filter_var($_POST['tel'], FILTER_SANITIZE_STRING);
+        $res->courriel = filter_var($_POST['courriel'], FILTER_SANITIZE_EMAIL);
+        $res->save();
+        $_SESSION['message'] = "Modification de responsable effectué avec succès !";
+        $app->redirect($app->urlFor("projet", [
+            'no' => $_POST['IdProjet']
+        ]));
     }
 
     /**
