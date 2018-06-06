@@ -74,10 +74,14 @@ class ControleurBackOffice
     {
         $app = \Slim\Slim::getInstance();
         $vue = new VueBackOffice();
-        // Si la personne est authentifiée
-        if (isset($_COOKIE['user']))
-            print $vue->render(VueBackOffice::AFF_CREATION);
-        else
+        // Si la personne est authentifiée et si l'utilisateur est administrateur
+        if (isset($_COOKIE['user'])) {
+            $user = User::getById($app->getEncryptedCookie("user"));
+            if ($user->droit != "0")
+                print $vue->render(VueBackOffice::AFF_CREATION);
+            else
+                $app->notFound();
+        } else
             $app->notFound();
     }
 
@@ -289,27 +293,29 @@ class ControleurBackOffice
             'no' => $_POST['IdProjet']
         ]));
     }
-    
-    public function postModificationCoFinanceur(){
+
+    public function postModificationCoFinanceur()
+    {
         $app = \Slim\Slim::getInstance();
         $cofin = Implique::getCoFinanceur($_POST['IdProjet']);
         $i = 0;
-        foreach($cofin as $co){
-            $co->Nom = $_POST['nomco'.$i];
-            $co->Prenom = $_POST['prenomco'.$i];
+        foreach ($cofin as $co) {
+            $co->Nom = $_POST['nomco' . $i];
+            $co->Prenom = $_POST['prenomco' . $i];
             $co->save();
-            $i++;
+            $i ++;
         }
         $_SESSION['message'] = "Modification de co-financeur(s) effectué avec succès !";
         $app->redirect($app->urlFor("projet", [
             'no' => $_POST['IdProjet']
         ]));
     }
-    
-    public function postModificationParrain(){
+
+    public function postModificationParrain()
+    {
         $app = \Slim\Slim::getInstance();
         $parrain = Implique::getParrain($_POST['IdProjet']);
-        foreach($parrain as $p){
+        foreach ($parrain as $p) {
             $p->Nom = $_POST['nomparrain'];
             $p->Prenom = $_POST['prenomparrain'];
             $p->save();
@@ -319,8 +325,9 @@ class ControleurBackOffice
             'no' => $_POST['IdProjet']
         ]));
     }
-    
-    public function postModificationRepresentant(){
+
+    public function postModificationRepresentant()
+    {
         $app = \Slim\Slim::getInstance();
         $rep = Representant::getById($_POST['IdRep']);
         $rep->Nom = filter_var($_POST['nomrpzlegal'], FILTER_SANITIZE_STRING);
@@ -332,8 +339,9 @@ class ControleurBackOffice
             'no' => $_POST['IdProjet']
         ]));
     }
-    
-    public function postModificationResponsable(){
+
+    public function postModificationResponsable()
+    {
         $app = \Slim\Slim::getInstance();
         $res = Responsable::getById($_POST["IdResp"]);
         $res->Nom = filter_var($_POST['nomresplegal'], FILTER_SANITIZE_STRING);

@@ -177,7 +177,8 @@ end;
         <div class="col l3 s12">
           <h5 class="white-text">Contact</h5>
           <ul>
-            <li><a class="white-text" href="#!">GEORGE Pierre</a></li>
+            <li><a class="white-text" href="mailto:Pierre.George@Demathieu-Bard.fr">GEORGE Pierre</a></li>
+            <li><a class="white-text" href="mailto:Francoise.Philibert@Demathieu-Bard.fr">PHILIBERT Françoise</a></li>
             <li><a class="white-text" href="mailto:ian.bialo@demathieu-bard.fr">BIALO Ian</a></li>
           </ul>
         </div>

@@ -75,7 +75,7 @@ class VueBackOffice
      */
     public function render($selecteur, $tab = null)
     {
-        //On vérifie que l'utilisateur n'a pas été supprimé depuis sa connexion au BackOffice
+        // On vérifie que l'utilisateur n'a pas été supprimé depuis sa connexion au BackOffice
         $app = \Slim\Slim::getInstance();
         $mail = $app->getEncryptedCookie("user");
         $user = User::getById($mail);
@@ -498,29 +498,29 @@ end;
             $dateEnvoiCheque = "placeholder='" . Formulaire::transformerDate(Date("Y-m-d")) . "'";
             $titleDateEnvoiCheque = "<span class='red-text'>Date de l'envoi du chèque - Valeur inchangée</span>";
         }
-        if ($suivi->Chrono != null)
+        if ($suivi->Chrono != "0")
             $titleSuivi = "Suivi - <strong>n° chrono : $suivi->Chrono</strong>";
         else
             $titleSuivi = "Suivi";
         
-        
         // Transformation des booléens dans la partie du projet
-        //$interetG = Formulaire::transformerBooleen($proj->InteretGeneral);
-        $interetG = self::generateSelectOuiNon("group0",$proj->InteretGeneral); 
-        //$mecenat = Formulaire::transformerBooleen($proj->Mecenat);
-        $mecenat = self::generateSelectOuiNon("group2",$proj->Mecenat);
-        //$fiscal = Formulaire::transformerBooleen($proj->Fiscal);
-        $fiscal = self::generateSelectOuiNon("group3",$proj->Fiscal);
+        // $interetG = Formulaire::transformerBooleen($proj->InteretGeneral);
+        $interetG = self::generateSelectOuiNon("group0", $proj->InteretGeneral);
+        // $mecenat = Formulaire::transformerBooleen($proj->Mecenat);
+        $mecenat = self::generateSelectOuiNon("group2", $proj->Mecenat);
+        // $fiscal = Formulaire::transformerBooleen($proj->Fiscal);
+        $fiscal = self::generateSelectOuiNon("group3", $proj->Fiscal);
         
         if ($suivi->Chrono != 0)
             $checked = 'checked="checked"';
         else
             $checked = '';
         
-        if (isset($proj->Valorisation))
+        if (isset($proj->Valorisation)) {
             $valor = $proj->Valorisation;
-        else
-            $valor = "<label>Aucune valorisation</label>";
+            $valor = '<input type="text" name="valorev" id="valorev" value="' . $valor . '">';
+        } else
+            $valor = '<input type="text" name="valorev" id="valorev" placeholder="Aucune valorisation">';
         
         if (isset($struct->Site))
             $site = $struct->Site;
@@ -619,7 +619,7 @@ end;
                 			</tr>
                             <tr>
                 				<td>Valorisation éventuelle</td>
-                				<td><input type="text" name="valorev" id="valorev" value="$valor" required></td>
+                				<td>$valor</td>
                 			</tr>
                 		</tbody>
 	                   </table>
@@ -788,6 +788,7 @@ end;
                 			</tr>
                 		</tbody>
 	                   </table>
+                       </form> 
 end;
         } else {
             $res .= <<<end
@@ -802,7 +803,7 @@ end;
                 
                 		<tbody>
 end;
-            $i=0;
+            $i = 0;
             foreach ($cofin as $co) {
                 $res .= <<<end
 
@@ -812,7 +813,7 @@ end;
                 			</tr>
    
 end;
-                $i++;
+                $i ++;
             }
             $res .= <<<end
 
@@ -854,6 +855,7 @@ end;
                 			</tr>
                 		</tbody>
 	                   </table>
+                       </form>
 end;
         } else {
             $res .= <<<end
@@ -1591,17 +1593,20 @@ end;
 end;
         return $res;
     }
-    
-    function generateSelectOuiNon($name,$booleen=0){
+
+    function generateSelectOuiNon($name, $booleen = 0)
+    {
         $select = '<div class="input-field col s12">
-                        <select name="'.$name.'" id="'.$name.'">
+                        <select name="' . $name . '" id="' . $name . '">
                           ';
-        if($booleen == 0) $select .= '<option value="0" selected>Non</option>
+        if ($booleen == 0)
+            $select .= '<option value="0" selected>Non</option>
                           <option value="1">Oui</option>';
-        else $select .= '<option value="0">Non</option>
+        else
+            $select .= '<option value="0">Non</option>
                           <option value="1" selected>Oui</option>
 ';
-                          
+        
         $select .= '                        </select>
                       </div>';
         return $select;
