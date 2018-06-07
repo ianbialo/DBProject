@@ -1,6 +1,11 @@
 <?php
 namespace dbproject\conf;
 
+/**
+ * Classe définissant les variables statiques de l'application
+ * @author IBIALO
+ *
+ */
 class Variable
 {
 
@@ -9,12 +14,15 @@ class Variable
     // ////////////////////////////////////////////////////////////////////////////////////////////////////
     
     /**
-     * @var string Chemin où se situe le projet sur le disque
+     * @var string Chemin où se situe le projet sur le disque.
+     * Il doit être modifié pour correspondre au chemin du projet dans la machine où il se situe.
+     * Le nom peut être changé seulement si l'application n'a pas été deployé.
      */
     public static $path = "C:\\xampp\htdocs\DBProject\DBProject";
 
     /**
-     * @var string Dossier dans le projet (à partir de la racine) où se situent les dossiers de fichiers
+     * @var string Dossier dans le projet (à partir de la racine) où se situent les dossiers de fichiers.
+     * Le nom peut être changé seulement si l'application n'a pas été deployé.
      */
     public static $dossierFichier = "uploads";
 
@@ -49,8 +57,4 @@ class Variable
         "ian.bialo9@etu.univ-lorraine.fr" => "Destinaire deux"
     );
 
-    /**
-     * @var string Adresse de l'Active Directory
-     */
-    public static $AD = "ldap://srvadmont1.ad.demathieu-bard.fr";
 }

@@ -14,6 +14,11 @@ use dbproject\modele\Representant;
 use dbproject\modele\Responsable;
 use dbproject\modele\Implique;
 
+/**
+ * Classe définissant les méthodes du controleur du BackOffice
+ * @author IBIALO
+ *
+ */
 class ControleurBackOffice
 {
 
@@ -59,6 +64,9 @@ class ControleurBackOffice
             $app->notFound();
     }
 
+    /**
+     * Méthode de gestion de compte
+     */
     public function gestionCompte()
     {
         $app = \Slim\Slim::getInstance();
@@ -70,6 +78,9 @@ class ControleurBackOffice
             $app->notFound();
     }
 
+    /**
+     * Méthode de création de compte
+     */
     public function creationCompte()
     {
         $app = \Slim\Slim::getInstance();
@@ -181,6 +192,9 @@ class ControleurBackOffice
         $app->redirect($app->urlFor("listeFormulaires"));
     }
 
+    /**
+     * Méthode de création de compte
+     */
     public function postCreationCompte()
     {
         $app = \Slim\Slim::getInstance();
@@ -192,6 +206,9 @@ class ControleurBackOffice
         $app->redirect($app->urlFor("gestionCompte"));
     }
 
+    /**
+     * Méthode de modification de compte
+     */
     public function postModificationCompte()
     {
         $app = \Slim\Slim::getInstance();
@@ -209,6 +226,9 @@ class ControleurBackOffice
         $app->redirect($app->urlFor("gestionCompte"));
     }
 
+    /**
+     * Méthode de suppression de compte
+     */
     public function postSuppressionCompte()
     {
         $app = \Slim\Slim::getInstance();
@@ -250,6 +270,9 @@ class ControleurBackOffice
         $app->redirect($app->urlFor("listeFormulaires"));
     }
 
+    /**
+     * Méthode de modifiaction de projet
+     */
     public function postModificationProjet()
     {
         $app = \Slim\Slim::getInstance();
@@ -276,6 +299,9 @@ class ControleurBackOffice
         ]));
     }
 
+    /**
+     * Méthode de modification de structure
+     */
     public function postModificationStructure()
     {
         $app = \Slim\Slim::getInstance();
@@ -294,6 +320,9 @@ class ControleurBackOffice
         ]));
     }
 
+    /**
+     * Méthode de modification de co-financeurs
+     */
     public function postModificationCoFinanceur()
     {
         $app = \Slim\Slim::getInstance();
@@ -311,6 +340,9 @@ class ControleurBackOffice
         ]));
     }
 
+    /**
+     * Méthode de modification de parrain
+     */
     public function postModificationParrain()
     {
         $app = \Slim\Slim::getInstance();
@@ -326,6 +358,9 @@ class ControleurBackOffice
         ]));
     }
 
+    /**
+     * Méthode de modification de représentant
+     */
     public function postModificationRepresentant()
     {
         $app = \Slim\Slim::getInstance();
@@ -340,6 +375,9 @@ class ControleurBackOffice
         ]));
     }
 
+    /**
+     * Méthode de modification de responsalbe
+     */
     public function postModificationResponsable()
     {
         $app = \Slim\Slim::getInstance();

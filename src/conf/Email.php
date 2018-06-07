@@ -6,6 +6,11 @@ require_once "vendor/phpmailer/src/SMTP.php";
 require_once "vendor/phpmailer/src/Exception.php";
 use PHPMailer\PHPMailer\PHPMailer;
 
+/**
+ * Classe permettant la gestion d'envoi de mail dans l'application
+ * @author IBIALO
+ *
+ */
 class Email
 {
 

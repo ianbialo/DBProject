@@ -8,6 +8,11 @@ use dbproject\modele\Projet;
 use dbproject\modele\Implique;
 use dbproject\modele\Suivi;
 
+/**
+ * Classe permettant le gestion des formulaires
+ * @author IBIALO
+ *
+ */
 class Formulaire
 {
 
@@ -178,7 +183,10 @@ class Formulaire
         return $suivi->save();
     }
 
-    //Méthode de suppression complète du formulaire
+    /**
+     * Méthode de suppression complète du formulaire
+     * @param int $id id du formulaire
+     */
     public static function supprimerFormulaire($id)
     {
         
@@ -202,7 +210,9 @@ class Formulaire
         Formulaire::majChronoSuivi();
     }
 
-    //Méthode de mise à jour des numéros chrono
+    /**
+     * Méthode de mise à jour des numéros chrono
+     */
     public static function majChronoSuivi()
     {
         $listeSuivi = Suivi::getAllDate();
@@ -223,7 +233,11 @@ class Formulaire
         }
     }
 
-    //Méthode de transformation de date de type "année-mois-jour" en "jour mois année" (le mois n'étant plus un entier).
+    /**
+     * Méthode de transformation de date de type "année-mois-jour" en "jour mois année" (le mois n'étant plus un entier)
+     * @param string $date date à transformer
+     * @return string date transformée
+     */
     public static function transformerDate($date)
     {
         $date = explode("-", $date);
@@ -247,7 +261,11 @@ class Formulaire
         return $jour . " " . $mois . " " . $annee;
     }
 
-    //Méthode de transformation de date de type "jour mois année" (le mois n'étant plus un entier) en "année-mois-jour".
+    /**
+     * Méthode de transformation de date de type "jour mois année" (le mois n'étant plus un entier) en "année-mois-jour".
+     * @param string $date à transformer
+     * @return string date transformée
+     */
     public static function reconstruireDate($date)
     {
         $date = explode(" ", $date);
@@ -271,7 +289,11 @@ class Formulaire
         return $annee . "-" . $mois . "-" . $jour;
     }
 
-    //Méthode de transformation d'un booléen (entier) en chaîne de caractère
+    /**
+     * Méthode de transformation d'un booléen (entier) en chaîne de caractère
+     * @param int $int entier à transformer
+     * @return string|NULL entier transformé
+     */
     public static function transformerBooleen($int)
     {
         if ($int == 0)

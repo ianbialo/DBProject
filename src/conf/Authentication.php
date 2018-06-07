@@ -3,13 +3,25 @@ namespace dbproject\conf;
 
 use dbproject\modele\User;
 
+/**
+ * Classe permettant à un utilisateur de se connecter au BackOffice
+ * @author IBIALO
+ *
+ */
 class Authentication
 {
-    
+    /**
+     * Méthode de création d'un nouveau compte utilisateur
+     * @param string $id login du nouvel utilisateur
+     * @param string $mdp mot de passe du nouvel utilisateur
+     * @param number $droit droit accordé au nouvel utilisateur
+     */
     public static function createUser($id, $mdp, $droit=0)
     {
         $app = \Slim\Slim::getInstance();
         $userTest = User::getById($id);
+        
+        //Si l'utilisateur n'existe pas
         if ($userTest == null) {
             $mdp = password_hash($mdp, PASSWORD_DEFAULT, Array(
                 'cost' => 12
@@ -25,50 +37,20 @@ class Authentication
             $app->redirect($app->urlFor("creationCompte"));
         }
     }
-
+    
     /**
-     * Méthode d'authentification LDAP à l'Active Directory de l'entreprise
-     * @param int $id id de l'utilisateur (ici son adresse mail)
+     * Méthode d'authentification d'un utilisateur au BackOffice
+     * @param string $id login de l'utilisateur
      * @param string $password mot de passe de l'utilisateur
      */
-    /**public static function authenticate($id, $password)
-    {
-        $app = \Slim\Slim::getInstance();
-        
-        // Mémorisation des informations dans de nouvelles variables
-        $ldap_dn = $id;
-        $ldap_password = $password;
-        
-        // Connexion au serveur LDAP
-        $ldap_con = ldap_connect("ldap://srvadmont1.ad.demathieu-bard.fr", 389) or die("Impossible de se connecter au serveur LDAP.");
-        ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
-        
-        // Si la vérification de l'utilisateur est correcte
-        if (@ldap_bind($ldap_con, $ldap_dn, $ldap_password)) {
-            
-            //Création du cookie de connexion
-            $app->setEncryptedCookie("user", $id, time() + 60 * 60 * 24 * 30, "/");
-            unset($_COOKIE['user']);
-            setcookie('user', '', time() - 60 * 60 * 24, '/');
-            
-            //Deconnexion du serveur
-            ldap_unbind($ldap_con);
-            
-            //Redirection vers la page des formulaires
-            $app->redirect($app->urlFor("listeFormulaires"));
-            
-        } else {
-            
-            $_SESSION['message'] = "Les renseignements fournis ne sont pas corrects. Veuillez réessayer.";
-            $app->redirect($app->urlFor("connexionAdmin"));
-        }
-    }*/
-    
     public static function authenticate($id, $password){
         $app = \Slim\Slim::getInstance();
         $id = filter_var($id, FILTER_SANITIZE_EMAIL);
         $user = User::getById($id);
+        
+        //Si l'utilisateur existe
         if ($user != null) {
+            //Si le mot de passe est le bon
             if (password_verify($password, $user->mdp)) {
                 $app->setEncryptedCookie("user", $id, time() + 60 * 60 * 24 * 30, "/");
                 unset($_COOKIE['user']);
@@ -88,12 +70,17 @@ class Authentication
      */
     public static function disconnect()
     {
+        //Si le cookie existe
         if (isset($_COOKIE['user'])) {
             unset($_COOKIE['user']);
             setcookie('user', '', time() - 60 * 60 * 24, '/'); // valeur vide et temps dans le passé
         }
     }
     
+    /**
+     * Méthode de suppression d'utilisateur de la base de données
+     * @param string $id
+     */
     public static function delete($id){
         $user = User::getById($id);
         $user->delete();

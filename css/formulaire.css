@@ -1,53 +1,6 @@
-/*textarea {
-  width: 300px;
-  height: 150px;
-}
-
-.panel {
-	border: 1px solid #e2dcdc;
-	text-align: center;
-	font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
-	margin-left: 10%;
-	margin-right: 10%;
-}
-
-.formulaire div.info {
-	margin-top: 10px;
-}
-
-.grandeTaille{
-	width: 350px;
-}
-
-
-.info > input {
-	display: block;
-}
-
-.info > label {
-	display: block;
-}
-
-#in {
-	display: inline;
-}
-
-#submitButton {
-	width: 220px;
-	height: 2em;
-    background: #e6e6e6;
-    border: 1px solid #999;
-    font-family: inherit;
-}*/
+/*La responsivité est prise en compte*/
+/*Si l'application est utilisée sur ordinateur/tablette*/
 @media ( min-width :35em) {
-	html {
-		/*line-height: 1.5;*/
-		
-	}
-	body {
-		/*font-size: 87.5%;*/
-		
-	}
 	.content {
 		text-align: left;
 		font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
@@ -75,25 +28,6 @@
 	}
 	.title {
 		border-bottom: 1px solid #EA670F;
-		/*background: url(https://www.demathieu-bard.fr/sites/all/themes/adaptivetheme/at_demathieubard/images/puce-db.png) no-repeat 0 4px;*/
-	}
-	h1 {
-		color: #022D60;
-		padding-left: 0.5em;
-		font-size: 1em;
-		font-weight: normal;
-	}
-	h3 {
-		color: #022D60;
-		padding-left: 0.5em;
-		font-size: 0.9em;
-		font-weight: normal;
-	}
-	label {
-		color: #022D60;
-		font-size: 0.9em;
-		font-weight: normal;
-		padding-bottom: 0.3em;
 	}
 	span.groupTitle {
 		color: #022D60;
@@ -118,19 +52,6 @@
 	#in {
 		display: inline;
 	}
-	div input {
-		/*padding-left: 1.5em;*/
-		
-	}
-	input[type=button], input[type=submit] {
-		height: 2em;
-		background: #e6e6e6;
-		border: 1px solid #999;
-		font-family: inherit;
-	}
-	input[type=text], input[type=number], input[type=url], input[type=date], input[type=email], textarea {
-		border:solid 1px LightSlateGrey;
-	}
 	#submitButton {
 		width: 220px;
 		text-align: center;
@@ -138,58 +59,11 @@
 	.footer {
 		text-align: right;
 	}
-	
-	a#retour{
+	a#retour {
 		margin-left: 10px;
 	}
 
 	/*Element*/
-	textarea {
-		width: 300px;
-		height: 150px;
-	}
-	ul {
-		list-style-type: none;
-		white-space: nowrap;
-	}
-	li {
-		display: inline;
-	}
-	a {
-		color: #999;
-		font-size: 0.85em;
-		text-decoration: none;
-	}
-}
-
-@media ( max-width :35em) {
-	header {
-		/* background-color: #0000a0; */
-		
-	}
-	
-	.content {
-		font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
-			"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-	}
-	
-	.picture img {
-		margin: 0.5%;
-		width: 99%;
-		height: 100%;
-	}
-	.panel {
-		border: 1px solid #e2dcdc;
-		text-align: center;
-		font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
-			"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-		padding-bottom: 10px;
-	}
-	.title {
-		border-bottom: 1px solid #EA670F;
-		/*background: url(https://www.demathieu-bard.fr/sites/all/themes/adaptivetheme/at_demathieubard/images/puce-db.png) no-repeat 0 4px;*/
-	}
-	
 	h1 {
 		color: #022D60;
 		padding-left: 0.5em;
@@ -208,7 +82,56 @@
 		font-weight: normal;
 		padding-bottom: 0.3em;
 	}
-	
+	input[type=button], input[type=submit] {
+		height: 2em;
+		background: #e6e6e6;
+		border: 1px solid #999;
+		font-family: inherit;
+	}
+	input[type=text], input[type=number], input[type=url], input[type=date],
+		input[type=email], textarea {
+		border: solid 1px LightSlateGrey;
+	}
+	textarea {
+		width: 300px;
+		height: 150px;
+	}
+	ul {
+		list-style-type: none;
+		white-space: nowrap;
+	}
+	li {
+		display: inline;
+	}
+	a {
+		color: #999;
+		font-size: 0.85em;
+		text-decoration: none;
+	}
+}
+
+/*Si l'application est utilisée sur smartphone*/
+@media ( max-width :35em) {
+	.content {
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+			"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	}
+	.picture img {
+		margin: 0.5%;
+		width: 99%;
+		height: 100%;
+	}
+	.panel {
+		border: 1px solid #e2dcdc;
+		text-align: center;
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+			"Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+		padding-bottom: 10px;
+	}
+	.title {
+		border-bottom: 1px solid #EA670F;
+		/*background: url(https://www.demathieu-bard.fr/sites/all/themes/adaptivetheme/at_demathieubard/images/puce-db.png) no-repeat 0 4px;*/
+	}
 	.formulaire div.info {
 		margin-top: 10px;
 	}
@@ -224,12 +147,10 @@
 	#in {
 		display: inline;
 	}
-	
 	span.groupTitle {
 		color: #022D60;
 		font-size: 16px;
 	}
-	
 	.formulaire div.info {
 		margin-top: 10px;
 		margin-bottom: 10px;
@@ -237,18 +158,6 @@
 	.grandeTaille {
 		width: 300px;
 	}
-	
-	input[type=button], input[type=submit] {
-		height: 2em;
-		background: #e6e6e6;
-		border: 1px solid #999;
-		font-family: inherit;
-	}
-	
-	input[type=text], input[type=number], input[type=url], input[type=date], input[type=email], textarea {
-		border:solid 1px LightSlateGrey;
-	}
-	
 	#submitButton {
 		width: 220px;
 		height: 2em;
@@ -256,12 +165,39 @@
 		border: 1px solid #999;
 		font-family: inherit;
 	}
-	
 	.footer {
 		text-align: right;
 	}
-	
-	
+
+	/*Element*/
+	h1 {
+		color: #022D60;
+		padding-left: 0.5em;
+		font-size: 1em;
+		font-weight: normal;
+	}
+	h3 {
+		color: #022D60;
+		padding-left: 0.5em;
+		font-size: 0.9em;
+		font-weight: normal;
+	}
+	input[type=button], input[type=submit] {
+		height: 2em;
+		background: #e6e6e6;
+		border: 1px solid #999;
+		font-family: inherit;
+	}
+	input[type=text], input[type=number], input[type=url], input[type=date],
+		input[type=email], textarea {
+		border: solid 1px LightSlateGrey;
+	}
+	label {
+		color: #022D60;
+		font-size: 0.9em;
+		font-weight: normal;
+		padding-bottom: 0.3em;
+	}
 	textarea {
 		width: 300px;
 		height: 150px;

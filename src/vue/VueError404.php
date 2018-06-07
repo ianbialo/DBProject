@@ -43,7 +43,7 @@ class VueError404
         </div>
         
         <div class="title">
-        <h1><img src="$path/img/puce-db.png" alt=""> Dépôt d’une demande de partenariat / sponsoring / mécénat</h1>
+        <h1><img src="$path/img/puce-db.png" alt=""> Une erreur est survenue</h1>
         </div>
         <h3>Il semble que la page soit inexistente.</h3>
         <a id="retour" href='$accueil'>Retour à l'accueil</a>

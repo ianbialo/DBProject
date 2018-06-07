@@ -4,13 +4,18 @@ namespace dbproject\conf;
 use dbproject\modele\Projet;
 use dbproject\modele\Suivi;
 
+/**
+ * Classe permettant de gérer les fichiers de l'application
+ * @author IBIALO
+ *
+ */
 class Uploads
 {
 
     /**
      * Méthode permettant l'ajout de fichiers selon un formulaire donné
      * @param int $id id du formulaire
-     * @return boolean
+     * @return boolean indicatif de réussite d'ajout de fichier dans un formulaire
      */
     public function ajoutFichierFormulaire($id)
     {

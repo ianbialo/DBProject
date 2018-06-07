@@ -3,6 +3,11 @@
 namespace dbproject\controleur;
 use dbproject\vue\VueError404;
 
+/**
+ * Classe définissant la méthode de controleur d'une erreur 404
+ * @author IBIALO
+ *
+ */
 class ControleurError404 {
 
 	public function __construct() {}

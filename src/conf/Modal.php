@@ -1,6 +1,11 @@
 <?php
 namespace dbproject\conf;
 
+/**
+ * Classe définissant des méthodes vis-à-vis des modals du framework Materialize
+ * @author IBIALO
+ *
+ */
 class Modal{
     
     /**

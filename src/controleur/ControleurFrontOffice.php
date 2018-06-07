@@ -5,6 +5,11 @@ use dbproject\vue\VueFrontOffice;
 use dbproject\conf\Email;
 use dbproject\conf\Formulaire;
 
+/**
+ * Classe définissant les méthodes du controleur du FrontOffice
+ * @author IBIALO
+ *
+ */
 class ControleurFrontOffice
 {
     //////////////////////////////////////////////////////////////////////////////////////////////////////

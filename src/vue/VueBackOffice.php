@@ -1203,16 +1203,25 @@ end;
         return $res;
     }
 
+    /**
+     * Méthode générant le code HTML de la page de gestion de compte
+     * @return string
+     */
     private function gestionCompte()
     {
         $app = \Slim\Slim::getInstance();
         $user = User::getById($app->getEncryptedCookie("user"));
+        //On vérifie si l'utilisateur est un administrateur ou non
         if ($user->droit == "0")
             return self::gestionCompteNormal();
         else
             return self::gestionCompteAdmin();
     }
 
+    /**
+     * Méthode générant le code HTML de la page de gestion de compte pour un compte administratueur
+     * @return string
+     */
     private function gestionCompteAdmin()
     {
         $app = \Slim\Slim::getInstance();
@@ -1412,6 +1421,10 @@ end;
         return $res;
     }
 
+    /**
+     * Méthode générant le code HTML de la page de gestion de compte pour un compte normal
+     * @return string
+     */
     private function gestionCompteNormal()
     {
         $app = \Slim\Slim::getInstance();
@@ -1507,6 +1520,10 @@ end;
         return $res;
     }
 
+    /**
+     * Méthode générant le code HTML de la page de création de compte
+     * @return string
+     */
     private function creationCompte()
     {
         $app = \Slim\Slim::getInstance();
@@ -1594,6 +1611,12 @@ end;
         return $res;
     }
 
+    /**
+     * Méthode permettant la génération du code HTML pour un sélecteur
+     * @param string $name nom du sélecteur
+     * @param number $booleen valeur du sélecteur à attribuer
+     * @return string code HTML du sélecteur
+     */
     function generateSelectOuiNon($name, $booleen = 0)
     {
         $select = '<div class="input-field col s12">
