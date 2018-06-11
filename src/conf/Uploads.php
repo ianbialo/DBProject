@@ -188,20 +188,20 @@ class Uploads
     public function supprimerFichier($id, $nom)
     {
         // Dossier avec tout les dossiers
-        $list = scandir(Variable::$path . "\\" . Variable::$dossierFichier);
+        $list = scandir(Variable::$path . "/" . Variable::$dossierFichier);
         
         foreach ($list as $l) {
             $no = explode("_", $l)[0];
             if ($no == $id) {
                 
                 // Dossier avec tout les fichiers recherchés
-                $list2 = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . Variable::$dossierSpecifique[1]);
+                $list2 = scandir(Variable::$path . "/" . Variable::$dossierFichier . "/" . $l . "/" . Variable::$dossierSpecifique[1]);
                 
                 foreach ($list2 as $i) {
                     if ($i == $nom) {
-                        unlink(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . Variable::$dossierSpecifique[1] . "\\" . $i);
+                        unlink(Variable::$path . "/" . Variable::$dossierFichier . "/" . $l . "/" . Variable::$dossierSpecifique[1] . "/" . $i);
                         $_SESSION['message'] = "Le fichier '$nom' a été supprimé avec succès.";
-                        $folder = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . Variable::$dossierSpecifique[1]);
+                        $folder = scandir(Variable::$path . "/" . Variable::$dossierFichier . "/" . $l . "/" . Variable::$dossierSpecifique[1]);
                         $i = 0;
                         foreach ($folder as $f)
                             if ($f != "." && $f != "..")
@@ -226,7 +226,7 @@ class Uploads
     {
         
         // Dossier avec tout les dossiers
-        $list = scandir(Variable::$path . "\\" . Variable::$dossierFichier);
+        $list = scandir(Variable::$path . "/" . Variable::$dossierFichier);
         $fichiers = array();
         
         foreach ($list as $l) {
@@ -235,18 +235,18 @@ class Uploads
                 
                 foreach (Variable::$dossierSpecifique as $ds) {
                     // Dossier avec tout les fichiers recherchés
-                    $list2 = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . $ds);
+                    $list2 = scandir(Variable::$path . "/" . Variable::$dossierFichier . "/" . $l . "/" . $ds);
                     
                     $zip = null;
                     foreach ($list2 as $i) {
                         if ($i != "." && $i != "..") {
-                            unlink(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . $ds . "\\" . $i);
+                            unlink(Variable::$path . "/" . Variable::$dossierFichier . "/" . $l . "/" . $ds . "/" . $i);
                         }
                     }
-                    rmdir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . $ds);
+                    rmdir(Variable::$path . "/" . Variable::$dossierFichier . "/" . $l . "/" . $ds);
                 }
                 
-                rmdir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l);
+                rmdir(Variable::$path . "/" . Variable::$dossierFichier . "/" . $l);
             }
         }
     }

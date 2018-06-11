@@ -1,6 +1,8 @@
 <?php
 namespace dbproject\conf;
 
+require_once 'vendor/ircmaxell/password-compat/lib/password.php';
+
 use dbproject\modele\User;
 
 /**

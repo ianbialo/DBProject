@@ -36,19 +36,6 @@ CREATE TABLE `implique` (
   `Role` int(1) NOT NULL COMMENT '0: co-financeur - 1: parrain'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Déchargement des données de la table `implique`
---
-
-INSERT INTO `implique` (`IdImpl`, `IdProjet`, `Nom`, `Prenom`, `Role`) VALUES
-(1, 1, 'Bialo', 'Ian', 0),
-(2, 1, 'Teyssandier', 'Clément', 0),
-(3, 1, 'Holzhammer', 'David', 0),
-(4, 1, 'Ober', 'Ober', 0),
-(12, 16, 'Conom1', 'Coprenom1', 0),
-(13, 16, 'Conom2', 'Coprenom2', 0),
-(14, 16, 'Conom3', 'Coprenom3', 0);
-
 -- --------------------------------------------------------
 
 --
@@ -78,14 +65,6 @@ CREATE TABLE `projet` (
   `Nouv` int(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Déchargement des données de la table `projet`
---
-
-INSERT INTO `projet` (`IdProjet`, `IdStruct`, `IdRes`, `IdRep`, `IdSuivi`, `DateDep`, `Expose`, `DateDeb`, `Duree`, `Lieu`, `Aide`, `Budget`, `Fin`, `InteretGeneral`, `Domaine`, `Mecenat`, `Fiscal`, `Valorisation`, `Document`, `Nouv`) VALUES
-(1, 1, 1, 1, 1, '2018-04-25', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis volutpat nulla. Pellentesque tincidunt leo venenatis felis sollicitudin metus.', '2018-05-16', 12, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 1300, 1300, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 1, 1, NULL, 0, 0),
-(6, 6, 6, 6, 6, '2018-04-24', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis volutpat nulla. Pellentesque tincidunt leo venenatis felis sollicitudin metus.', '2018-07-15', 12, 'Chez moi', 12, 12, 'Oui les fins oui', 1, 'Oui le domaine oui', 1, 1, NULL, 2, 0),
-(16, 18, 18, 18, 16, '2018-05-15', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur quis volutpat nulla. Pellentesque tincidunt leo venenatis felis sollicitudin metus.', '2018-10-11', 5, 'quelque part', 5, 5, 'pour plein de choses', 1, 'Ceci est le domaine', 1, 1, 'c&#39;est cool', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -103,11 +82,6 @@ CREATE TABLE `representant` (
 --
 -- Déchargement des données de la table `representant`
 --
-
-INSERT INTO `representant` (`IdRep`, `Nom`, `Prenom`, `Qualite`) VALUES
-(1, 'Rem', 'Zguegz', 'Gogo'),
-(6, 'Ober', 'Ober', 'http://localhost:8012/DBProject/'),
-(18, 'Ian', 'Bialo', 'oui la qualité');
 
 -- --------------------------------------------------------
 
@@ -127,14 +101,6 @@ CREATE TABLE `responsable` (
   `Courriel` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Déchargement des données de la table `responsable`
---
-
-INSERT INTO `responsable` (`IdRes`, `Nom`, `Prenom`, `Position`, `Adresse`, `CodePostal`, `Ville`, `Tel`, `Courriel`) VALUES
-(1, 'Berhu', 'Baptiste', 'Gogo', '2 Ter Boulevard Charlemagne', '54000', 'Nancy', '0606060606', 'ian.bialo9@etu.univ-lorraine.fr'),
-(6, 'Gan', 'Dayv', 'oui la position oui', '5, rue des johns', '55555', 'JohnCity', '0606060606', 'ian.bialo@demathieu-bard.fr'),
-(18, 'Teyss', 'Clem', 'la position ouai', '5, rue des johns', '55555', 'JohnCity', '0606060606', 'ian.bialo@demathieu-bard.fr');
 
 -- --------------------------------------------------------
 
@@ -152,15 +118,6 @@ CREATE TABLE `structure` (
   `Type` varchar(255) NOT NULL,
   `Site` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Déchargement des données de la table `structure`
---
-
-INSERT INTO `structure` (`IdStruct`, `Nom`, `Adresse`, `CodePostal`, `Ville`, `Raison`, `Type`, `Site`) VALUES
-(1, 'Amphux', '2 Ter Boulevard Charlemagne', '54000', 'Nancy', 'Ceci est une raison', 'Une association', 'http://iut-charlemagne.univ-lorraine.fr/'),
-(6, 'Unix', '5, rue des johns', '55555', 'JohnCity', 'Oui la raison oui', 'Une institution', NULL),
-(18, 'Je suis une structure', '5, rue des johns', '55555', 'JohnCity', 'je suis la raison', 'Une institution', 'http://localhost:8012/DBProject/DBProject/');
 
 -- --------------------------------------------------------
 
@@ -181,14 +138,6 @@ CREATE TABLE `suivi` (
   `Document` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Déchargement des données de la table `suivi`
---
-
-INSERT INTO `suivi` (`IdSuivi`, `Chrono`, `Montant`, `DateRep`, `DateEnvoiConv`, `DateRecepConv`, `DateRecepRecu`, `DateEnvoiCheque`, `Observations`, `Document`) VALUES
-(1, '0', 0, NULL, '2018-06-20', '2018-06-10', '2018-07-12', '2018-09-13', NULL, 1),
-(6, '2018_1', 0, '2018-05-19', NULL, NULL, NULL, NULL, NULL, 3),
-(16, '0', 0, NULL, NULL, NULL, NULL, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 

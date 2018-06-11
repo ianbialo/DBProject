@@ -404,7 +404,7 @@ end;
             $path = $requete->getRootUri();
             
             // Dossier avec tout les dossiers
-            $list = scandir(Variable::$path . "\\" . Variable::$dossierFichier);
+            $list = scandir(Variable::$path . "/" . Variable::$dossierFichier);
             
             foreach ($list as $l) {
                 $id = explode("_", $l)[0];
@@ -413,7 +413,7 @@ end;
                     $dossier = $l;
                     
                     // Dossier avec tout les fichiers recherchés
-                    $list2 = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . $folderSpecifique);
+                    $list2 = scandir(Variable::$path . "/" . Variable::$dossierFichier . "/" . $l . "/" . $folderSpecifique);
                     
                     $zip = null;
                     foreach ($list2 as $i) {
@@ -440,14 +440,14 @@ end;
             $path = $requete->getRootUri();
             
             // Dossier avec tout les dossiers
-            $list = scandir(Variable::$path . "\\" . Variable::$dossierFichier);
+            $list = scandir(Variable::$path . "/" . Variable::$dossierFichier);
             
             foreach ($list as $l) {
                 $id = explode("_", $l)[0];
                 if ($no == $id) {
                     
                     // Dossier avec tout les fichiers recherchés
-                    $list2 = scandir(Variable::$path . "\\" . Variable::$dossierFichier . "\\" . $l . "\\" . $folderSpecifique);
+                    $list2 = scandir(Variable::$path . "/" . Variable::$dossierFichier . "/" . $l . "/" . $folderSpecifique);
                     
                     foreach ($list2 as $i) {
                         if ($i != "." && $i != "..") {
