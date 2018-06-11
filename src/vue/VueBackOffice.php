@@ -369,7 +369,7 @@ end;
 end;
             }
             
-            $res = <<<end
+            $res .= <<<end
 	              
             </div>
 

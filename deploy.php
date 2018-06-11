@@ -26,7 +26,9 @@ if(file_exists($dir)){
     print "Le dossier ".$dir." et son contenu ont été supprimés. Recréation du dossier iminente.\n";
 }
 print "Création du dossier ".$dir."...\n";
-mkdir($dir);
+$old = umask(0);
+mkdir($dir,0777);
+umask($old); 
 print "Le dossier ".$dir." a été créé.\n";
 
 

@@ -216,7 +216,7 @@ class Formulaire
     public static function majChronoSuivi()
     {
         $listeSuivi = Suivi::getAllDate();
-        if ($listeSuivi != null) {
+        if (sizeof($listeSuivi) != 0) {
             $chrono = 1;
             $date = explode("-", $listeSuivi[0]->DateDep)[0];
             foreach ($listeSuivi as $suivi) {
