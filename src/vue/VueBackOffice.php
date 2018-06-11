@@ -204,7 +204,7 @@ $(document).ready(function() {";
                 break;
         }
         
-        if (sizeof($listeProj) == 0) {
+        if (sizeof($listeProj) != 0) {
             
             $res = <<<end
 
