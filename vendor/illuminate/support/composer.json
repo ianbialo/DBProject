@@ -2,7 +2,7 @@
     "name": "illuminate/support",
     "description": "The Illuminate Support package.",
     "license": "MIT",
-    "homepage": "https://laravel.com",
+    "homepage": "http://laravel.com",
     "support": {
         "issues": "https://github.com/laravel/framework/issues",
         "source": "https://github.com/laravel/framework"
@@ -10,18 +10,15 @@
     "authors": [
         {
             "name": "Taylor Otwell",
-            "email": "taylor@laravel.com"
+            "email": "taylorotwell@gmail.com"
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": ">=5.4.0",
         "ext-mbstring": "*",
-        "doctrine/inflector": "~1.1",
-        "illuminate/contracts": "5.5.*",
-        "nesbot/carbon": "^1.24.1"
-    },
-    "replace": {
-        "tightenco/collect": "<5.5.33"
+        "illuminate/contracts": "5.0.*",
+        "doctrine/inflector": "~1.0",
+        "danielstjules/stringy": "~1.8"
     },
     "autoload": {
         "psr-4": {
@@ -33,16 +30,12 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "5.5-dev"
+            "dev-master": "5.0-dev"
         }
     },
     "suggest": {
-        "illuminate/filesystem": "Required to use the composer class (5.5.*).",
-        "symfony/process": "Required to use the composer class (~3.3).",
-        "symfony/var-dumper": "Required to use the dd function (~3.3)."
-    },
-    "config": {
-        "sort-packages": true
+        "jeremeamia/superclosure": "Required to be able to serialize closures (~2.0).",
+        "symfony/var-dumper": "Required to use the dd function (2.6.*)."
     },
     "minimum-stability": "dev"
 }

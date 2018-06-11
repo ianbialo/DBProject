@@ -1,9 +1,15 @@
 {
+	"config": {
+       "platform": {
+           "php": "5.4.0"
+       }
+    },
+
   "require": {
-    "illuminate/database":"5.5.*",
-    "php": ">=7.0.0",
+    "illuminate/database":"5.0.33",
+    "php": "5.4.0",
     "slim/slim" : "2.*",
-    "ircmaxell/password-compat": "^1.0"
+	"ircmaxell/password-compat": "^1.0"
   },
   "autoload": {
     "psr-4": {

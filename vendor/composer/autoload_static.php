@@ -4,12 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitea1cd274600e0f45d0ae9baca0023ff0
+class ComposerStaticInit24a93aeb869ab2c2d28ede6878055bb4
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
-        'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -21,11 +21,7 @@ class ComposerStaticInitea1cd274600e0f45d0ae9baca0023ff0
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Translation\\' => 30,
-        ),
-        'P' => 
-        array (
-            'Psr\\SimpleCache\\' => 16,
-            'Psr\\Container\\' => 14,
+            'Stringy\\' => 8,
         ),
         'I' => 
         array (
@@ -33,14 +29,6 @@ class ComposerStaticInitea1cd274600e0f45d0ae9baca0023ff0
             'Illuminate\\Database\\' => 20,
             'Illuminate\\Contracts\\' => 21,
             'Illuminate\\Container\\' => 21,
-        ),
-        'D' => 
-        array (
-            'Doctrine\\Common\\Inflector\\' => 26,
-        ),
-        'C' => 
-        array (
-            'Carbon\\' => 7,
         ),
     );
 
@@ -57,13 +45,9 @@ class ComposerStaticInitea1cd274600e0f45d0ae9baca0023ff0
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
         ),
-        'Psr\\SimpleCache\\' => 
+        'Stringy\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
-        ),
-        'Psr\\Container\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/container/src',
+            0 => __DIR__ . '/..' . '/danielstjules/stringy/src',
         ),
         'Illuminate\\Support\\' => 
         array (
@@ -81,14 +65,10 @@ class ComposerStaticInitea1cd274600e0f45d0ae9baca0023ff0
         array (
             0 => __DIR__ . '/..' . '/illuminate/container',
         ),
-        'Doctrine\\Common\\Inflector\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
-        ),
-        'Carbon\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
-        ),
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
     );
 
     public static $prefixesPsr0 = array (
@@ -99,14 +79,22 @@ class ComposerStaticInitea1cd274600e0f45d0ae9baca0023ff0
                 0 => __DIR__ . '/..' . '/slim/slim',
             ),
         ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Inflector\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/inflector/lib',
+            ),
+        ),
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitea1cd274600e0f45d0ae9baca0023ff0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitea1cd274600e0f45d0ae9baca0023ff0::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitea1cd274600e0f45d0ae9baca0023ff0::$prefixesPsr0;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit24a93aeb869ab2c2d28ede6878055bb4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit24a93aeb869ab2c2d28ede6878055bb4::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit24a93aeb869ab2c2d28ede6878055bb4::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit24a93aeb869ab2c2d28ede6878055bb4::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }
