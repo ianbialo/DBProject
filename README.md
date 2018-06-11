@@ -19,9 +19,10 @@ Ces informations sont ensuite traitées pour la mise en place d'un suivi de proj
 Pour pouvoir mettre en place l'application web, il suffit de :
 
 * Cloner le dépôt dans le répertoire de votre serveur web
-* Rendez-vous dans le fichier Variable.php situé dans à l'adresse src/conf/ et modifier les informations nécessaires.
+* Rendez-vous dans le fichier Variable.php situé dans le dossier à l'adresse src/conf/ et modifier les informations nécessaires.
   * $path : chemin vers le dossier du projet
   * $dossierFichier : chemin depuis la racine vers le dossier contenant le dossier allant contenir les différents fichiers uploadés dans l'application.
+  * $annuaire : destinataires des mails envoyés par l'application.
 
   Le reste des informations sont modifiables de manière optionnel.
 * Depuis une invite de commande, placez vous dans la racine du projet et lancez la commande :
