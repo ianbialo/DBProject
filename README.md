@@ -32,4 +32,4 @@ Pour pouvoir mettre en place l'application web, il suffit de :
 
 ## Attention
 
-Il est important de ne pas oublier d'accorder les droits nécessaires à l'application pour le bon fonctionnement de celui-ci
+Il est important de ne pas oublier d'accorder les droits nécessaires au dossier où se situe l'application pour le bon fonctionnement de celui-ci.
