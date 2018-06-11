@@ -18,7 +18,7 @@ class Variable
      * Il doit être modifié pour correspondre au chemin du projet dans la machine où il se situe.
      * Le nom peut être changé seulement si l'application n'a pas été deployé.
      */
-    public static $path = "C:\\xampp\htdocs\DBProject\DBProject";
+    public static $path = "/le/chemin/ici";
 
     /**
      * @var string Dossier dans le projet (à partir de la racine) où se situent les dossiers de fichiers.
@@ -51,10 +51,14 @@ class Variable
 
     /**
      * @var array Annuaire des personnes à informer en cas de création d'un nouveau formulaire
+     * A chaque destinaire est associée le numéro de destinataire.
+     * Un exemple de la variable $annuaire :
+     * $annuaire = array(
+        "john.johnny@demathieu-bard.fr" => "Destinataire un",
+        "oui.stiti@gmail.com" => "Destinaire deux"
+    );
      */
     public static $annuaire = array(
-        "ian.bialo@demathieu-bard.fr" => "Destinataire un",
-        "ian.bialo9@etu.univ-lorraine.fr" => "Destinaire deux"
     );
 
 }
