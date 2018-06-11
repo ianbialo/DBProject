@@ -29,3 +29,7 @@ Pour pouvoir mettre en place l'application web, il suffit de :
     **php deploy.php**
 
 * Votre application est maintenant prête à être utilisée !
+
+## Attention
+
+Il est important de ne pas oublier d'accorder les droits nécessaires à l'application pour le bon fonctionnement de celui-ci
