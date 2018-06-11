@@ -204,7 +204,9 @@ $(document).ready(function() {";
                 break;
         }
         
-        $res = <<<end
+        if (sizeof($listeProj) == 0) {
+            
+            $res = <<<end
 
 
             <div class="container">
@@ -214,16 +216,16 @@ $(document).ready(function() {";
                         <select size="1" name="links" onchange="window.location.href=this.value;">
                             <option value="" disabled selected>Choisissez un projet</option>
 end;
-        foreach ($listeProj as $p) {
-            $struct = Structure::getById($p->IdStruct);
-            $changementTri = $app->urlFor("listeFormulaires");
-            $redirection2 = $app->urlFor("projet", [
-                'no' => $p->IdProjet
-            ]);
-            $res .= '
+            foreach ($listeProj as $p) {
+                $struct = Structure::getById($p->IdStruct);
+                $changementTri = $app->urlFor("listeFormulaires");
+                $redirection2 = $app->urlFor("projet", [
+                    'no' => $p->IdProjet
+                ]);
+                $res .= '
                     <option value="' . $redirection2 . '">' . $struct->Nom . '</option>';
-        }
-        $res .= <<<end
+            }
+            $res .= <<<end
                     </select>
                     <label>Accès rapide aux projets</label>
                 </div>
@@ -248,19 +250,19 @@ end;
                     <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
                         
 end;
-        if ($query == 0)
-            $res .= '<option value="' . $changementTri . '?query=0&validate=' . $validate . '" selected>Alphabétique</option>
+            if ($query == 0)
+                $res .= '<option value="' . $changementTri . '?query=0&validate=' . $validate . '" selected>Alphabétique</option>
                         ';
-        else
-            $res .= '<option value="' . $changementTri . '?query=0&validate=' . $validate . '">Alphabétique</option>
+            else
+                $res .= '<option value="' . $changementTri . '?query=0&validate=' . $validate . '">Alphabétique</option>
                         ';
-        if ($query == 1)
-            $res .= '<option value="' . $changementTri . '?query=1&validate=' . $validate . '" selected>Date de création</option>
+            if ($query == 1)
+                $res .= '<option value="' . $changementTri . '?query=1&validate=' . $validate . '" selected>Date de création</option>
                         ';
-        else
-            $res .= '<option value="' . $changementTri . '?query=1&validate=' . $validate . '">Date de création</option>
+            else
+                $res .= '<option value="' . $changementTri . '?query=1&validate=' . $validate . '">Date de création</option>
                         ';
-        $res .= <<<end
+            $res .= <<<end
                     </select>
                     <label>Trier par</label>
                   </div>
@@ -269,11 +271,11 @@ end;
                     <p>
                       <label>
 end;
-        if ($validate == 0)
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=0&#39;" checked />';
-        else
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=0&#39;" />';
-        $res .= <<<end
+            if ($validate == 0)
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=0&#39;" checked />';
+            else
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=0&#39;" />';
+            $res .= <<<end
 
                         <span>Tous</span>
                       </label>
@@ -283,11 +285,11 @@ end;
                     <p>
                       <label>
 end;
-        if ($validate == 1)
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=1&#39;" checked />';
-        else
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=1&#39;" />';
-        $res .= <<<end
+            if ($validate == 1)
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=1&#39;" checked />';
+            else
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=1&#39;" />';
+            $res .= <<<end
 
                         <span>Traités</span>
                       </label>
@@ -297,11 +299,11 @@ end;
                     <p>
                       <label>
 end;
-        if ($validate == 2)
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=2&#39;" checked />';
-        else
-            $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=2&#39;" />';
-        $res .= <<<end
+            if ($validate == 2)
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=2&#39;" checked />';
+            else
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=2&#39;" />';
+            $res .= <<<end
 
                         <span>Non-traités</span>
                       </label>
@@ -312,24 +314,24 @@ end;
             
                 
 end;
-        foreach ($listeProj as $p) {
-            $struct = Structure::getById($p->IdStruct);
-            $rep = Representant::getById($p->IdRep);
-            $resp = Responsable::getById($p->IdRes);
-            $suivi = Suivi::getById($p->IdSuivi);
-            $acceder = $app->urlFor("projet", [
-                'no' => $p->IdProjet
-            ]);
-            $supprimer = $app->urlFor("postSuppressionFormulaire");
-            
-            $date = Formulaire::transformerDate($p->DateDep);
-            if ($suivi->Chrono != "0")
-                $titre = $struct->Nom . " - " . $date . " - <span class='green-text text-accent-4'>n° Chrono : " . $suivi->Chrono . "</span>";
-            else
-                $titre = $struct->Nom . " - " . $date;
-            if ($p->Nouv == "1")
-                $titre = "<span class='red-text text-accent-4'>New</span> " . $titre;
-            $res .= <<<end
+            foreach ($listeProj as $p) {
+                $struct = Structure::getById($p->IdStruct);
+                $rep = Representant::getById($p->IdRep);
+                $resp = Responsable::getById($p->IdRes);
+                $suivi = Suivi::getById($p->IdSuivi);
+                $acceder = $app->urlFor("projet", [
+                    'no' => $p->IdProjet
+                ]);
+                $supprimer = $app->urlFor("postSuppressionFormulaire");
+                
+                $date = Formulaire::transformerDate($p->DateDep);
+                if ($suivi->Chrono != "0")
+                    $titre = $struct->Nom . " - " . $date . " - <span class='green-text text-accent-4'>n° Chrono : " . $suivi->Chrono . "</span>";
+                else
+                    $titre = $struct->Nom . " - " . $date;
+                if ($p->Nouv == "1")
+                    $titre = "<span class='red-text text-accent-4'>New</span> " . $titre;
+                $res .= <<<end
 
               <!-- Modal Structure -->
               <div id="modal$p->IdProjet" class="modal">
@@ -365,13 +367,24 @@ end;
 
   
 end;
-        }
-        
-        $res .= <<<end
+            }
+            
+            $res = <<<end
 	              
             </div>
 
 end;
+        } else {
+            $res = <<<end
+
+            <div class="container">
+                <h3>Liste des projets - $mail</h3>
+                <div class="col s12">
+                        <h5>Aucun projet n'a encore été enregistré dans l'application.</h5>
+                </div>
+            </div>
+end;
+        }
         return $res;
     }
 
@@ -1205,13 +1218,14 @@ end;
 
     /**
      * Méthode générant le code HTML de la page de gestion de compte
+     *
      * @return string
      */
     private function gestionCompte()
     {
         $app = \Slim\Slim::getInstance();
         $user = User::getById($app->getEncryptedCookie("user"));
-        //On vérifie si l'utilisateur est un administrateur ou non
+        // On vérifie si l'utilisateur est un administrateur ou non
         if ($user->droit == "0")
             return self::gestionCompteNormal();
         else
@@ -1220,6 +1234,7 @@ end;
 
     /**
      * Méthode générant le code HTML de la page de gestion de compte pour un compte administratueur
+     *
      * @return string
      */
     private function gestionCompteAdmin()
@@ -1423,6 +1438,7 @@ end;
 
     /**
      * Méthode générant le code HTML de la page de gestion de compte pour un compte normal
+     *
      * @return string
      */
     private function gestionCompteNormal()
@@ -1522,6 +1538,7 @@ end;
 
     /**
      * Méthode générant le code HTML de la page de création de compte
+     *
      * @return string
      */
     private function creationCompte()
@@ -1613,8 +1630,11 @@ end;
 
     /**
      * Méthode permettant la génération du code HTML pour un sélecteur
-     * @param string $name nom du sélecteur
-     * @param number $booleen valeur du sélecteur à attribuer
+     *
+     * @param string $name
+     *            nom du sélecteur
+     * @param number $booleen
+     *            valeur du sélecteur à attribuer
      * @return string code HTML du sélecteur
      */
     function generateSelectOuiNon($name, $booleen = 0)
