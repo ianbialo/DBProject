@@ -166,6 +166,7 @@ $(document).ready(function() {";
         $requete = $app->request();
         $path = $requete->getRootUri();
         $mail = $app->getEncryptedCookie("user");
+        $changementTri = $app->urlFor("listeFormulaires");
         
         $testQuery = array(
             0,
@@ -218,7 +219,6 @@ $(document).ready(function() {";
 end;
             foreach ($listeProj as $p) {
                 $struct = Structure::getById($p->IdStruct);
-                $changementTri = $app->urlFor("listeFormulaires");
                 $redirection2 = $app->urlFor("projet", [
                     'no' => $p->IdProjet
                 ]);
@@ -375,15 +375,72 @@ end;
 
 end;
         } else {
-            $res = <<<end
-
+            $test = Projet::getAll();
+            if(sizeof($test) != 0){
+                $res = <<<end
+                
             <div class="container">
                 <h3>Liste des projets - $mail</h3>
                 <div class="col s12">
-                        <h5>Aucun projet n'a encore été enregistré dans l'application.</h5>
+                        <h5>Aucun projet n'est enregistré.</h5>
+                </div>
+                <div class="row col s6">
+                    <div class="col s2">
+                    <p>
+                      <label>
+end;
+            if ($validate == 0)
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=0&#39;" checked />';
+            else
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=0&#39;" />';
+            $res .= <<<end
+
+                        <span>Tous</span>
+                      </label>
+                    </p>
+                    </div>
+                    <div class="col s2">
+                    <p>
+                      <label>
+end;
+            if ($validate == 1)
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=1&#39;" checked />';
+            else
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=1&#39;" />';
+            $res .= <<<end
+
+                        <span>Traités</span>
+                      </label>
+                    </p>
+                    </div>
+                    <div class="col s2">
+                    <p>
+                      <label>
+end;
+            if ($validate == 2)
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=2&#39;" checked />';
+            else
+                $res .= '<input name="group1" type="radio" onclick="window.location.href=&#39;' . $changementTri . '?query=' . $query . '&validate=2&#39;" />';
+            $res .= <<<end
+
+                        <span>Non-traités</span>
+                      </label>
+                    </p>
+                    </div>
+                  </div>
+            </div>
+end;
+            }else{
+                $res = <<<end
+                
+            <div class="container">
+                <h3>Liste des projets - $mail</h3>
+                <div class="col s12">
+                        <h5>Aucun projet n'est enregistré.</h5>
                 </div>
             </div>
 end;
+            }
         }
         return $res;
     }
